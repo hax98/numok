@@ -24,6 +24,7 @@ RUN apt-get update \
         curl \
         netcat-openbsd \
     && docker-php-ext-install pdo pdo_mysql mbstring \
+    && rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* \
     && (a2dismod mpm_event mpm_worker 2>/dev/null || true) \
     && a2enmod mpm_prefork rewrite headers \
     && rm -rf /var/lib/apt/lists/*
