@@ -6,3 +6,4 @@ public/assets/uploads/*
 repomix*
 vendor/*
 composer.lock
+qa-*.png
