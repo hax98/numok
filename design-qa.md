@@ -29,6 +29,10 @@ Required fidelity surfaces:
 
 Live deployment check: `https://partners.repostit.io/` returned the redesigned hero and workflow asset after the Railway deploy. Live `/register` and `/login` both rendered their forms; the live OG image returned HTTP 200 as `image/png`.
 
+## Authentication screens
+
+The live `/login` and `/register` screens were captured in the connected Chrome surface as `qa-auth-login.png` and `qa-auth-register.png`. Both use the same Repostit paper/ink/purple system, preserve the real form actions, and were checked at the desktop viewport. The visual layout has a two-column editorial form/brand panel, a responsive one-column mobile fallback, and the supplied workflow artwork on the brand panel.
+
 ## Comparison history
 
 1. Initial comparison: the selected user-supplied artwork and rendered page were captured together in `qa-comparison.png`. No P0/P1/P2 drift was found. The implementation keeps the artwork exact and uses deterministic HTML for the surrounding program copy.
