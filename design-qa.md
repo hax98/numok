@@ -27,6 +27,8 @@ Required fidelity surfaces:
 - `How it works` anchor and external Repostit link are present in the rendered DOM.
 - Favicon now points to the transparent purple-plane PNG; Open Graph/Twitter metadata points to the new partner preview image.
 
+Live deployment check: `https://partners.repostit.io/` returned the redesigned hero and workflow asset after the Railway deploy. Live `/register` and `/login` both rendered their forms; the live OG image returned HTTP 200 as `image/png`.
+
 ## Comparison history
 
 1. Initial comparison: selected direction 2 and the rendered page were captured together in `qa-comparison.png`. No P0/P1/P2 drift was found. The implementation intentionally replaces generated mock text with exact program copy and uses a generated workflow asset with the same visual role.
