@@ -10,7 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
 
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon/android-chrome-512x512.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
@@ -39,7 +39,12 @@
                                 <?php if (!empty($settings['custom_logo'])): ?>
                                     <img src="/assets/uploads/<?= htmlspecialchars($settings['custom_logo']) ?>" alt="<?= htmlspecialchars($settings['custom_app_name'] ?? 'App') ?>" class="h-8 max-w-48 object-contain" />
                                 <?php else: ?>
-                                    <img src="/assets/images/repostit-logo.png" alt="Repostit Partners" class="h-8 max-w-48 object-contain" />
+                                    <div class="flex items-center gap-2">
+                                        <span class="grid h-8 w-8 place-items-center rounded-lg bg-fuchsia-600">
+                                            <img src="/assets/favicon/android-chrome-512x512.png" alt="" class="h-6 w-6 object-contain brightness-0 invert" />
+                                        </span>
+                                        <span class="font-semibold text-gray-900">Repostit</span>
+                                    </div>
                                 <?php endif; ?>
                             </a>
                         </div>

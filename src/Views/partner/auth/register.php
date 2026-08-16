@@ -1,87 +1,55 @@
-<div class="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md">
-            <?php if (!empty($settings['custom_logo'])): ?>
-            <img src="/assets/uploads/<?= htmlspecialchars($settings['custom_logo']) ?>" alt="<?= htmlspecialchars($settings['custom_app_name'] ?? 'App') ?>" class="h-12 mx-auto max-w-64 object-contain" />
-        <?php else: ?>
-            <img src="/assets/images/repostit-logo.png" alt="Repostit Partners" class="h-12 mx-auto max-w-64 object-contain" />
-        <?php endif; ?>
-        <h2 class="mt-2 text-center text-gray-400">
-            Create your partner account
-        </h2>
-    </div>
+<?php require ROOT_PATH . '/src/Views/partner/auth/styles.php'; ?>
 
-    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+<div class="partner-auth-page">
+    <section class="partner-auth-form-side">
+        <nav class="partner-auth-nav" aria-label="Partner portal navigation">
+            <a href="/" class="partner-auth-brand" aria-label="Repostit Partners home">
+                <span class="partner-auth-mark"><img src="/assets/favicon/android-chrome-512x512.png" alt="" /></span>
+                <span>Repostit <small style="font-family: 'DM Sans', sans-serif; font-size: 9px; letter-spacing: .16em; color: #77717e;">PARTNERS</small></span>
+            </a>
+            <a class="partner-auth-back" href="/">Back to partner program</a>
+        </nav>
+
+        <div class="partner-auth-content">
+            <p class="partner-auth-eyebrow">JOIN THE CREW</p>
+            <h1>Make your next recommendation count.</h1>
+            <p class="partner-auth-lede">Create your free partner account, try Repostit, and share it when it genuinely helps your audience or clients.</p>
+
             <?php if (isset($_SESSION['register_error'])): ?>
-            <div class="rounded-md bg-red-50 p-4 mb-6">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-red-800"><?= htmlspecialchars($_SESSION['register_error']) ?></p>
-                    </div>
-                </div>
-            </div>
+                <div class="partner-auth-alert" role="alert"><?= htmlspecialchars($_SESSION['register_error']) ?></div>
             <?php unset($_SESSION['register_error']); endif; ?>
 
-            <form class="space-y-6" action="/auth/register" method="POST">
-                <div>
-                    <label for="company_name" class="block text-sm font-medium text-gray-700">
-                        Company Name
-                    </label>
-                    <div class="mt-1">
-                        <input id="company_name" name="company_name" type="text" required autofocus
-                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
+            <form class="partner-auth-form" action="/auth/register" method="POST">
+                <div class="partner-auth-field">
+                    <label for="company_name">Company or creator name</label>
+                    <input id="company_name" name="company_name" type="text" autocomplete="organization" required autofocus placeholder="Your name or business" />
                 </div>
-
-                <div>
-                    <label for="contact_name" class="block text-sm font-medium text-gray-700">
-                        Contact Name
-                    </label>
-                    <div class="mt-1">
-                        <input id="contact_name" name="contact_name" type="text" required
-                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
+                <div class="partner-auth-field">
+                    <label for="contact_name">Your name</label>
+                    <input id="contact_name" name="contact_name" type="text" autocomplete="name" required placeholder="First and last name" />
                 </div>
-
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">
-                        Email address
-                    </label>
-                    <div class="mt-1">
-                        <input id="email" name="email" type="email" autocomplete="email" required
-                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
+                <div class="partner-auth-field">
+                    <label for="email">Email address</label>
+                    <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
                 </div>
-
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">
-                        Password
-                    </label>
-                    <div class="mt-1">
-                        <input id="password" name="password" type="password" required
-                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                               minlength="8">
-                    </div>
+                <div class="partner-auth-field">
+                    <label for="password">Create a password</label>
+                    <input id="password" name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters" />
                 </div>
-
-                <div>
-                    <button type="submit"
-                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Create account
-                    </button>
-                </div>
+                <button class="partner-auth-submit" type="submit">Create my free account</button>
             </form>
+
+            <p class="partner-auth-secondary">Already a partner? <a href="/login">Sign in to your account</a></p>
         </div>
-        <p class="mt-8 text-center text-sm text-gray-600">
-            Already registered?
-            <a href="/login" class="font-medium text-indigo-600 hover:text-indigo-500">
-                Sign in to your account
-            </a>
-        </p>
-    </div>
+        <p class="partner-auth-footnote">Free to join · 20% recurring commission · No upfront fee</p>
+    </section>
+
+    <aside class="partner-auth-visual" aria-label="Repostit partner program overview">
+        <div class="partner-auth-visual-copy">
+            <p class="partner-auth-visual-kicker">REPOSTIT PARTNER PROGRAM</p>
+            <h2>Share what you genuinely <em>use.</em></h2>
+        </div>
+        <div class="partner-auth-art"><img src="/assets/images/partner-workflow.png" alt="One creator video flowing into multiple content formats" /></div>
+        <div class="partner-auth-visual-footer"><span>One simple link.</span><strong>Recurring revenue.</strong></div>
+    </aside>
 </div>
