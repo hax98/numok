@@ -95,4 +95,11 @@ if [ "${RUN_MIGRATIONS:-false}" = "true" ]; then
   fi
 fi
 
+# Railway may reuse an Apache base layer with an event/worker MPM enabled.
+# PHP's Apache module requires prefork, so normalize the enabled MPM at runtime
+# immediately before starting Apache.
+rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* 2>/dev/null || true
+a2dismod mpm_event mpm_worker 2>/dev/null || true
+a2enmod mpm_prefork 2>/dev/null || true
+
 exec "$@"
