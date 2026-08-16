@@ -11,8 +11,13 @@ $config['database'] = [
 
 // Email configuration
 $config['email'] = [
+    // Brevo's transactional API is backed by the Brevo account key. This is
+    // preferred when present because it does not require exposing SMTP
+    // credentials to the application container.
+    'brevo_api_key' => getenv('BREVO_API_KEY') ?: '',
     'resend_api_key' => getenv('RESEND_API_KEY') ?: 'RESEND_API_KEY',
-    'from_address' => getenv('MAIL_FROM_ADDRESS') ?: 'onboarding@resend.dev',
+    'from_address' => getenv('MAIL_FROM_ADDRESS') ?: 'support@repostit.io',
+    'from_name' => getenv('MAIL_FROM_NAME') ?: 'Repostit Partners',
 ];
 
 // Initialize database connection

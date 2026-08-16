@@ -25,7 +25,7 @@ $path = trim($path, '/');
 // Define routes
 $routes = [
     // Partner routes (root level)
-    '' => ['PartnerDashboardController', 'index'],
+    '' => ['LandingController', 'index'],
     'login' => ['PartnerAuthController', 'index'],
     'auth/login' => ['PartnerAuthController', 'login'],
     'register' => ['PartnerAuthController', 'register'],
