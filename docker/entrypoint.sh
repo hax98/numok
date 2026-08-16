@@ -73,8 +73,10 @@ if [ "${RUN_MIGRATIONS:-false}" = "true" ]; then
 
       # Create default admin user for first-time setup
       echo "[entrypoint] 👤 Creating default administrator account..."
-      ADMIN_EMAIL="${ADMIN_EMAIL:-admin@numok.com}"
-      ADMIN_PASSWORD_HASH="\$2y\$10\$bLQ3Qd64NRSxvc7A2wKJAe/ocgCCkB5jbyC11I1XklnjDClzO6vpK"  # Hash for 'admin123'
+      ADMIN_EMAIL="${ADMIN_EMAIL:-admin@repostit.io}"
+      # Set ADMIN_PASSWORD_HASH in Railway (bcrypt) before the first boot.
+      # The legacy fallback keeps local Docker setup compatible; it must not be used in production.
+      ADMIN_PASSWORD_HASH="${ADMIN_PASSWORD_HASH:-\$2y\$10\$bLQ3Qd64NRSxvc7A2wKJAe/ocgCCkB5jbyC11I1XklnjDClzO6vpK}"
       mysql -h"$DB_HOST" -u"$DB_USER" -p"$DB_PASS" --skip-ssl "$DB_NAME" -e "INSERT IGNORE INTO users (email, password, name, is_admin, created_at) VALUES ('$ADMIN_EMAIL', '$ADMIN_PASSWORD_HASH', 'Default Admin', 1, CURRENT_TIMESTAMP);" 2>/dev/null || true
 
       echo "[entrypoint] ======================================"

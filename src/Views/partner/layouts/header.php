@@ -6,14 +6,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($title ?? 'Partner Portal - ' . ($settings['custom_app_name'] ?? 'Numok')) ?></title>
+    <title><?= htmlspecialchars($title ?? 'Partner Portal - ' . ($settings['custom_app_name'] ?? 'Repostit Partners')) ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
 
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg">
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
     <link rel="manifest" href="/assets/favicon/site.webmanifest">
+    <style>
+        :root { --repostit-pink: #ec4899; --repostit-purple: #a855f7; }
+        .bg-indigo-600 { background-color: var(--repostit-pink) !important; }
+        .bg-indigo-500 { background-color: #db2777 !important; }
+        .hover\:bg-indigo-700:hover, .hover\:bg-indigo-500:hover { background-color: #db2777 !important; }
+        .text-indigo-600, .text-indigo-700 { color: #db2777 !important; }
+        .hover\:text-indigo-500:hover { color: #be185d !important; }
+        .border-indigo-500, .focus\:border-indigo-500:focus { border-color: var(--repostit-pink) !important; }
+        .bg-indigo-50 { background-color: #fce7f3 !important; }
+        .focus\:ring-indigo-500:focus, .focus\:ring-indigo-600:focus { --tw-ring-color: var(--repostit-pink) !important; }
+    </style>
 </head>
 <body class="h-full">
     <?php if (isset($_SESSION['partner_id'])): ?>
@@ -27,7 +39,7 @@
                                 <?php if (!empty($settings['custom_logo'])): ?>
                                     <img src="/assets/uploads/<?= htmlspecialchars($settings['custom_logo']) ?>" alt="<?= htmlspecialchars($settings['custom_app_name'] ?? 'App') ?>" class="h-8 max-w-48 object-contain" />
                                 <?php else: ?>
-                                    <img src="/assets/images/numok-logo.png" alt="Numok" class="h-8" />
+                                    <img src="/assets/images/repostit-logo.png" alt="Repostit Partners" class="h-8 max-w-48 object-contain" />
                                 <?php endif; ?>
                             </a>
                         </div>

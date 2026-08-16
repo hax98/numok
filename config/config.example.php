@@ -20,9 +20,9 @@ $config['email'] = [
 
 // Application configuration
 $config['app'] = [
-    'name' => 'Numok',
+    'name' => getenv('APP_NAME') ?: 'Repostit Partners',
     'url' => getenv('APP_URL') ?: 'http://localhost',
-    'debug' => getenv('APP_DEBUG') ?: true
+    'debug' => filter_var(getenv('APP_DEBUG') ?: '0', FILTER_VALIDATE_BOOL)
 ];
 
 // Time zone

@@ -6,7 +6,7 @@
                     alt="<?= htmlspecialchars($settings['custom_app_name'] ?? 'App') ?>"
                     class="h-12 mx-auto max-w-64 object-contain">
             <?php else: ?>
-                <img src="/assets/images/numok-logo.png" class="h-12 mx-auto">
+                <img src="/assets/images/repostit-logo.png" alt="Repostit Partners" class="h-12 mx-auto max-w-64 object-contain">
             <?php endif; ?>
         </h2>
         <h3 class="mt-6 text-center text-xl font-semibold leading-9 tracking-tight text-gray-900">
