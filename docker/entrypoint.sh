@@ -84,8 +84,8 @@ if [ "${RUN_MIGRATIONS:-false}" = "true" ]; then
       echo "[entrypoint] -------------------------------------"
       echo "[entrypoint] Open a new incognito/private window and navigate to http://$VIRTUAL_HOST/admin/login "
       echo "[entrypoint] 📧 Email:    $ADMIN_EMAIL"
-      echo "[entrypoint] 🔑 Password: admin123"
-      echo "[entrypoint] ⚠️  IMPORTANT: Change this password immediately after login!"
+      echo "[entrypoint] 🔑 Password: supplied through ADMIN_PASSWORD_HASH"
+      echo "[entrypoint] ⚠️  Store the matching plaintext password securely; it is not printed in logs."
       echo "[entrypoint] ======================================"
     else
       echo "[entrypoint] Schema already present; skipping deploy.sql"
