@@ -38,6 +38,22 @@
         <?php unset($_SESSION['success']);
         endif; ?>
 
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="rounded-lg bg-red-50 p-4 mt-6 border border-red-200" role="alert">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-red-800"><?= htmlspecialchars($_SESSION['error'], ENT_QUOTES, 'UTF-8') ?></p>
+                    </div>
+                </div>
+            </div>
+        <?php unset($_SESSION['error']);
+        endif; ?>
+
         <!-- Empty State -->
         <?php if (empty($programs)): ?>
             <div class="text-center mt-16 py-12">
@@ -144,6 +160,12 @@
 
                                 <!-- Tracking Link Section (for joined programs) -->
                                 <?php if ($program['status'] === 'joined'): ?>
+                                    <?php
+                                    $landingPage = rtrim((string) ($program['landing_page'] ?? ''), '?&');
+                                    $trackingCode = (string) ($program['tracking_code'] ?? '');
+                                    $trackingSeparator = str_contains($landingPage, '?') ? '&' : '?';
+                                    $trackingUrl = $landingPage . $trackingSeparator . 'via=' . $trackingCode;
+                                    ?>
                                     <div class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
                                         <div class="flex items-center justify-between mb-3">
                                             <h4 class="text-sm font-semibold text-gray-900 flex items-center">
@@ -153,14 +175,14 @@
                                                 Your Tracking Link
                                             </h4>
                                             <span class="text-xs text-gray-500 font-mono bg-white px-2 py-1 rounded border">
-                                                <?= htmlspecialchars($program['tracking_code']) ?>
+                                                <?= htmlspecialchars($trackingCode, ENT_QUOTES, 'UTF-8') ?>
                                             </span>
                                         </div>
                                         <div class="flex items-center gap-2">
                                             <code class="flex-1 text-sm font-mono bg-white px-3 py-2 rounded border border-gray-200 text-gray-700 break-all">
-                                                <?= htmlspecialchars($program['landing_page']) ?>?via=<?= htmlspecialchars($program['tracking_code']) ?>
+                                                <?= htmlspecialchars($trackingUrl, ENT_QUOTES, 'UTF-8') ?>
                                             </code>
-                                            <button onclick="copyToClipboard('<?= htmlspecialchars($program['landing_page']) ?>?via=<?= htmlspecialchars($program['tracking_code']) ?>')"
+                                            <button type="button" onclick="copyToClipboard(<?= htmlspecialchars(json_encode($trackingUrl), ENT_QUOTES, 'UTF-8') ?>, this)"
                                                 class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
@@ -168,6 +190,26 @@
                                                 Copy
                                             </button>
                                         </div>
+                                        <form action="/programs/update-tracking" method="POST" class="mt-4 border-t border-gray-200 pt-4">
+                                            <input type="hidden" name="partner_program_id" value="<?= (int) $program['id'] ?>">
+                                            <label for="tracking-code-<?= (int) $program['id'] ?>" class="block text-sm font-medium text-gray-700">Change tracking code</label>
+                                            <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+                                                <input id="tracking-code-<?= (int) $program['id'] ?>"
+                                                    name="tracking_code"
+                                                    value="<?= htmlspecialchars($trackingCode, ENT_QUOTES, 'UTF-8') ?>"
+                                                    minlength="3"
+                                                    maxlength="50"
+                                                    pattern="[A-Za-z0-9][A-Za-z0-9_-]{2,49}"
+                                                    autocomplete="off"
+                                                    required
+                                                    class="flex-1 rounded-md border-gray-300 font-mono text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                                    aria-describedby="tracking-code-help-<?= (int) $program['id'] ?>">
+                                                <button type="submit" class="inline-flex items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                                    Save link
+                                                </button>
+                                            </div>
+                                            <p id="tracking-code-help-<?= (int) $program['id'] ?>" class="mt-2 text-xs text-gray-500">3 to 50 characters, letters, numbers, hyphens, or underscores. Existing links stop working after you change the code.</p>
+                                        </form>
                                     </div>
                                 <?php endif; ?>
 
@@ -328,10 +370,9 @@
 
 <script>
     // Copy to clipboard functionality
-    async function copyToClipboard(text) {
+    async function copyToClipboard(text, button) {
         try {
             await navigator.clipboard.writeText(text);
-            const button = event.target.closest('button');
             const originalContent = button.innerHTML;
             button.innerHTML = `
                 <svg class="w-4 h-4 mr-1 text-green-600" fill="currentColor" viewBox="0 0 20 20">

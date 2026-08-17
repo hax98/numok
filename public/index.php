@@ -42,6 +42,7 @@ $routes = [
     'earnings' => ['PartnerEarningsController', 'index'],
     'programs' => ['PartnerProgramsController', 'index'],
     'programs/join' => ['PartnerProgramsController', 'join'],
+    'programs/update-tracking' => ['PartnerProgramsController', 'updateTracking'],
 
     // Admin routes (under /admin)
     'admin' => ['DashboardController', 'index'],
