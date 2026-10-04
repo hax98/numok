@@ -34,6 +34,10 @@
 
 ## Operations
 
+### Sharing cards added 4 October
+
+Three illustrated cards immediately below the link/next-step area explain Instagram Reel comment-to-DM, Instagram Story link stickers, and TikTok/bio placement. Their buttons open the existing link form and select Instagram/video, Instagram/story, or TikTok/post respectively. They do not submit, publish or send DMs. Draft titles are preserved and changing an already-named placement requires confirmation. Read-only admin previews and unjoined accounts have disabled actions. Manual DM delivery is supported; external automation is explicitly separate. Eight preset interaction checks passed, and all 60 PHP files passed syntax checks before deployment.
+
 Open https://partners.repostit.io/admin/creators for creator operations. A creator opens https://partners.repostit.io/dashboard, links their existing Repostit account, creates a placement link and submits the public promotional URL. Verify actual content separately from product publishing activity, then compare attributed paying customers. Record milestone transfers only after the actual transfer has been completed.
 
 Deploy PHP via Railway from this repository. Deploy only the isolated bridge with `firebase deploy --only functions:repostit-partners --project repostit-91b0e --config firebase.bridge.json`; do not deploy the unrelated dirty main Repostit worktree.
