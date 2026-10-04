@@ -9,7 +9,7 @@ $connections=$snapshot['connections']??[];
 $csrfField='<input type="hidden" name="csrf" value="'.$escape($csrf).'">';
 $money=static fn($v)=>'$'.number_format((float)$v,2);
 ?>
-<link rel="stylesheet" href="/assets/css/creator-hub.css">
+<link rel="stylesheet" href="/assets/css/creator-hub.css?v=sharing-cards-20261004">
 <div class="creator-hub">
  <?php if($readOnly): ?><div class="ch-notice">Read-only creator workspace preview. No account, content or payout actions can be submitted from this view.</div><?php endif; ?>
  <div class="ch-top"><div><div class="ch-kicker">YOUR CREATOR WORKSPACE</div><h1>Hello, <?= $escape(explode(' ',$partner['contact_name'])[0]) ?>.</h1><p class="ch-muted">Your content, your referrals, your recurring income. One place to keep it moving.</p></div><span class="ch-badge">Repostit Partners</span></div>
@@ -117,5 +117,5 @@ $money=static fn($v)=>'$'.number_format((float)$v,2);
  <section class="ch-card ch-stack"><div class="ch-kicker">WHAT TO MAKE NEXT</div><h2>Double down on customers, not just views.</h2><?php if($best && $best['customers']>0): ?><p class="ch-muted">Your strongest tracked content is <strong><?= $escape($best['title']) ?></strong>, with <?= (int)$best['customers'] ?> paying customers from <?= (int)$best['clicks'] ?> link visits. Try another piece around that same problem, with a new content link so the result stays separate.</p><?php else: ?><p class="ch-muted">No content has a verified paying referral yet. Start with one real workflow demo and a clear way to get your link. Compare signups first, then paying customers before deciding what to repeat.</p><?php endif; ?></section>
  <div class="ch-row"><p class="ch-muted">Need a hand? <a class="ch-link" href="mailto:support@repostit.io">Reach out to Hax</a>.</p><span class="ch-period">Account access, content publication and customer payment are separate milestones.</span></div>
 </div>
-<script src="/assets/js/creator-hub.js" defer></script>
+<script src="/assets/js/creator-hub.js?v=sharing-cards-20261004" defer></script>
 <?php if(!$readOnly): ?><script type="application/json" id="firebase-public-config"><?= json_encode($firebaseConfig,JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT) ?></script><script type="module" src="/assets/js/creator-connect.js"></script><?php endif; ?>
