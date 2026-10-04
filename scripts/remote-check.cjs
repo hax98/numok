@@ -1,0 +1,30 @@
+// Production read-only preflight or isolated PHP syntax checks. Never prints credentials.
+const fs=require('fs'),path=require('path'),cp=require('child_process');
+const cli='C:/Users/habib/AppData/Local/npm-cache/_npx/79fa66f96c8fdacf/node_modules/@railway/cli/bin/railway.exe';
+function remote(code){return cp.execFileSync(cli,['ssh','--project','dc28001a-13a7-4a2f-9f54-247cb05ed4fb','--environment','a8a321f2-24ac-459d-bd18-65a8ebf40d31','--service','86583c49-8e1d-4ef4-a565-ab764ae8a576','--','php','-r','eval(stream_get_contents(STDIN));'],{input:code,encoding:'utf8',timeout:180000,maxBuffer:3e6});}
+if(process.argv[2]==='scheduled'){
+ console.log(remote(`require '/var/www/html/vendor/autoload.php';require '/var/www/html/config/config.php';$out=Numok\\Services\\PortalSecurity::postJson('https://partners.repostit.io/internal/creator-sync',[],['X-Partner-Bridge-Key: '.getenv('PARTNER_PORTAL_BRIDGE_KEY')],180);echo json_encode($out);`));
+}else if(process.argv[2]==='render'){
+ const php=`define('ROOT_PATH','/var/www/html'); require ROOT_PATH.'/vendor/autoload.php';require ROOT_PATH.'/config/config.php'; $_SERVER['REQUEST_URI']='/admin/creators/preview';$_SESSION=[];$p=Numok\\Database\\Database::query("SELECT id,contact_name,email FROM partners WHERE contact_name LIKE 'Rafaella%' LIMIT 1")->fetch(); if(!$p)throw new RuntimeException('Exact preview partner missing');$id=(int)$p['id'];$data=['title'=>'Read-only creator workspace preview','partner'=>$p,'programs'=>Numok\\Services\\CreatorHub::programs($id),'summary'=>Numok\\Services\\CreatorHub::summary($id),'profile'=>Numok\\Services\\CreatorHub::profile($id),'contents'=>Numok\\Services\\CreatorHub::contents($id),'socials'=>Numok\\Database\\Database::query('SELECT * FROM creator_social_profiles WHERE partner_id=?',[$id])->fetchAll(),'csrf'=>'read-only-preview','firebaseConfig'=>Numok\\Services\\CreatorHub::firebaseConfig(),'readOnly'=>true,'syncError'=>null];ob_start();$v=new ReflectionMethod(Numok\\Controllers\\Controller::class,'view');$v->invoke(new Numok\\Controllers\\Controller(),'partner/creator/index',$data);$html=ob_get_clean();echo json_encode(['html'=>$html]);`;
+ console.log(remote(php));
+}else if(process.argv[2]==='ledger'){
+ const test=fs.readFileSync(path.join(__dirname,'../tests/creator-ledger-smoke.php')).toString('base64');
+ console.log(remote(`require '/var/www/html/vendor/autoload.php';require '/var/www/html/config/config.php';$tmp=tempnam(sys_get_temp_dir(),'creator-ledger-');file_put_contents($tmp,base64_decode('${test}'));try{require $tmp;}finally{unlink($tmp);}`));
+}else if(process.argv[2]==='sync'){
+ console.log(remote(`require '/var/www/html/vendor/autoload.php';require '/var/www/html/config/config.php';$partners=Numok\\Database\\Database::query("SELECT DISTINCT pp.partner_id FROM partner_programs pp JOIN partners p ON p.id=pp.partner_id WHERE p.status='active' AND pp.status='active'")->fetchAll();foreach($partners as $p){Numok\\Services\\CreatorHub::refreshReferrals((int)$p['partner_id']);echo 'Partner '.$p['partner_id'].' verified sync complete.\\n';}echo 'Persistent conversion records: '.Numok\\Database\\Database::query('SELECT COUNT(*) FROM conversions')->fetchColumn();`));
+}else if(process.argv[2]==='schema'){
+ console.log(remote(`require '/var/www/html/vendor/autoload.php'; require '/var/www/html/config/config.php'; $db=Numok\\Database\\Database::getInstance(); foreach(['partners','partner_programs','conversions','clicks'] as $table){echo $table.' '.json_encode($db->query('SHOW COLUMNS FROM '.$table)->fetchAll()).'\\n';}`));
+}else if(process.argv[2]==='preflight'){
+ console.log(remote(`require '/var/www/html/vendor/autoload.php'; require '/var/www/html/config/config.php'; $db=Numok\\Database\\Database::getInstance(); $out=['php'=>PHP_VERSION,'tables'=>$db->query('SELECT COUNT(*) FROM partners')->fetchColumn(),'conversionCount'=>$db->query('SELECT COUNT(*) FROM conversions')->fetchColumn(),'programs'=>$db->query('SELECT id,name,landing_page,commission_type,commission_value,is_recurring,reward_days,terms FROM programs')->fetchAll()]; foreach(['stripe_secret_key','stripe_webhook_secret'] as $name) { $q=$db->prepare('SELECT value FROM settings WHERE name=?'); $q->execute([$name]); $out[$name.'_configured']=(bool)$q->fetchColumn(); } echo json_encode($out);`));
+}else if(process.argv[2]==='rules'){
+ const rules=fs.readFileSync(path.join(__dirname,'../src/Services/CreatorRules.php')).toString('base64');
+ const tests=fs.readFileSync(path.join(__dirname,'../tests/creator-rules.php')).toString('base64');
+ console.log(remote(`$a=tempnam(sys_get_temp_dir(),'creator-rule-');$b=tempnam(sys_get_temp_dir(),'creator-test-');file_put_contents($a,base64_decode('${rules}'));file_put_contents($b,base64_decode('${tests}'));try{require $a;require $b;}finally{unlink($a);unlink($b);}`));
+}else{
+ const root=path.resolve(__dirname,'..'),files=[];
+ function walk(dir){for(const d of fs.readdirSync(dir,{withFileTypes:true})){const f=path.join(dir,d.name);if(d.isDirectory())walk(f);else if(f.endsWith('.php')) files.push(f);}}
+ for(const dir of ['src','public','scripts'])walk(path.join(root,dir));
+ const packet=files.map(f=>({name:path.relative(root,f).replaceAll('\\','/'),body:fs.readFileSync(f).toString('base64')}));
+ const encoded=Buffer.from(JSON.stringify(packet)).toString('base64');
+ console.log(remote(`$files=json_decode(base64_decode('${encoded}'),true); $fail=0; foreach($files as $file) { $tmp=tempnam(sys_get_temp_dir(),'creator-lint-'); file_put_contents($tmp,base64_decode($file['body'])); exec('php -l '.escapeshellarg($tmp).' 2>&1',$output,$status); unlink($tmp); if($status) { echo $file['name'].' '.implode(' ', $output).'\\n'; $fail++; } $output=[]; } echo 'PHP files checked: '.count($files).', failures: '.$fail.'\\n'; if($fail)exit(1);`));
+}

@@ -87,15 +87,15 @@ class PartnerEarningsController extends PartnerBaseController {
         $summary = Database::query(
             "SELECT 
                 COUNT(c.id) as total_conversions,
-                COALESCE(SUM(c.amount), 0) as total_revenue,
-                COALESCE(SUM(c.commission_amount), 0) as total_commission,
-                COALESCE(AVG(c.commission_amount), 0) as avg_commission,
+                COALESCE(SUM(CASE WHEN c.status<>'rejected' AND c.currency='usd' THEN c.amount ELSE 0 END), 0) as total_revenue,
+                COALESCE(SUM(CASE WHEN c.status<>'rejected' AND c.currency='usd' THEN c.commission_amount ELSE 0 END), 0) as total_commission,
+                COALESCE(AVG(CASE WHEN c.status<>'rejected' AND c.currency='usd' THEN c.commission_amount END), 0) as avg_commission,
                 COUNT(CASE WHEN c.status = 'pending' THEN 1 END) as pending_count,
                 COUNT(CASE WHEN c.status = 'payable' THEN 1 END) as payable_count,
                 COUNT(CASE WHEN c.status = 'paid' THEN 1 END) as paid_count,
-                COALESCE(SUM(CASE WHEN c.status = 'pending' THEN c.commission_amount END), 0) as pending_amount,
-                COALESCE(SUM(CASE WHEN c.status = 'payable' THEN c.commission_amount END), 0) as payable_amount,
-                COALESCE(SUM(CASE WHEN c.status = 'paid' THEN c.commission_amount END), 0) as paid_amount
+                COALESCE(SUM(CASE WHEN c.status = 'pending' AND c.currency='usd' THEN c.commission_amount END), 0) as pending_amount,
+                COALESCE(SUM(CASE WHEN c.status = 'payable' AND c.currency='usd' THEN c.commission_amount END), 0) as payable_amount,
+                COALESCE(SUM(CASE WHEN c.status = 'paid' AND c.currency='usd' THEN c.commission_amount END), 0) as paid_amount
              FROM conversions c
              JOIN partner_programs pp ON c.partner_program_id = pp.id
              WHERE {$whereClause}",
@@ -212,10 +212,11 @@ class PartnerEarningsController extends PartnerBaseController {
              FROM conversions c
              JOIN partner_programs pp ON c.partner_program_id = pp.id
              WHERE pp.partner_id = ? 
+             AND c.status<>'rejected' AND c.currency='usd'
              AND c.created_at >= DATE_SUB(CURRENT_DATE(), INTERVAL ? MONTH)
              GROUP BY DATE_FORMAT(c.created_at, '%Y-%m')
              ORDER BY month ASC",
             [$partnerId, $months]
         )->fetchAll();
     }
-} 
+}

@@ -1,5 +1,6 @@
 <?php
 // File: src/Views/layouts/header.php
+$path='partner/'.trim(parse_url($_SERVER['REQUEST_URI']??'',PHP_URL_PATH),'/');
 ?>
 <!DOCTYPE html>
 <html lang="en" class="h-full bg-gray-50">
@@ -16,7 +17,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
     <link rel="manifest" href="/assets/favicon/site.webmanifest">
     <style>
-        :root { --repostit-pink: #ec4899; --repostit-purple: #a855f7; }
+        :root { --repostit-pink: #5b3df5; --repostit-purple: #5b3df5; }
         .bg-indigo-600 { background-color: var(--repostit-pink) !important; }
         .bg-indigo-500 { background-color: #db2777 !important; }
         .hover\:bg-indigo-700:hover, .hover\:bg-indigo-500:hover { background-color: #db2777 !important; }

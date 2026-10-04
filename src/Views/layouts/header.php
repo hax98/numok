@@ -1,3 +1,4 @@
+<?php $path=trim(parse_url($_SERVER['REQUEST_URI']??'', PHP_URL_PATH),'/'); ?>
 <!DOCTYPE html>
 <html lang="en" class="h-full bg-gray-50">
 <head>
@@ -24,7 +25,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
     <link rel="manifest" href="/assets/favicon/site.webmanifest">
     <style>
-        :root { --repostit-pink: #ec4899; --repostit-purple: #a855f7; }
+        :root { --repostit-pink: #5b3df5; --repostit-purple: #5b3df5; }
         .bg-indigo-600 { background-color: var(--repostit-pink) !important; }
         .bg-indigo-500 { background-color: #db2777 !important; }
         .hover\:bg-indigo-700:hover, .hover\:bg-indigo-500:hover { background-color: #db2777 !important; }
@@ -59,7 +60,8 @@
                         <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
                             <a href="/admin/dashboard" class="<?= $path === 'dashboard' ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium">Dashboard</a>
                             <a href="/admin/programs" class="<?= $path === 'programs' ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium">Programs</a>
-                            <a href="/admin/partners" class="<?= $path === 'partners' ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium">Partners</a>
+                            <a href="/admin/partners" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium">Partners</a>
+                            <a href="/admin/creators" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium">Creator Hub</a>
                             <a href="/admin/conversions" class="<?= $path === 'conversions' ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium">Conversions</a>
                         </div>
                     </div>
@@ -113,7 +115,8 @@
                 <div class="space-y-1 pb-3 pt-2">
                     <a href="/admin/dashboard" class="<?= $path === 'dashboard' ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium">Dashboard</a>
                     <a href="/admin/programs" class="<?= $path === 'programs' ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium">Programs</a>
-                    <a href="/admin/partners" class="<?= $path === 'partners' ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium">Partners</a>
+                    <a href="/admin/partners" class="block py-2 pl-3 pr-4 text-base font-medium">Partners</a>
+                    <a href="/admin/creators" class="block py-2 pl-3 pr-4 text-base font-medium">Creator Hub</a>
                     <a href="/admin/conversions" class="<?= $path === 'conversions' ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium">Conversions</a>
                 </div>
                 <div class="border-t border-gray-200 pb-3 pt-4">

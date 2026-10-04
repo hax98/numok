@@ -20,6 +20,7 @@
             <?php unset($_SESSION['register_error']); endif; ?>
 
             <form class="partner-auth-form" action="/auth/register" method="POST">
+                <input type="hidden" name="csrf" value="<?= htmlspecialchars(\Numok\Services\PortalSecurity::csrf(), ENT_QUOTES, 'UTF-8') ?>">
                 <div class="partner-auth-field">
                     <label for="company_name">Company or creator name</label>
                     <input id="company_name" name="company_name" type="text" autocomplete="organization" required autofocus placeholder="Your name or business" />
@@ -36,12 +37,13 @@
                     <label for="password">Create a password</label>
                     <input id="password" name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters" />
                 </div>
-                <button class="partner-auth-submit" type="submit">Create my free account</button>
+                <?php if($program): ?><details style="font-size:12px;line-height:1.6"><summary>Read the affiliate program terms</summary><div style="max-height:210px;overflow:auto;white-space:pre-wrap;padding:12px 0"><?= htmlspecialchars(($program['terms']??'')."\n\n".\Numok\Services\CreatorRules::BONUS_TERMS,ENT_QUOTES,'UTF-8') ?></div></details><label class="partner-auth-check" style="align-items:flex-start;line-height:1.5"><input type="checkbox" name="terms_accepted" value="1" required>I accept the affiliate program terms and bonus conditions.</label><?php endif; ?>
+                <button class="partner-auth-submit" type="submit">Create my free account and referral link</button>
             </form>
 
             <p class="partner-auth-secondary">Already a partner? <a href="/login">Sign in to your account</a></p>
         </div>
-        <p class="partner-auth-footnote">Free to join · 20% recurring commission · No upfront fee</p>
+        <p class="partner-auth-footnote">20% recurring · $200 at 20 paying subscribers · An additional $5,000 at 500</p>
     </section>
 
     <aside class="partner-auth-visual" aria-label="Repostit partner program overview">

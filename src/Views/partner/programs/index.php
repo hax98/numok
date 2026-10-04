@@ -191,6 +191,7 @@
                                             </button>
                                         </div>
                                         <form action="/programs/update-tracking" method="POST" class="mt-4 border-t border-gray-200 pt-4">
+                                            <input type="hidden" name="csrf" value="<?= htmlspecialchars(\Numok\Services\PortalSecurity::csrf(), ENT_QUOTES, 'UTF-8') ?>">
                                             <input type="hidden" name="partner_program_id" value="<?= (int) $program['id'] ?>">
                                             <label for="tracking-code-<?= (int) $program['id'] ?>" class="block text-sm font-medium text-gray-700">Change tracking code</label>
                                             <div class="mt-2 flex flex-col gap-2 sm:flex-row">
@@ -240,10 +241,11 @@
 
                                             <!-- Join Form with Terms -->
                                             <form action="/programs/join" method="POST" class="space-y-4">
+                                                <input type="hidden" name="csrf" value="<?= htmlspecialchars(\Numok\Services\PortalSecurity::csrf(), ENT_QUOTES, 'UTF-8') ?>">
                                                 <input type="hidden" name="program_id" value="<?= $program['id'] ?>">
                                                 <div class="flex items-start">
                                                     <div class="flex h-6 items-center">
-                                                        <input type="checkbox" required
+                                                        <input type="checkbox" name="terms_accepted" value="1" required
                                                             class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
                                                     </div>
                                                     <div class="ml-3">
@@ -263,6 +265,7 @@
                                         <?php else: ?>
                                             <!-- Direct Join Button -->
                                             <form action="/programs/join" method="POST">
+                                                <input type="hidden" name="csrf" value="<?= htmlspecialchars(\Numok\Services\PortalSecurity::csrf(), ENT_QUOTES, 'UTF-8') ?>">
                                                 <input type="hidden" name="program_id" value="<?= $program['id'] ?>">
                                                 <button type="submit" 
                                                     class="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors shadow-sm">

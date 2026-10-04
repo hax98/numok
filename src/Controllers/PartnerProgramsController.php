@@ -31,6 +31,8 @@ class PartnerProgramsController extends PartnerBaseController {
              ORDER BY p.name",
             [$partnerId]
         )->fetchAll();
+        foreach($programs as &$program) $program['terms']=($program['terms']??'')."\n\n".\Numok\Services\CreatorRules::BONUS_TERMS;
+        unset($program);
 
         $settings = $this->getSettings();
         $this->view('partner/programs/index', [
@@ -40,6 +42,7 @@ class PartnerProgramsController extends PartnerBaseController {
     }
 
     public function join(): void {
+        \Numok\Services\PortalSecurity::requirePost();
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: /programs');
             exit;
@@ -60,6 +63,10 @@ class PartnerProgramsController extends PartnerBaseController {
             exit;
         }
 
+        if (!empty($program['terms']) && ($_POST['terms_accepted']??'')!=='1') {
+            $_SESSION['error']='Please read and accept the program terms.';
+            header('Location: /programs'); exit;
+        }
         // Check if already joined
         $existing = Database::query(
             "SELECT id FROM partner_programs 
@@ -93,7 +100,7 @@ class PartnerProgramsController extends PartnerBaseController {
         try {
             Database::insert('partner_programs', $insertData);
 
-            $_SESSION['success'] = 'Successfully joined the program!';
+            $_SESSION['success'] = 'Successfully joined the program! Your referral link is ready.';
         } catch (\Exception $e) {
             $_SESSION['error'] = 'Failed to join program. Please try again.';
         }
@@ -111,6 +118,7 @@ class PartnerProgramsController extends PartnerBaseController {
      * partner_program_id.
      */
     public function updateTracking(): void {
+        \Numok\Services\PortalSecurity::requirePost();
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: /programs');
             exit;
@@ -137,7 +145,7 @@ class PartnerProgramsController extends PartnerBaseController {
         }
 
         $ownedProgram = Database::query(
-            "SELECT id FROM partner_programs WHERE id = ? AND partner_id = ? LIMIT 1",
+            "SELECT id,tracking_code FROM partner_programs WHERE id = ? AND partner_id = ? LIMIT 1",
             [$partnerProgramId, $partnerId]
         )->fetch();
 
@@ -152,13 +160,15 @@ class PartnerProgramsController extends PartnerBaseController {
             [$trackingCode, $partnerProgramId]
         )->fetch();
 
-        if ($codeInUse) {
+        $aliasInUse=Database::query('SELECT partner_program_id FROM creator_tracking_aliases WHERE tracking_code=? AND partner_program_id<>?',[$trackingCode,$partnerProgramId])->fetch();
+        if ($codeInUse || $aliasInUse) {
             $_SESSION['error'] = 'That tracking code is already in use. Choose another one.';
             header('Location: /programs');
             exit;
         }
 
         try {
+            Database::query('INSERT INTO creator_tracking_aliases (tracking_code,partner_program_id) VALUES (?,?) ON DUPLICATE KEY UPDATE tracking_code=tracking_code',[$ownedProgram['tracking_code'],$partnerProgramId]);
             Database::update(
                 'partner_programs',
                 ['tracking_code' => $trackingCode],

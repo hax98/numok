@@ -85,14 +85,14 @@ class PartnerAuthController extends PartnerBaseController
     {
         $settings = $this->getSettings();
         $this->view('partner/auth/register', [
-            'title' => 'Register - ' . ($settings['custom_app_name'] ?? 'Numok')
+            'title' => 'Register - ' . ($settings['custom_app_name'] ?? 'Numok'),
+            'program'=>Database::query("SELECT id,terms FROM programs WHERE status='active' AND is_private=0 ORDER BY id LIMIT 1")->fetch()
         ]);
     }
 
     public function store(): void
     {
-        // Debug logging
-        error_log('Partner registration attempt - POST data: ' . print_r($_POST, true));
+        \Numok\Services\PortalSecurity::requirePost();
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('Location: /register');
             exit;
@@ -128,6 +128,10 @@ class PartnerAuthController extends PartnerBaseController
             exit;
         }
 
+        if (strlen((string)$_POST['password']) < 8 || strlen((string)$_POST['password']) > 200) {
+            $_SESSION['register_error'] = 'Use a password between 8 and 200 characters.';
+            header('Location: /register'); exit;
+        }
         try {
             // Sanitize inputs
             $companyName = trim($_POST['company_name']);
@@ -139,7 +143,13 @@ class PartnerAuthController extends PartnerBaseController
                 exit;
             }
 
-            Database::insert('partners', [
+            $program=Database::query("SELECT id,terms FROM programs WHERE status='active' AND is_private=0 ORDER BY id LIMIT 1")->fetch();
+            if($program && ($_POST['terms_accepted']??'')!=='1') {
+                $_SESSION['register_error']='Please review and accept the affiliate program terms.';
+                header('Location: /register'); exit;
+            }
+            $partnerId = Database::transaction(function () use($email,$companyName,$contactName,$program) {
+            $id=Database::insert('partners', [
                 'email' => $email,
                 'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
                 'company_name' => $companyName,
@@ -147,16 +157,21 @@ class PartnerAuthController extends PartnerBaseController
                 'payment_email' => $email,
                 'status' => 'active'  // Automatically activate partners
             ]);
+            if($program)Database::insert('partner_programs',['partner_id'=>$id,'program_id'=>$program['id'],'tracking_code'=>bin2hex(random_bytes(8)),
+                'status'=>'active','terms_accepted'=>gmdate('Y-m-d H:i:s'),'terms_accepted_ip'=>$_SERVER['REMOTE_ADDR']??null]);
+            return $id;
+            });
 
-            // Log successful registration
-            error_log("Partner registered successfully - Email: $email, Company: $companyName");
-
-            // Send welcome email
-            $emailService = new \Numok\Services\EmailService();
-            $emailService->sendWelcomeEmail($email, $contactName);
-
-            $_SESSION['register_success'] = 'Registration successful!';
-            header('Location: /login');
+            try {
+                $emailService = new \Numok\Services\EmailService();
+                $emailService->sendWelcomeEmail($email, $contactName);
+            } catch (\Throwable $e) { error_log('Partner welcome email unavailable.'); }
+            session_regenerate_id(true);
+            $_SESSION['partner_id']=$partnerId;
+            $_SESSION['partner_email']=$email;
+            $_SESSION['partner_company']=$companyName;
+            $_SESSION['success']=$program?'Welcome! Your affiliate link is ready.':'Welcome! Join the program to get your referral link.';
+            header('Location: /dashboard');
         } catch (\Exception $e) {
             $_SESSION['register_error'] = 'Registration failed. Please try again.';
             header('Location: /register');

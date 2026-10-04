@@ -95,6 +95,9 @@ if [ "${RUN_MIGRATIONS:-false}" = "true" ]; then
   fi
 fi
 
+# Idempotent additive creator-hub migration, never a production schema reset.
+php "$APP_ROOT/scripts/migrate-creator-hub.php"
+
 # Railway may reuse an Apache base layer with an event/worker MPM enabled.
 # PHP's Apache module requires prefork, so normalize the enabled MPM at runtime
 # immediately before starting Apache.

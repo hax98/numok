@@ -1,0 +1,1 @@
+{"functions":[{"source":"integrations/firebase","codebase":"repostit-partners","ignore":["node_modules","*.test.cjs"]}]}

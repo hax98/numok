@@ -7,3 +7,9 @@ repomix*
 vendor/*
 composer.lock
 qa-*.png
+integrations/firebase/node_modules/
+firebase-debug.log
+firebase-debug.*.log
+reports/creator-preview.html
+reports/*.png
+reports/*.jpg

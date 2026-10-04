@@ -1,9 +1,6 @@
 <?php
 declare(strict_types=1);
 
-// Start session
-session_start();
-
 // Initialize error reporting for development
 error_reporting(E_ALL);
 ini_set('display_errors', '0');
@@ -16,6 +13,13 @@ require_once ROOT_PATH . '/vendor/autoload.php';
 
 // Load configuration
 require_once ROOT_PATH . '/config/config.php';
+
+// Shared session storage survives deployment. Cookies stay local to this portal.
+ini_set('session.use_strict_mode','1');
+ini_set('session.gc_maxlifetime','86400');
+session_set_cookie_params(['lifetime'=>0,'path'=>'/','secure'=>true,'httponly'=>true,'samesite'=>'Lax']);
+session_set_save_handler(new \Numok\Services\PortalSessionHandler(),true);
+session_start();
 
 // Get the path
 $path = $_SERVER['REQUEST_URI'];
@@ -37,7 +41,15 @@ $routes = [
     'settings' => ['PartnerProfileController', 'index'],
     'settings/update' => ['PartnerProfileController', 'update'],
     'logout' => ['PartnerAuthController', 'logout'],
-    'dashboard' => ['PartnerDashboardController', 'index'],
+    'dashboard' => ['CreatorHubController', 'index'],
+    'creator/profile' => ['CreatorHubController', 'addProfile'],
+    'creator/content' => ['CreatorHubController', 'createContent'],
+    'creator/content/submit' => ['CreatorHubController', 'submitContent'],
+    'creator/connect' => ['CreatorHubController', 'syncAccount'],
+    'creator/disconnect' => ['CreatorHubController', 'disconnectAccount'],
+    'internal/creator-sync' => ['CreatorSyncController', 'sync'],
+    'r/([a-f0-9]{24})' => ['CreatorLinkController', 'content'],
+    'go/([A-Za-z0-9_-]{3,50})' => ['CreatorLinkController', 'affiliate'],
     'tracking' => ['PartnerTrackingController', 'index'],
     'earnings' => ['PartnerEarningsController', 'index'],
     'programs' => ['PartnerProgramsController', 'index'],
@@ -50,6 +62,12 @@ $routes = [
     'admin/auth/login' => ['AuthController', 'login'],
     'admin/logout' => ['AuthController', 'logout'],
     'admin/dashboard' => ['DashboardController', 'index'],
+    'admin/creators' => ['CreatorAdminController', 'index'],
+    'admin/creators/(\d+)/preview' => ['CreatorAdminController', 'preview'],
+    'admin/creators/verify-content' => ['CreatorAdminController', 'verifyContent'],
+    'admin/creators/record-bonus' => ['CreatorAdminController', 'recordBonus'],
+    'admin/creators/sync-referrals' => ['CreatorAdminController', 'syncReferrals'],
+    'admin/creators/grant-access' => ['CreatorAdminController', 'grantAccess'],
     'admin/settings' => ['SettingsController', 'index'],
     'admin/settings/update' => ['SettingsController', 'update'],
     'admin/settings/update-branding' => ['SettingsController', 'updateBranding'],
@@ -106,8 +124,8 @@ foreach ($routes as $pattern => $route) {
             $controller = new $controllerName();
 
             // Type cast numeric parameters to integer
-            $params = array_map(function ($value) {
-                return is_numeric($value) ? (int) $value : $value;
+            $params = array_map(function ($value) use ($route) {
+                return $route[0] !== 'CreatorLinkController' && is_numeric($value) ? (int) $value : $value;
             }, $matches);
 
             // Call the method with any captured parameters

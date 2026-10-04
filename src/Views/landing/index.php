@@ -29,7 +29,7 @@ $partnerShareImage = '/assets/images/partner-og.png';
                     <a href="/register" class="partner-button">Join free</a>
                     <a href="/login" class="partner-text-link">Already a partner? Log in</a>
                 </div>
-                <p class="partner-hero-note">Free to join. Share what you genuinely use.</p>
+                <p class="partner-hero-note">Free to join. $200 at 20 paying subscribers, plus an additional $5,000 at 500. Share what you genuinely use.</p>
             </div>
 
             <div class="partner-hero-art" aria-label="One video flowing into content for multiple platforms">
