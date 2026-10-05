@@ -36,8 +36,14 @@ final class CreatorFlowRules {
     }
     public static function campaignProgress(array $deliverables,array $contents): array {
         $done=0;$total=0;$rows=[];
+        $unique=[];
+        foreach($contents as $content){
+            if($content['status']!=='verified'||empty($content['post_url']))continue;
+            $url=preg_replace('~[?#].*$~','',rtrim((string)$content['post_url'],'/'));
+            $unique[$content['platform'].':'.$url]=$content;
+        }
         foreach($deliverables as $item){
-            $count=count(array_filter($contents,fn($c)=>$c['status']==='verified' && $c['platform']===$item['platform'] && $c['kind']===$item['kind']));
+            $count=count(array_filter($unique,fn($c)=>$c['platform']===$item['platform'] && $c['kind']===$item['kind']));
             $done+=min($count,$item['count']);$total+=$item['count'];
             $rows[]=$item+['verified'=>min($count,$item['count'])];
         }

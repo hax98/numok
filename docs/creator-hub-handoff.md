@@ -1,4 +1,4 @@
-# Repostit creator workspace, 2026-10-04
+# Repostit creator workspace, updated 2026-10-05
 
 ## Implemented and deployed
 
@@ -24,9 +24,9 @@
 ## Explicit boundaries
 
 - Existing affiliates must link their Repostit account themselves. Joining alone does not grant complimentary publishing access or create agreed sponsored deliverables.
-- Analytics cover matching posts published through Repostit only, for metrics made available by the provider. Arbitrary native posts and unavailable metrics are not silently counted as tracked/zero. Existing provider analytics does not support YouTube insights.
+- Native Instagram posts/Reels and TikTok videos now have read-only owned-post analytics adapters. Instagram resolves URLs against up to 200 recent authorized media; TikTok's video query checks ownership. Native Stories remain unsupported. Other platforms import existing Repostit performance snapshots when present; YouTube has no current insights adapter. Expired credentials/missing scopes require reconnection in Repostit, never scraping or permission bypass. Provider tokens never leave Firebase.
 - Content-specific attribution requires using that content's dedicated link. A generic bio link cannot identify the video viewed; this is link-based attribution, not view-through attribution.
-- Account synchronization imports analytics on creator refresh; hourly job refreshes referrals/billing, not social-provider analytics.
+- Hourly synchronization now refreshes consenting linked account/social snapshots as well as referrals/billing, reconciles campaign completion and deduplicates in-portal action reminders. A 15-minute freshness floor prevents repeated portal refreshes. Provider metrics may lag. A successful account snapshot is not proof that a promotional post has provider metrics.
 - USD balances are displayed in the creator summary. Genuine non-USD subscribers can count toward bonuses, but their currency amounts are not added to a USD balance without conversion.
 - Existing 60-day recurring commission validation delay is preserved; bonus eligibility uses the stated distinct verified-paying-subscriber rule, not an added 60-day creator requirement.
 - No new creator registration, creator OAuth session, complimentary entitlement grant, live checkout or bank transfer was exercised during this rollout. Their authenticated routes are implemented, but a complete creator-operated end-to-end pilot remains necessary.
@@ -39,5 +39,16 @@
 Three illustrated cards immediately below the link/next-step area explain Instagram Reel comment-to-DM, Instagram Story link stickers, and TikTok/bio placement. Their buttons open the existing link form and select Instagram/video, Instagram/story, or TikTok/post respectively. They do not submit, publish or send DMs. Draft titles are preserved and changing an already-named placement requires confirmation. Read-only admin previews and unjoined accounts have disabled actions. Manual DM delivery is supported; external automation is explicitly separate. Eight preset interaction checks passed, and all 60 PHP files passed syntax checks before deployment.
 
 Open https://partners.repostit.io/admin/creators for creator operations. A creator opens https://partners.repostit.io/dashboard, links their existing Repostit account, creates a placement link and submits the public promotional URL. Verify actual content separately from product publishing activity, then compare attributed paying customers. Record milestone transfers only after the actual transfer has been completed.
+
+### Campaign and analytics completion, 5 October
+
+- Admin proposes a brief, platform/format quantities and UTC deadline for an active joined program. Creator explicitly accepts or declines in the portal. No signup is silently treated as accepting sponsored deliverables.
+- Accepted campaigns can be selected on content-link creation. Submitted content counts only after admin review; duplicate URLs cannot fulfill multiple deliverables. Updating a URL reopens the review/completion state.
+- Admin action queue and creator reminders are in-portal only, no automatic emails or DMs. Joining, linking, access approval, campaign acceptance and promotion verification stay separate stages.
+- Recommendations distinguish no published evidence, low traffic, visits without signups, signups without payments and early paying-customer signals. They are exploratory guidance, not statistical guarantees.
+- All payouts remain manual. Admin must confirm reviewing referral authenticity and the completed wire before recording a bonus. The admin view provides payment records and Stripe customer links for review. Threshold attainment and commission maturity never issue a payment.
+- Verification: 26 Node tests, 19 PHP rule checks, 11 isolated MySQL campaign checks, 14 isolated MySQL ledger checks, 64 PHP syntax checks. MySQL tests use temporary tables, not persistent users, referrals or revenue. Includes acceptance replay/cross-creator rejection, reminder deduplication, duplicate promotional URL rejection, refunds/disputes, renewal deduplication and both bonus thresholds without payouts.
+- Firebase isolated bridge deployed successfully. Production creator dashboard and sharing preset/form association checked through the integrated Browser. Protected bridge and internal sync reject unauthenticated calls with 401. Admin view rendered successfully via authenticated server access; the integrated Browser admin session was logged out, so no admin action was submitted through that session.
+- Provider success/ownership/permission/failure cases were tested with fixtures. A real creator promotion followed through native provider metrics, signup and a live paid subscription is still required before calling business attribution end-to-end validated. No live checkout, creator message, public promotion or money transfer was performed in this rollout.
 
 Deploy PHP via Railway from this repository. Deploy only the isolated bridge with `firebase deploy --only functions:repostit-partners --project repostit-91b0e --config firebase.bridge.json`; do not deploy the unrelated dirty main Repostit worktree.

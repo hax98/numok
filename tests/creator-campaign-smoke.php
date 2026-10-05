@@ -19,7 +19,7 @@ try{CreatorCampaigns::respond(900002,2,'accepted');$ok=false;}catch(RuntimeExcep
 try{CreatorCampaigns::respond(900001,1,'accepted');$ok=false;}catch(RuntimeException $e){$ok=true;}$check($ok,'Replay denied');
 CreatorCampaigns::respond(900001,2,'declined');
 $check($db->query('SELECT status FROM creator_campaigns WHERE id=2')->fetchColumn()==='declined','Decline proposal');
-$token=str_repeat('b',24);Database::insert('creator_content',['partner_id'=>900001,'partner_program_id'=>900001,'campaign_id'=>1,'title'=>'Isolated fixture','platform'=>'instagram','kind'=>'video','token'=>$token,'status'=>'submitted']);
+$token=str_repeat('b',24);Database::insert('creator_content',['partner_id'=>900001,'partner_program_id'=>900001,'campaign_id'=>1,'title'=>'Isolated fixture','platform'=>'instagram','kind'=>'video','token'=>$token,'status'=>'submitted','post_url'=>'https://instagram.com/reel/IsolatedFixture/']);
 CreatorCampaigns::reconcile(900001);$check($db->query('SELECT status FROM creator_campaigns WHERE id=1')->fetchColumn()==='accepted','Submitted content not verified');
 Database::query("UPDATE creator_content SET status='verified'");CreatorCampaigns::reconcile(900001);
 $check($db->query('SELECT status FROM creator_campaigns WHERE id=1')->fetchColumn()==='completed','Verified deliverable completes campaign');

@@ -114,7 +114,7 @@ class CreatorHubController extends PartnerBaseController {
     }
     public function refreshAnalytics(): void {
         PortalSecurity::requirePost();
-        try { CreatorHub::refreshAnalytics((int)$_SESSION['partner_id']); $_SESSION['success']='Available post metrics refreshed. Missing permissions or unsupported formats are shown separately.'; }
+        try { $refreshed=CreatorHub::refreshAnalytics((int)$_SESSION['partner_id']); $_SESSION['success']=$refreshed?'Available post metrics refreshed. Missing permissions or unsupported formats are shown separately.':'Your latest snapshot is still fresh, it will refresh automatically on the next scheduled sync.'; }
         catch(\Throwable $e){$_SESSION['error']='Analytics refresh is temporarily unavailable. The last snapshot is shown.';}
         header('Location: /dashboard#content');exit;
     }
