@@ -38,7 +38,7 @@ final class CreatorHub {
             $token=$row['token']; $pp=$row['partner_program_id'];
             $row['clicks']=(int)Database::query("SELECT COUNT(*) FROM clicks WHERE partner_program_id=? AND (JSON_UNQUOTE(JSON_EXTRACT(sub_ids,'$.sid'))=? OR JSON_UNQUOTE(JSON_EXTRACT(sub_ids,'$.utm_content'))=?)",[$pp,$token,$token])->fetchColumn();
             $row['signups']=(int)Database::query('SELECT COUNT(*) FROM creator_referrals WHERE partner_id=? AND content_token=?',[$partnerId,$token])->fetchColumn();
-            $money=Database::query("SELECT COUNT(DISTINCT customer_key) customers, COALESCE(SUM(CASE WHEN currency='usd' THEN commission_amount ELSE 0 END),0) earnings FROM conversions WHERE partner_program_id=? AND content_token=? AND amount>0 AND status<>'rejected'",[$pp,$token])->fetch();
+            $money=Database::query("SELECT COUNT(DISTINCT CASE WHEN JSON_EXTRACT(metadata,'$.subscription_id') IS NOT NULL AND JSON_UNQUOTE(JSON_EXTRACT(metadata,'$.subscription_id'))<>'null' THEN customer_key ELSE NULL END) customers, COALESCE(SUM(CASE WHEN currency='usd' THEN commission_amount ELSE 0 END),0) earnings FROM conversions WHERE partner_program_id=? AND content_token=? AND amount>0 AND status<>'rejected'",[$pp,$token])->fetch();
             $row += $money; $row['provider_metrics']=json_decode($row['provider_metrics'] ?? 'null',true);
             $row['link']=CreatorRules::link($token);
         }
@@ -98,13 +98,36 @@ final class CreatorHub {
     public static function matchProviderPosts(int $partnerId, array $posts): void {
         foreach (self::contents($partnerId) as $content) {
             if (!$content['post_url']) continue;
-            $normalized=fn($url)=>strtolower(preg_replace('~[?#].*$~','',rtrim((string)$url,'/')));
+            $normalized=fn($url)=>preg_replace('~[?#].*$~','',rtrim((string)$url,'/'));
             foreach ($posts as $post) {
                 if (!empty($post['qaFixture'])) continue;
                 if ($normalized($post['publishedUrl'] ?? '') !== $normalized($content['post_url'])) continue;
                 Database::update('creator_content',['provider_attempt_id'=>$post['attemptId']??null,
-                    'provider_metrics'=>json_encode($post['metrics']??null),'provider_checked_at'=>gmdate('Y-m-d H:i:s')], 'id=? AND partner_id=?',[$content['id'],$partnerId]);
+                    'provider_metrics'=>json_encode($post['metrics']??null),'analytics_status'=>$post['insightsStatus']??'not_checked','provider_checked_at'=>!empty($post['fetchedAtMs'])?gmdate('Y-m-d H:i:s',(int)($post['fetchedAtMs']/1000)):null], 'id=? AND partner_id=?',[$content['id'],$partnerId]);
             }
         }
+    }
+    public static function refreshAnalytics(int $partnerId,bool $force=false): void {
+        $profile=self::profile($partnerId);
+        if(empty($profile['firebase_uid'])||empty($profile['consent_at']))return;
+        if(!$force&&!empty($profile['synced_at'])&&strtotime($profile['synced_at'].' UTC')>time()-900)return;
+        $posts=array_values(array_filter(self::contents($partnerId),fn($c)=>!empty($c['post_url'])));
+        $snapshot=['connections'=>[],'posts'=>[]];$account=null;
+        // Bounded chunks, no submitted content is silently dropped.
+        $chunks=array_chunk($posts,20);if(!$chunks)$chunks=[[]];
+        foreach($chunks as $chunk){
+            $result=self::bridge(['action'=>'analytics','uid'=>$profile['firebase_uid'],'email'=>$profile['repostit_email'],
+                'contents'=>array_map(fn($c)=>['token'=>$c['token'],'platform'=>$c['platform'],'kind'=>$c['kind'],'url'=>$c['post_url']],$chunk)]);
+            $snapshot['connections']=$result['connections']??[];$account=$result['account']??$account;
+            foreach($result['posts']??[] as $post){
+                $token=$post['token']??'';if(!preg_match('/^[a-f0-9]{24}$/',$token))continue;
+                $snapshot['posts'][]=$post;
+                Database::update('creator_content',['provider_metrics'=>json_encode($post['metrics']??null),'analytics_status'=>$post['status']??'retry',
+                    'provider_checked_at'=>!empty($post['fetchedAtMs'])?gmdate('Y-m-d H:i:s',(int)($post['fetchedAtMs']/1000)):null], 'partner_id=? AND token=? AND EXISTS (SELECT 1 FROM creator_profiles WHERE partner_id=? AND firebase_uid=? AND consent_at IS NOT NULL)',[$partnerId,$token,$partnerId,$profile['firebase_uid']]);
+            }
+        }
+        $data=['analytics_snapshot'=>json_encode($snapshot),'synced_at'=>gmdate('Y-m-d H:i:s')];
+        if($account!==null)$data['account_snapshot']=json_encode($account);
+        Database::update('creator_profiles',$data,'partner_id=? AND firebase_uid=? AND consent_at IS NOT NULL',[$partnerId,$profile['firebase_uid']]);
     }
 }

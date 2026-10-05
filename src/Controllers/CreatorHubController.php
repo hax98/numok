@@ -3,12 +3,14 @@ declare(strict_types=1);
 namespace Numok\Controllers;
 use Numok\Database\Database;
 use Numok\Middleware\PartnerMiddleware;
-use Numok\Services\{CreatorHub,CreatorRules,PortalSecurity};
+use Numok\Services\{CreatorHub,CreatorRules,CreatorCampaigns,PortalSecurity};
 
 class CreatorHubController extends PartnerBaseController {
     public function __construct() { PartnerMiddleware::handle(); }
     public function index(): void {
         $partnerId=(int)$_SESSION['partner_id'];
+        CreatorCampaigns::reconcile($partnerId);
+        CreatorCampaigns::refreshActions($partnerId);
         $syncError=null;
         try { CreatorHub::refreshReferrals($partnerId); } catch (\Throwable $e) { $syncError='Signup sync unavailable. Existing records are shown, not live signup totals.'; }
         $this->renderHub($partnerId,$syncError);
@@ -18,6 +20,7 @@ class CreatorHubController extends PartnerBaseController {
             'partner'=>Database::query('SELECT id,contact_name,email FROM partners WHERE id=?',[$partnerId])->fetch(),
             'programs'=>CreatorHub::programs($partnerId),'summary'=>CreatorHub::summary($partnerId),
             'profile'=>CreatorHub::profile($partnerId),'contents'=>CreatorHub::contents($partnerId),
+            'campaigns'=>CreatorCampaigns::all($partnerId),'actions'=>CreatorCampaigns::actions($partnerId),
             'socials'=>Database::query('SELECT * FROM creator_social_profiles WHERE partner_id=?',[$partnerId])->fetchAll(),
             'csrf'=>PortalSecurity::token(),'firebaseConfig'=>CreatorHub::firebaseConfig(),'readOnly'=>false,'syncError'=>$syncError]);
     }
@@ -40,7 +43,14 @@ class CreatorHubController extends PartnerBaseController {
             if (!Database::query("SELECT id FROM partner_programs WHERE id=? AND partner_id=? AND status='active'",[$programId,$partnerId])->fetch()) throw new \InvalidArgumentException('Join a program before creating your content link.');
             $title=trim((string)($_POST['title']??'')); $platform=(string)($_POST['platform']??''); $kind=(string)($_POST['kind']??'');
             if (!$title || strlen($title)>180 || !in_array($platform,CreatorRules::PLATFORMS,true) || !in_array($kind,['video','story','post','tutorial'],true)) throw new \InvalidArgumentException('Choose a title, platform and format.');
-            Database::insert('creator_content',['partner_id'=>$partnerId,'partner_program_id'=>$programId,'token'=>bin2hex(random_bytes(12)),'title'=>$title,'platform'=>$platform,'kind'=>$kind]);
+            $campaignId=(int)($_POST['campaign_id']??0);
+            if($campaignId){
+                $campaign=Database::query("SELECT * FROM creator_campaigns WHERE id=? AND partner_id=? AND partner_program_id=? AND status='accepted'",[$campaignId,$partnerId,$programId])->fetch();
+                if(!$campaign)throw new \InvalidArgumentException('Accept this campaign before adding its content.');
+                $items=json_decode($campaign['deliverables'],true)?:[];
+                if(!array_filter($items,fn($d)=>$d['platform']===$platform&&$d['kind']===$kind))throw new \InvalidArgumentException('Use a format and platform agreed for this campaign.');
+            }
+            Database::insert('creator_content',['partner_id'=>$partnerId,'partner_program_id'=>$programId,'campaign_id'=>$campaignId?:null,'token'=>bin2hex(random_bytes(12)),'title'=>$title,'platform'=>$platform,'kind'=>$kind]);
             $_SESSION['success']='Your content link is ready. Use this specific link in the Story, bio or requested DM for this content.';
         } catch (\Throwable $e) { $_SESSION['error']=$e instanceof \InvalidArgumentException ? $e->getMessage() : 'Could not create the content link.'; }
         header('Location: /dashboard#content'); exit;
@@ -52,7 +62,8 @@ class CreatorHubController extends PartnerBaseController {
             $content=Database::query('SELECT * FROM creator_content WHERE id=? AND partner_id=?',[$id,$partnerId])->fetch();
             if (!$content) throw new \InvalidArgumentException('Content not found in your account.');
             $url=CreatorRules::socialUrl((string)($_POST['post_url']??''),$content['platform']);
-            Database::update('creator_content',['post_url'=>$url,'status'=>'submitted','submitted_at'=>gmdate('Y-m-d H:i:s'),'verified_at'=>null,'provider_metrics'=>null,'provider_attempt_id'=>null,'provider_checked_at'=>null],'id=? AND partner_id=?',[$id,$partnerId]);
+            Database::update('creator_content',['post_url'=>$url,'status'=>'submitted','submitted_at'=>gmdate('Y-m-d H:i:s'),'verified_at'=>null,'provider_metrics'=>null,'analytics_status'=>'not_checked','provider_attempt_id'=>null,'provider_checked_at'=>null],'id=? AND partner_id=?',[$id,$partnerId]);
+            if(!empty($content['campaign_id']))Database::query("UPDATE creator_campaigns SET status='accepted' WHERE id=? AND partner_id=? AND status='completed'",[$content['campaign_id'],$partnerId]);
             CreatorHub::matchProviderPosts($partnerId,CreatorHub::profile($partnerId)['analytics_snapshot']['posts']??[]);
             $_SESSION['success']='Published URL submitted. Repostit will verify the promotional content separately from its analytics.';
         } catch (\Throwable $e) { $_SESSION['error']=$e instanceof \InvalidArgumentException ? $e->getMessage() : 'Could not submit this URL.'; }
@@ -86,6 +97,8 @@ class CreatorHubController extends PartnerBaseController {
             Database::query('INSERT INTO creator_profiles (partner_id,firebase_uid,repostit_email,consent_at,account_snapshot,analytics_snapshot,synced_at) VALUES (?,?,?,UTC_TIMESTAMP(),?,?,UTC_TIMESTAMP()) ON DUPLICATE KEY UPDATE firebase_uid=VALUES(firebase_uid),repostit_email=VALUES(repostit_email),consent_at=VALUES(consent_at),account_snapshot=VALUES(account_snapshot),analytics_snapshot=VALUES(analytics_snapshot),synced_at=UTC_TIMESTAMP()',
                 [$partnerId,$uid,$user['email'],json_encode($account['account']??[]),json_encode($snapshot)]);
             CreatorHub::matchProviderPosts($partnerId,$snapshot['posts']);
+            // Import native-post metrics too, with only server-side provider credentials.
+            CreatorHub::refreshAnalytics($partnerId,true);
             PortalSecurity::json(['ok'=>true]);
         } catch (\Throwable $e) {
             $safe=$e instanceof \RuntimeException ? $e->getMessage() : 'Could not synchronize your account.';
@@ -95,8 +108,22 @@ class CreatorHubController extends PartnerBaseController {
     public function disconnectAccount(): void {
         PortalSecurity::requirePost();
         Database::update('creator_profiles',['firebase_uid'=>null,'repostit_email'=>null,'consent_at'=>null,'account_snapshot'=>null,'analytics_snapshot'=>null,'synced_at'=>null],'partner_id=?',[$_SESSION['partner_id']]);
-        Database::query('UPDATE creator_content SET provider_metrics=NULL,provider_attempt_id=NULL,provider_checked_at=NULL WHERE partner_id=?',[$_SESSION['partner_id']]);
+        Database::query("UPDATE creator_content SET provider_metrics=NULL,provider_attempt_id=NULL,provider_checked_at=NULL,analytics_status='not_checked' WHERE partner_id=?",[$_SESSION['partner_id']]);
         $_SESSION['success']='Portal account disconnected. Your social connections in Repostit have not been changed.';
         header('Location: /dashboard#socials'); exit;
+    }
+    public function refreshAnalytics(): void {
+        PortalSecurity::requirePost();
+        try { CreatorHub::refreshAnalytics((int)$_SESSION['partner_id']); $_SESSION['success']='Available post metrics refreshed. Missing permissions or unsupported formats are shown separately.'; }
+        catch(\Throwable $e){$_SESSION['error']='Analytics refresh is temporarily unavailable. The last snapshot is shown.';}
+        header('Location: /dashboard#content');exit;
+    }
+    public function respondCampaign(): void {
+        PortalSecurity::requirePost();$id=(int)($_POST['campaign_id']??0);$decision=$_POST['decision']??'';
+        if(!in_array($decision,['accepted','declined'],true)){http_response_code(400);exit('Choose accept or decline.');}
+        try{CreatorCampaigns::respond((int)$_SESSION['partner_id'],$id,$decision);}
+        catch(\Throwable $e){$_SESSION['error']='This campaign is no longer awaiting your response.';header('Location: /dashboard#campaigns');exit;}
+        $_SESSION['success']=$decision==='accepted'?'Campaign accepted. Create a dedicated link for each agreed placement below.':'Campaign declined. No content obligation was added.';
+        header('Location: /dashboard#campaigns');exit;
     }
 }

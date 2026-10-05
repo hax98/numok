@@ -6,6 +6,7 @@ const {getAuth}=require('firebase-admin/auth');
 const {getFirestore}=require('firebase-admin/firestore');
 const Stripe=require('stripe');
 const {hash,safeEqual,referral,iso,accountSnapshot,mapConcurrent}=require('./rules');
+const {validateContents,collectAnalytics}=require('./analytics');
 initializeApp();
 const portalSecret=defineSecret('PARTNER_PORTAL_BRIDGE_KEY'),stripeSecret=defineSecret('STRIPE_LIVE_SECRET');
 exports.partnerPortalBridge=onRequest({region:'us-central1',timeoutSeconds:300,memory:'512MiB',maxInstances:2,concurrency:10,secrets:[portalSecret,stripeSecret]},async(req,res)=>{
@@ -21,6 +22,20 @@ exports.partnerPortalBridge=onRequest({region:'us-central1',timeoutSeconds:300,m
    const profile=await db.collection('users').doc(decoded.uid).get();
    if(!profile.exists)return res.status(404).json({error:'Repostit profile not found'});
    return res.json({account:accountSnapshot(profile.data()),identity:{uid:user.uid,email:user.email}});
+  }
+  if(body.action==='analytics'){
+   // Only the secret-authenticated portal may request a previously consented linked UID.
+   if(typeof body.uid!=='string'||!/^[-A-Za-z0-9_]{1,128}$/.test(body.uid)||typeof body.email!=='string')return res.status(400).json({error:'Invalid linked account'});
+   validateContents(body.contents);
+   const user=await getAuth().getUser(body.uid);
+   if(user.disabled||!user.emailVerified||user.email?.toLowerCase()!==body.email.toLowerCase())return res.status(403).json({error:'Linked identity no longer valid'});
+   const profile=await db.collection('users').doc(body.uid).get();if(!profile.exists)return res.status(404).json({error:'Repostit profile not found'});
+   const connectionDocs=await db.collection('connections').where('userId','==',body.uid).limit(101).get();
+   if(connectionDocs.size>100)return res.status(413).json({error:'Connection cohort requires paginated sync'});
+   const cacheDocs=await db.collection('users').doc(body.uid).collection('creatorPerformance').limit(1001).get();
+   if(cacheDocs.size>1000)return res.status(413).json({error:'Analytics history requires paginated sync'});
+   const result=await collectAnalytics({contents:body.contents,connections:connectionDocs.docs.map(d=>({id:d.id,...d.data()})),cached:cacheDocs.docs.map(d=>d.data())});
+   return res.json({...result,account:accountSnapshot(profile.data()),syncedAt:new Date().toISOString()});
   }
   if(body.action!=='referrals'||!Array.isArray(body.codes)||body.codes.length<1||body.codes.length>30||body.codes.some(c=>typeof c!=='string'||!/^[A-Za-z0-9_-]{3,50}$/.test(c)))return res.status(400).json({error:'Invalid referral request'});
   const codes=[...new Set(body.codes)],users=new Map();

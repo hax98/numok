@@ -5,6 +5,12 @@ require dirname(__DIR__) . '/config/config.php';
 $db = \Numok\Database\Database::getInstance();
 // Only additive changes. Never import deploy.sql into an existing database.
 $db->exec(file_get_contents(dirname(__DIR__) . '/database/0005-creator-hub.sql'));
+$db->exec(file_get_contents(dirname(__DIR__) . '/database/0006-creator-campaigns.sql'));
+foreach (['campaign_id'=>'INT UNSIGNED NULL','analytics_status'=>"VARCHAR(50) NOT NULL DEFAULT 'not_checked'"] as $column=>$definition) {
+    $check=$db->prepare('SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name=? AND column_name=?');
+    $check->execute(['creator_content',$column]);
+    if(!$check->fetchColumn())$db->exec("ALTER TABLE creator_content ADD COLUMN `$column` $definition");
+}
 foreach (['customer_key' => 'VARCHAR(100) NULL', 'content_token' => 'VARCHAR(100) NULL', 'currency' => "CHAR(3) NOT NULL DEFAULT 'usd'"] as $column => $definition) {
     $check = $db->prepare('SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name=? AND column_name=?');
     $check->execute(['conversions', $column]);

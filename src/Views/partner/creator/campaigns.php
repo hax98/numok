@@ -1,0 +1,12 @@
+<?php use Numok\Services\CreatorCampaigns;
+$campaigns=$campaigns??CreatorCampaigns::all((int)$partner['id']);
+$actions=$actions??CreatorCampaigns::actions((int)$partner['id']); ?>
+<?php foreach($actions as $action): if($action['audience']!=='creator')continue; ?><div class="ch-notice" role="status"><?= $escape($action['message']) ?> <a class="ch-link" href="<?= $escape($action['destination']) ?>">Open next step</a></div><?php endforeach; ?>
+<section class="ch-card ch-stack" id="campaigns"><div><div class="ch-kicker">YOUR AGREED CONTENT</div><h2>A clear brief. A clear next step.</h2><p class="ch-muted">Affiliate membership alone does not commit you to making content. Review each proposal and accept only what you want to take on.</p></div>
+<?php if(!$campaigns): ?><div class="ch-empty">No campaign agreed yet. You can share your link freely, or ask Hax to agree a brief and dates with you.</div><?php endif; ?>
+<?php foreach($campaigns as $campaign): ?><article class="ch-plan"><div class="ch-row"><h3><?= $escape($campaign['title']) ?></h3><span class="ch-badge"><?= $escape(ucfirst($campaign['status'])) ?></span></div><p class="ch-textwrap" style="white-space:pre-line"><?= $escape($campaign['brief']) ?></p>
+<p class="ch-muted">Deadline: <?= $escape($campaign['due_at']) ?> UTC<?= $campaign['overdue']?' · Deadline passed':'' ?>. <?= (int)$campaign['progress']['done'] ?> / <?= (int)$campaign['progress']['total'] ?> promotions verified.</p>
+<ul><?php foreach($campaign['progress']['rows'] as $d): ?><li><?= (int)$d['count'] ?> <?= $escape(ucfirst($d['platform']).' '.$d['kind']) ?>, <?= (int)$d['verified'] ?> verified</li><?php endforeach; ?></ul>
+<?php if(!$readOnly&&$campaign['status']==='proposed'): ?><form method="post" action="/creator/campaign/respond" class="ch-row" style="justify-content:flex-start"><?= $csrfField ?><input type="hidden" name="campaign_id" value="<?= (int)$campaign['id'] ?>"><button class="ch-button" name="decision" value="accepted">Accept brief and deadline</button><button class="ch-button secondary" name="decision" value="declined">Decline</button></form><?php elseif($campaign['status']==='accepted'): ?><a class="ch-link" href="#content">Create a link for each placement and choose this campaign</a><?php endif; ?>
+</article><?php endforeach; ?>
+<p class="ch-subtle">Completion requires our review of the published promotional URLs. Product publishing activity alone is not proof that you promoted Repostit.</p></section>
