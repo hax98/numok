@@ -10,14 +10,14 @@ final class CreatorSyncController extends Controller {
         if(strlen($expected)<32||!hash_equals($expected,$provided))PortalSecurity::json(['error'=>'Unauthorized'],401);
         session_write_close();
         $ids=Database::query("SELECT DISTINCT pp.partner_id FROM partner_programs pp JOIN partners p ON p.id=pp.partner_id WHERE p.status='active' AND pp.status='active' ORDER BY pp.partner_id")->fetchAll();
-        $synced=0;$failed=0;$analyticsSynced=0;$analyticsFailed=0;
+        $synced=0;$failed=0;$analyticsSynced=0;$analyticsFailed=0;$analyticsSkipped=0;
         foreach($ids as $row){
             try{CreatorHub::refreshReferrals((int)$row['partner_id']);$synced++;}
             catch(\Throwable $e){$failed++;error_log('Creator scheduled sync unavailable for partner '.(int)$row['partner_id']);}
-            try{CreatorHub::refreshAnalytics((int)$row['partner_id']);$analyticsSynced++;}
+            try{if(CreatorHub::refreshAnalytics((int)$row['partner_id']))$analyticsSynced++;else $analyticsSkipped++;}
             catch(\Throwable $e){$analyticsFailed++;error_log('Creator analytics sync unavailable for partner '.(int)$row['partner_id']);}
             CreatorCampaigns::reconcile((int)$row['partner_id']);CreatorCampaigns::refreshActions((int)$row['partner_id']);
         }
-        PortalSecurity::json(['synced'=>$synced,'failed'=>$failed,'analyticsSynced'=>$analyticsSynced,'analyticsFailed'=>$analyticsFailed,'reminders'=>'in_portal_only','automaticPayments'=>false],($failed||$analyticsFailed)?503:200);
+        PortalSecurity::json(['synced'=>$synced,'failed'=>$failed,'analyticsSynced'=>$analyticsSynced,'analyticsFailed'=>$analyticsFailed,'analyticsSkipped'=>$analyticsSkipped,'reminders'=>'in_portal_only','automaticPayments'=>false],($failed||$analyticsFailed)?503:200);
     }
 }

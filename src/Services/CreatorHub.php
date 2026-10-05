@@ -107,10 +107,10 @@ final class CreatorHub {
             }
         }
     }
-    public static function refreshAnalytics(int $partnerId,bool $force=false): void {
+    public static function refreshAnalytics(int $partnerId,bool $force=false): bool {
         $profile=self::profile($partnerId);
-        if(empty($profile['firebase_uid'])||empty($profile['consent_at']))return;
-        if(!$force&&!empty($profile['synced_at'])&&strtotime($profile['synced_at'].' UTC')>time()-900)return;
+        if(empty($profile['firebase_uid'])||empty($profile['consent_at']))return false;
+        if(!$force&&!empty($profile['synced_at'])&&strtotime($profile['synced_at'].' UTC')>time()-900)return false;
         $posts=array_values(array_filter(self::contents($partnerId),fn($c)=>!empty($c['post_url'])));
         $snapshot=['connections'=>[],'posts'=>[]];$account=null;
         // Bounded chunks, no submitted content is silently dropped.
@@ -129,5 +129,6 @@ final class CreatorHub {
         $data=['analytics_snapshot'=>json_encode($snapshot),'synced_at'=>gmdate('Y-m-d H:i:s')];
         if($account!==null)$data['account_snapshot']=json_encode($account);
         Database::update('creator_profiles',$data,'partner_id=? AND firebase_uid=? AND consent_at IS NOT NULL',[$partnerId,$profile['firebase_uid']]);
+        return true;
     }
 }

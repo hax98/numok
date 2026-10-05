@@ -35,4 +35,10 @@ $check(CreatorHub::payingCount(900001)===19,'Real subscriber counts regardless o
 $check(CreatorHub::payingCount(900002)===0,'Partner isolation');
 $mature=$payment(1);$mature['paidAt']=gmdate('c',time()-90*86400);$method->invoke(null,900001,['isolated_qa'=>900001],$mature);
 $check($db->query("SELECT status FROM conversions WHERE stripe_payment_id='in_QA1'")->fetchColumn()==='payable','Validated commission matures after reward delay');
+for($i=31;$i<=511;$i++)$method->invoke(null,900001,['isolated_qa'=>900001],$payment($i));
+$check(CreatorHub::payingCount(900001)===500,'500 distinct genuine subscribers');
+$milestones=CreatorHub::summary(900001)['milestones'];
+$check($milestones[0]['status']==='earned'&&$milestones[1]['status']==='earned'&&array_sum(array_column($milestones,'amount'))===5200,'Additional milestone stacks to 5200');
+$check((int)$db->query("SELECT COUNT(*) FROM creator_bonus_payouts")->fetchColumn()===0,'Reaching both milestones never creates a payout');
+$check((int)$db->query("SELECT COUNT(*) FROM conversions WHERE status='paid'")->fetchColumn()===0,'Commission maturity never marks money paid');
 echo 'Isolated MySQL ledger checks passed: '.$checks.'. No persistent fixture writes.'.PHP_EOL;
