@@ -10,7 +10,7 @@ final class CreatorCampaigns {
             $row=Database::query('SELECT * FROM creator_campaigns WHERE id=? AND partner_id=? FOR UPDATE',[$id,$partnerId])->fetch();
             if(!$row || $row['status']!=='proposed')throw new \RuntimeException('This campaign is no longer awaiting your response.');
             Database::update('creator_campaigns',['status'=>$decision,'accepted_at'=>$decision==='accepted'?gmdate('Y-m-d H:i:s'):null],'id=?',[$id]);
-            Database::insert('creator_audit_log',['partner_id'=>$partnerId,'action'=>'campaign_'.$decision,'details'=>json_encode(['campaignId'=>$id])]);
+            Database::insert('creator_audit_log',['actor_id'=>$partnerId,'partner_id'=>$partnerId,'action'=>'campaign_'.$decision,'details'=>json_encode(['campaignId'=>$id,'actorType'=>'creator'])]);
         });
     }
     public static function all(int $partnerId): array {

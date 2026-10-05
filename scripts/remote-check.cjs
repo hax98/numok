@@ -15,7 +15,9 @@ if(process.argv[2]==='migrate-flow'){
  console.log(remote(php));
 }else if(['ledger','campaigns'].includes(process.argv[2])){
  const test=fs.readFileSync(path.join(__dirname,process.argv[2]==='campaigns'?'../tests/creator-campaign-smoke.php':'../tests/creator-ledger-smoke.php')).toString('base64');
- console.log(remote(`require '/var/www/html/vendor/autoload.php';require '/var/www/html/config/config.php';$tmp=tempnam(sys_get_temp_dir(),'creator-ledger-');file_put_contents($tmp,base64_decode('${test}'));try{require $tmp;}finally{unlink($tmp);}`));
+ const local=process.argv[2]==='campaigns'?['CreatorRules','CreatorFlowRules','CreatorHub','CreatorCampaigns']:['CreatorRules','CreatorHub'];
+ const source=local.map(name=>fs.readFileSync(path.join(__dirname,'../src/Services/'+name+'.php')).toString('base64'));
+ console.log(remote(`require '/var/www/html/vendor/autoload.php';require '/var/www/html/config/config.php';$files=[];try{foreach(${JSON.stringify(source).replaceAll('[','array(').replaceAll(']',')')} as $body){$f=tempnam(sys_get_temp_dir(),'creator-source-');$files[]=$f;file_put_contents($f,base64_decode($body));require $f;}$tmp=tempnam(sys_get_temp_dir(),'creator-ledger-');$files[]=$tmp;file_put_contents($tmp,base64_decode('${test}'));require $tmp;}finally{foreach($files as $f)unlink($f);}`));
 }else if(process.argv[2]==='sync'){
  console.log(remote(`require '/var/www/html/vendor/autoload.php';require '/var/www/html/config/config.php';$partners=Numok\\Database\\Database::query("SELECT DISTINCT pp.partner_id FROM partner_programs pp JOIN partners p ON p.id=pp.partner_id WHERE p.status='active' AND pp.status='active'")->fetchAll();foreach($partners as $p){Numok\\Services\\CreatorHub::refreshReferrals((int)$p['partner_id']);echo 'Partner '.$p['partner_id'].' verified sync complete.\\n';}echo 'Persistent conversion records: '.Numok\\Database\\Database::query('SELECT COUNT(*) FROM conversions')->fetchColumn();`));
 }else if(process.argv[2]==='schema'){
