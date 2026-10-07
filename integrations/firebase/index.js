@@ -7,6 +7,7 @@ const {getFirestore}=require('firebase-admin/firestore');
 const Stripe=require('stripe');
 const {hash,safeEqual,referral,iso,accountSnapshot,mapConcurrent}=require('./rules');
 const {validateContents,collectAnalytics}=require('./analytics');
+const {syncPortal}=require('./portalSync');
 initializeApp();
 const portalSecret=defineSecret('PARTNER_PORTAL_BRIDGE_KEY'),stripeSecret=defineSecret('STRIPE_LIVE_SECRET');
 exports.partnerPortalBridge=onRequest({region:'us-central1',timeoutSeconds:300,memory:'512MiB',maxInstances:2,concurrency:10,secrets:[portalSecret,stripeSecret]},async(req,res)=>{
@@ -89,8 +90,6 @@ exports.partnerPortalBridge=onRequest({region:'us-central1',timeoutSeconds:300,m
 });
 
 exports.syncPartnerPortal=onSchedule({schedule:'every 60 minutes',timeZone:'Europe/Rome',region:'us-central1',timeoutSeconds:540,memory:'256MiB',maxInstances:1,secrets:[portalSecret]},async()=>{
- const response=await fetch('https://partners.repostit.io/internal/creator-sync',{method:'POST',headers:{'X-Partner-Bridge-Key':portalSecret.value(),'Content-Type':'application/json'},body:'{}',signal:AbortSignal.timeout(500000)});
- const result=await response.json();
- if(!response.ok)throw new Error('Portal sync failed, '+(result.failed??'unknown')+' partners require retry');
- console.log('Partner portal verified sync',{synced:result.synced,failed:result.failed});
+ const result=await syncPortal({key:portalSecret.value()});
+ console.log('Partner portal verified sync',result);
 });
