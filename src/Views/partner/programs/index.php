@@ -161,10 +161,8 @@
                                 <!-- Tracking Link Section (for joined programs) -->
                                 <?php if ($program['status'] === 'joined'): ?>
                                     <?php
-                                    $landingPage = rtrim((string) ($program['landing_page'] ?? ''), '?&');
                                     $trackingCode = (string) ($program['tracking_code'] ?? '');
-                                    $trackingSeparator = str_contains($landingPage, '?') ? '&' : '?';
-                                    $trackingUrl = $landingPage . $trackingSeparator . 'via=' . $trackingCode;
+                                    $trackingUrl = \Numok\Services\CreatorRules::affiliateLink($trackingCode);
                                     ?>
                                     <div class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
                                         <div class="flex items-center justify-between mb-3">
@@ -172,7 +170,7 @@
                                                 <svg class="w-4 h-4 mr-2 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd" />
                                                 </svg>
-                                                Your Tracking Link
+                                                Your affiliate link
                                             </h4>
                                             <span class="text-xs text-gray-500 font-mono bg-white px-2 py-1 rounded border">
                                                 <?= htmlspecialchars($trackingCode, ENT_QUOTES, 'UTF-8') ?>
@@ -193,7 +191,7 @@
                                         <form action="/programs/update-tracking" method="POST" class="mt-4 border-t border-gray-200 pt-4">
                                             <input type="hidden" name="csrf" value="<?= htmlspecialchars(\Numok\Services\PortalSecurity::csrf(), ENT_QUOTES, 'UTF-8') ?>">
                                             <input type="hidden" name="partner_program_id" value="<?= (int) $program['id'] ?>">
-                                            <label for="tracking-code-<?= (int) $program['id'] ?>" class="block text-sm font-medium text-gray-700">Change tracking code</label>
+                                            <label for="tracking-code-<?= (int) $program['id'] ?>" class="block text-sm font-medium text-gray-700">Customize your link</label>
                                             <div class="mt-2 flex flex-col gap-2 sm:flex-row">
                                                 <input id="tracking-code-<?= (int) $program['id'] ?>"
                                                     name="tracking_code"
@@ -209,7 +207,7 @@
                                                     Save link
                                                 </button>
                                             </div>
-                                            <p id="tracking-code-help-<?= (int) $program['id'] ?>" class="mt-2 text-xs text-gray-500">3 to 50 characters, letters, numbers, hyphens, or underscores. Existing links stop working after you change the code.</p>
+                                            <p id="tracking-code-help-<?= (int) $program['id'] ?>" class="mt-2 text-xs text-gray-500">3 to 50 characters, letters, numbers, hyphens, or underscores. Previously shared short links keep working after you customize it.</p>
                                         </form>
                                     </div>
                                 <?php endif; ?>

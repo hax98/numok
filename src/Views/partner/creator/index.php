@@ -18,7 +18,7 @@ $money=static fn($v)=>'$'.number_format((float)$v,2);
  <?php if($syncError): ?><div class="ch-notice error" role="status"><?= $escape($syncError) ?></div><?php endif; ?>
  <div class="ch-two">
   <section class="ch-card accent" aria-labelledby="link-heading"><div class="ch-kicker">START HERE</div><h2 id="link-heading">Your recommendation has a home.</h2>
-   <?php if($program): $link='https://partners.repostit.io/go/'.rawurlencode($program['tracking_code']); ?>
+   <?php if($program): $link=CreatorRules::affiliateLink((string)$program['tracking_code']); ?>
     <p class="ch-muted">Share your link in your bio, a Story link sticker, or a DM someone has asked for.</p>
     <div class="ch-linkfield"><input aria-label="Your affiliate link" readonly value="<?= $escape($link) ?>"><button class="ch-button" type="button" data-copy="<?= $escape($link) ?>">Copy link</button></div>
     <div class="ch-row" style="margin-top:18px"><span class="ch-badge">20% recurring while referrals stay subscribed</span><a class="ch-link" href="/programs">Customize your code</a></div>

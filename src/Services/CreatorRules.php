@@ -42,4 +42,7 @@ final class CreatorRules {
         if (!preg_match('/^[a-f0-9]{24}$/', $token)) throw new \InvalidArgumentException('Invalid content token.');
         return 'https://partners.repostit.io/r/' . $token;
     }
+    public static function affiliateLink(string $code): string {
+        return 'https://partners.repostit.io/go/' . rawurlencode($code);
+    }
 }
