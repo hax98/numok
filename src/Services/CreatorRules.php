@@ -40,9 +40,9 @@ final class CreatorRules {
     }
     public static function link(string $token): string {
         if (!preg_match('/^[a-f0-9]{24}$/', $token)) throw new \InvalidArgumentException('Invalid content token.');
-        return 'https://partners.repostit.io/r/' . $token;
+        return PortalEnvironment::baseUrl() . '/r/' . $token;
     }
     public static function affiliateLink(string $code): string {
-        return 'https://partners.repostit.io/go/' . rawurlencode($code);
+        return PortalEnvironment::baseUrl() . '/go/' . rawurlencode($code);
     }
 }

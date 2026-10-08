@@ -3,7 +3,7 @@ const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // Only retry known failures before a connection is established. A dropped
 // socket or response timeout may have reached the portal: do not replay it.
-async function syncPortal({ key, fetchImpl = fetch, waitImpl = wait, now = Date.now,
+async function syncPortal({ key, url = 'https://partners.repostit.io/internal/creator-sync', fetchImpl = fetch, waitImpl = wait, now = Date.now,
   logger = console, timeoutMs = 500000 }) {
   if (typeof key !== 'string' || !key) throw new Error('Partner portal sync key unavailable');
   const deadline = now() + timeoutMs;
@@ -12,7 +12,7 @@ async function syncPortal({ key, fetchImpl = fetch, waitImpl = wait, now = Date.
     const remaining = deadline - now();
     if (remaining <= 0) throw new Error('Partner portal sync deadline exceeded');
     try {
-      response = await fetchImpl('https://partners.repostit.io/internal/creator-sync', {
+      response = await fetchImpl(url, {
         method: 'POST', redirect: 'error',
         headers: { 'X-Partner-Bridge-Key': key, 'Content-Type': 'application/json' },
         body: '{}', signal: AbortSignal.timeout(Math.ceil(remaining)),

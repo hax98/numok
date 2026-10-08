@@ -5,9 +5,7 @@ use Numok\Database\Database;
 
 final class CreatorHub {
     public static function firebaseConfig(): array {
-        // Public Firebase web configuration, not an administrator credential.
-        return ['apiKey'=>'AIzaSyBadVKoP1A-ZTF5vsh_VL-YkMbAWoNMpX0','authDomain'=>'repostit-91b0e.firebaseapp.com',
-            'projectId'=>'repostit-91b0e','appId'=>'1:286284314864:web:f0253867299d62cf672a35'];
+        return PortalEnvironment::firebaseConfig();
     }
     public static function programs(int $partnerId): array {
         return Database::query("SELECT pp.*, p.name, p.landing_page, p.commission_value, p.terms FROM partner_programs pp JOIN programs p ON p.id=pp.program_id WHERE pp.partner_id=? AND pp.status='active' AND p.status='active' ORDER BY pp.id", [$partnerId])->fetchAll();
@@ -48,7 +46,7 @@ final class CreatorHub {
     public static function bridge(array $data): array {
         $secret=getenv('PARTNER_PORTAL_BRIDGE_KEY') ?: '';
         if (!$secret) throw new \RuntimeException('Repostit referral sync is not configured.');
-        return PortalSecurity::postJson('https://us-central1-repostit-91b0e.cloudfunctions.net/partnerPortalBridge', $data,
+        return PortalSecurity::postJson(PortalEnvironment::functionUrl('partnerPortalBridge'), $data,
             ['X-Partner-Bridge-Key: '.$secret], 90);
     }
     public static function refreshReferrals(int $partnerId): void {

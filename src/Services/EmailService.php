@@ -53,6 +53,10 @@ class EmailService
 
     private function sendEmail(string $to, string $subject, string $html): void
     {
+        if (PortalEnvironment::staging()) {
+            error_log('Staging email delivery disabled.');
+            return;
+        }
         try {
             if ($this->brevoApiKey !== '') {
                 $this->sendViaBrevo($to, $subject, $html);

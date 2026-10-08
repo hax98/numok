@@ -74,7 +74,7 @@ class CreatorAdminController extends Controller {
             // The existing Firebase callable independently rechecks the administrator claim,
             // exact target email, grant duration and idempotent audit request ID.
             $requestId='portal_creator_'.substr(hash('sha256',$id.':'.$profile['firebase_uid']),0,48);
-            $reply=PortalSecurity::postJson('https://us-central1-repostit-91b0e.cloudfunctions.net/manageComplimentaryPublishingAccess',
+            $reply=PortalSecurity::postJson(\Numok\Services\PortalEnvironment::functionUrl('manageComplimentaryPublishingAccess'),
                 ['data'=>['userId'=>$profile['firebase_uid'],'email'=>$profile['repostit_email'],'action'=>'grant',
                     'reason'=>'Annual creator partner access approved in Repostit Partners admin.','requestId'=>$requestId]],['Authorization: Bearer '.$token],125);
             $result=$reply['result']??[];

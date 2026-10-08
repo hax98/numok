@@ -8,8 +8,9 @@ const Stripe=require('stripe');
 const {hash,safeEqual,referral,iso,accountSnapshot,mapConcurrent}=require('./rules');
 const {validateContents,collectAnalytics}=require('./analytics');
 const {syncPortal}=require('./portalSync');
+const {portalUrl,stripeKey,STAGING_PROJECT}=require('./environment');
 initializeApp();
-const portalSecret=defineSecret('PARTNER_PORTAL_BRIDGE_KEY'),stripeSecret=defineSecret('STRIPE_LIVE_SECRET');
+const portalSecret=defineSecret(process.env.GCLOUD_PROJECT===STAGING_PROJECT?'PARTNER_STAGING_PORTAL_BRIDGE_KEY':'PARTNER_PORTAL_BRIDGE_KEY'),stripeSecret=defineSecret(process.env.GCLOUD_PROJECT===STAGING_PROJECT?'PARTNER_PORTAL_TEST_STRIPE_KEY':'STRIPE_LIVE_SECRET');
 exports.partnerPortalBridge=onRequest({region:'us-central1',timeoutSeconds:300,memory:'512MiB',maxInstances:2,concurrency:10,secrets:[portalSecret,stripeSecret]},async(req,res)=>{
  res.set('Cache-Control','no-store');
  if(req.method!=='POST')return res.status(405).json({error:'POST required'});
@@ -46,7 +47,7 @@ exports.partnerPortalBridge=onRequest({region:'us-central1',timeoutSeconds:300,m
    if(snap.size>1000)return res.status(413).json({error:'Referral cohort requires paginated sync'});
    for(const d of snap.docs)users.set(d.id,d.data());
   }
-  const stripe=new Stripe(stripeSecret.value()),referrals=[],payments=[];
+  let stripe;const referrals=[],payments=[];
   await mapConcurrent([...users],4,async([uid,data])=>{
    const attr=referral(data,codes);if(!attr||uid===body.excludeUid||String(data.email||'').toLowerCase()===String(body.excludeEmail||'').toLowerCase())return;
    const auth=await getAuth().getUser(uid).catch(()=>null);
@@ -58,6 +59,7 @@ exports.partnerPortalBridge=onRequest({region:'us-central1',timeoutSeconds:300,m
    const dates=real.map(p=>iso(p.confirmedAt)||iso(p.createdAt)).filter(Boolean).sort();
    referrals.push({...attr,customerHash:hash(uid),stripeCustomerId:customer,signedUpAt:signup,firstPublishAt:dates[0]||null});
    if(!customer||!/^cus_[A-Za-z0-9]+$/.test(customer))return;
+   stripe ||= new Stripe(stripeKey(process.env.GCLOUD_PROJECT,stripeSecret.value()));
    let after,scanned=0;
    do{
     const page=await stripe.invoices.list({customer,status:'paid',limit:100,...(after?{starting_after:after}:{})});
@@ -90,6 +92,6 @@ exports.partnerPortalBridge=onRequest({region:'us-central1',timeoutSeconds:300,m
 });
 
 exports.syncPartnerPortal=onSchedule({schedule:'every 60 minutes',timeZone:'Europe/Rome',region:'us-central1',timeoutSeconds:540,memory:'256MiB',maxInstances:1,secrets:[portalSecret]},async()=>{
- const result=await syncPortal({key:portalSecret.value()});
+ const result=await syncPortal({key:portalSecret.value(),url:portalUrl(process.env.GCLOUD_PROJECT,process.env.PARTNER_PORTAL_SYNC_URL)});
  console.log('Partner portal verified sync',result);
 });

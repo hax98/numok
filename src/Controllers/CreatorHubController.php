@@ -87,7 +87,7 @@ class CreatorHubController extends PartnerBaseController {
             if (!empty($existing['firebase_uid']) && $existing['firebase_uid']!==$uid) throw new \RuntimeException('Disconnect your current Repostit account before linking a different one.');
             if (Database::query('SELECT partner_id FROM creator_profiles WHERE firebase_uid=? AND partner_id<>?',[$uid,$partnerId])->fetch()) throw new \RuntimeException('This Repostit account is already linked to another partner.');
             // Callable checks the Firebase ID token and queries only this authenticated creator.
-            $analytics=PortalSecurity::postJson('https://us-central1-repostit-91b0e.cloudfunctions.net/getCreatorPerformance',['data'=>['periodDays'=>90,'refresh'=>false]],['Authorization: Bearer '.$token],125)['result']??[];
+            $analytics=PortalSecurity::postJson(\Numok\Services\PortalEnvironment::functionUrl('getCreatorPerformance'),['data'=>['periodDays'=>90,'refresh'=>false]],['Authorization: Bearer '.$token],125)['result']??[];
             // Store only the public metrics needed for the portal, never provider tokens.
             $snapshot=['connections'=>$analytics['capability']['connections']??[],'posts'=>array_map(static fn($p)=>[
                 'attemptId'=>$p['attemptId']??null,'platform'=>$p['platform']??null,'publishedUrl'=>$p['publishedUrl']??null,
