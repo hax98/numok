@@ -15,6 +15,12 @@ final class PortalEnvironment {
     public static function firebaseProject(): string {
         return self::staging() ? 'repostit-dev' : 'repostit-91b0e';
     }
+    public static function appUrl(): string {
+        return self::staging() ? 'https://preview.repostit.io' : 'https://app.repostit.io';
+    }
+    public static function referralHosts(): array {
+        return self::staging() ? ['preview.repostit.io'] : ['repostit.io','www.repostit.io','app.repostit.io'];
+    }
     public static function functionUrl(string $name): string {
         if (!in_array($name, ['partnerPortalBridge', 'getCreatorPerformance', 'manageComplimentaryPublishingAccess'], true)) {
             throw new \InvalidArgumentException('Unknown portal function.');

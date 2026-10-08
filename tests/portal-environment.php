@@ -7,9 +7,13 @@ $check=function(bool $ok,string $name)use(&$checks):void{if(!$ok)throw new Runti
 $reject=function(callable $fn,string $name)use($check):void{$rejected=false;try{$fn();}catch(RuntimeException $e){$rejected=true;}$check($rejected,$name);};
 putenv('APP_ENV');putenv('APP_URL');
 $check(E::baseUrl()==='https://partners.repostit.io','Production URL unchanged');
+$check(E::appUrl()==='https://app.repostit.io','Production app unchanged');
+$check(E::referralHosts()===['repostit.io','www.repostit.io','app.repostit.io'],'Production referral destinations unchanged');
 $check(CreatorHub::firebaseConfig()['projectId']==='repostit-91b0e','Production auth unchanged');
 $check(E::functionUrl('partnerPortalBridge')==='https://us-central1-repostit-91b0e.cloudfunctions.net/partnerPortalBridge','Production bridge unchanged');
 putenv('APP_ENV=staging');
+$check(E::appUrl()==='https://preview.repostit.io','Staging links use preview');
+$check(E::referralHosts()===['preview.repostit.io'],'Staging cannot redirect to production');
 $reject(fn()=>E::baseUrl(),'Missing staging URL rejected');
 foreach(['https://partners.repostit.io','http://partners-staging-example.up.railway.app','https://user:pass@partners-staging-example.up.railway.app','https://partners-staging-example.up.railway.app?secret=oops'] as $url){
  putenv('APP_URL='.$url);$reject(fn()=>E::baseUrl(),'Unsafe staging URL rejected');

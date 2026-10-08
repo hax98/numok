@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Numok\Controllers;
 use Numok\Database\Database;
+use Numok\Services\PortalEnvironment;
 class CreatorLinkController extends Controller {
     public function content(string $token): void {
         $row=Database::query("SELECT c.token,pp.id,pp.tracking_code,p.landing_page FROM creator_content c JOIN partner_programs pp ON pp.id=c.partner_program_id JOIN programs p ON p.id=pp.program_id JOIN partners partner ON partner.id=pp.partner_id WHERE c.token=? AND pp.status='active' AND p.status='active' AND partner.status='active'",[$token])->fetch();
@@ -16,8 +17,8 @@ class CreatorLinkController extends Controller {
         if (!$row) { http_response_code(404); exit('This referral link is not active.'); }
         $method=$_SERVER['REQUEST_METHOD']??'GET';
         if (!in_array($method,['GET','HEAD'],true)) { http_response_code(405); exit; }
-        $target=$row['landing_page'] ?: 'https://app.repostit.io/'; $parts=parse_url($target);
-        if (($parts['scheme']??'')!=='https' || !in_array(strtolower($parts['host']??''),['repostit.io','www.repostit.io','app.repostit.io'],true) || isset($parts['user']) || isset($parts['pass'])) { http_response_code(503); exit('Referral destination unavailable.'); }
+        $target=$row['landing_page'] ?: PortalEnvironment::appUrl().'/'; $parts=parse_url($target);
+        if (($parts['scheme']??'')!=='https' || !in_array(strtolower($parts['host']??''),PortalEnvironment::referralHosts(),true) || isset($parts['user']) || isset($parts['pass'])) { http_response_code(503); exit('Referral destination unavailable.'); }
         $params=['via'=>$row['tracking_code'],'utm_source'=>'creator','utm_medium'=>'affiliate','utm_campaign'=>'repostit_partners'];
         if ($isContent) $params['utm_content']=$row['token'];
         // Link previews are not visitor clicks; GET counts remain visits, not unique people.
