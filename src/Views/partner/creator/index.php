@@ -27,7 +27,7 @@ $money=static fn($v)=>'$'.number_format((float)$v,2);
   </section>
   <section class="ch-card"><h2>Your next steps</h2>
    <div class="ch-step"><span class="ch-stepnum"><?= $program?'✓':'1' ?></span><div><a class="ch-link" href="/programs">Join the program and get your link</a><p>Review the terms, then choose a code that feels like you.</p></div></div>
-   <div class="ch-step"><span class="ch-stepnum"><?= $linked?'✓':'2' ?></span><div><a class="ch-link" href="#socials">Link your Repostit account</a><p>Bring in your connected profiles and available analytics.</p></div></div>
+   <div class="ch-step"><span class="ch-stepnum"><?= $linked?'✓':'2' ?></span><div><a class="ch-link" href="#socials">Link your Repostit account</a><p>Publishing uses a separate app account. <a class="ch-link" href="<?= $escape(\Numok\Services\PortalEnvironment::appUrl()) ?>" target="_blank" rel="noopener">Open Repostit</a> with your existing app account, or create one if you're new. Then link it here for your connected profiles and available analytics.</p></div></div>
    <div class="ch-step"><span class="ch-stepnum">3</span><div><a class="ch-link" href="#brief">Try it, then show your real workflow</a><p>Publish successfully before recommending it to your audience.</p></div></div>
    <div class="ch-step"><span class="ch-stepnum">4</span><div><a class="ch-link" href="#content">Add a content link and published URL</a><p>Measure what works, then make more of that.</p></div></div>
   </section>
