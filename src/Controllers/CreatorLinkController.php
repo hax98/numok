@@ -19,7 +19,8 @@ class CreatorLinkController extends Controller {
         if (!in_array($method,['GET','HEAD'],true)) { http_response_code(405); exit; }
         $target=$row['landing_page'] ?: PortalEnvironment::appUrl().'/'; $parts=parse_url($target);
         if (($parts['scheme']??'')!=='https' || !in_array(strtolower($parts['host']??''),PortalEnvironment::referralHosts(),true) || isset($parts['user']) || isset($parts['pass'])) { http_response_code(503); exit('Referral destination unavailable.'); }
-        $params=['via'=>$row['tracking_code'],'utm_source'=>'creator','utm_medium'=>'affiliate','utm_campaign'=>'repostit_partners'];
+        // ref is the app's explicit signup-code path; via remains consented legacy attribution.
+        $params=['ref'=>$row['tracking_code'],'via'=>$row['tracking_code'],'utm_source'=>'creator','utm_medium'=>'affiliate','utm_campaign'=>'repostit_partners'];
         if ($isContent) $params['utm_content']=$row['token'];
         // Link previews are not visitor clicks; GET counts remain visits, not unique people.
         if ($method==='GET' && !preg_match('/bot|crawler|spider|facebookexternalhit|preview|headless/i',$_SERVER['HTTP_USER_AGENT']??'')) {
