@@ -3,6 +3,18 @@ const {safeEqual,referral,accountSnapshot,hash,mapConcurrent}=require('./rules')
 test('bridge authentication fails closed',()=>{assert.equal(safeEqual('', ''),false);assert.equal(safeEqual('a'.repeat(40),'a'.repeat(40)),true);assert.equal(safeEqual('b'.repeat(40),'a'.repeat(40)),false);});
 test('first-touch creator code takes precedence',()=>{assert.equal(referral({referralData:{via:'alice',ref:'bob'}},['bob']),null);assert.equal(referral({referralData:{via:'alice',utm_content:'clip1'}},['alice']).contentToken,'clip1');});
 test('test accounts never become creator referrals',()=>assert.equal(referral({isTestAccount:true,referralData:{via:'alice'}},['alice']),null));
+test('explicit signup code qualifies without optional attribution',()=>{
+ for(const type of ['ref','affiliate'])assert.deepEqual(referral({signupReferralCode:{type,code:'alice'}},['alice']),{code:'alice',contentToken:null});
+});
+test('explicit code does not reassign an established first touch',()=>{
+ const data={referralData:{via:'alice',utm_content:'clip1'},signupReferralCode:{type:'ref',code:'bob'}};
+ assert.equal(referral(data,['bob']),null);assert.deepEqual(referral(data,['alice']),{code:'alice',contentToken:'clip1'});
+});
+test('invalid or unrequested signup codes and test accounts are excluded',()=>{
+ for(const explicit of [{type:'via',code:'alice'},{type:'ref',code:'alice/other'},{type:'ref',code:123},{type:'ref',code:'other'}])assert.equal(referral({signupReferralCode:explicit},['alice']),null);
+ for(const flag of ['isTestAccount','isTest','testAccount'])assert.equal(referral({[flag]:true,signupReferralCode:{type:'ref',code:'alice'}},['alice']),null);
+});
+test('explicit-only attribution does not borrow an unrelated content token',()=>assert.deepEqual(referral({referralData:{utm_content:'unrelated'},signupReferralCode:{type:'ref',code:'alice'}},['alice']),{code:'alice',contentToken:null}));
 test('free access is not a paid subscription and expires',()=>{const now=Date.now(),data={complimentaryPublishingAccess:{plan:'influencer',startsAt:new Date(now-1000),endsAt:new Date(now+1000),grantedBy:'admin',requestId:'approved'},subscription:{plan:'free'}};assert.equal(accountSnapshot(data,now).grantState,'active');assert.equal(accountSnapshot(data,now).billingPlan,'free');assert.equal(accountSnapshot(data,now+2000).influencerExpiresAt,null);});
 test('privacy hash is stable and opaque',()=>{assert.equal(hash('uid').length,64);assert.equal(hash('uid'),hash('uid'));});
 test('Unicode secret mismatch fails closed without throwing',()=>assert.equal(safeEqual('é'.repeat(40),'a'.repeat(40)),false));

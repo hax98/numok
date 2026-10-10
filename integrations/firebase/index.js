@@ -42,8 +42,8 @@ exports.partnerPortalBridge=onRequest({region:'us-central1',timeoutSeconds:300,m
   if(body.action!=='referrals'||!Array.isArray(body.codes)||body.codes.length<1||body.codes.length>30||body.codes.some(c=>typeof c!=='string'||!/^[A-Za-z0-9_-]{3,50}$/.test(c)))return res.status(400).json({error:'Invalid referral request'});
   const codes=[...new Set(body.codes)],users=new Map();
   // Queries are exact-code constrained, never return a global user export to the portal.
-  for(const field of ['via','ref','referral','affiliate','referral_via','referral_ref']){
-   const snap=await db.collection('users').where('referralData.'+field,'in',codes).limit(1001).get();
+  for(const path of ['via','ref','referral','affiliate','referral_via','referral_ref'].map(field=>'referralData.'+field).concat('signupReferralCode.code')){
+   const snap=await db.collection('users').where(path,'in',codes).limit(1001).get();
    if(snap.size>1000)return res.status(413).json({error:'Referral cohort requires paginated sync'});
    for(const d of snap.docs)users.set(d.id,d.data());
   }
