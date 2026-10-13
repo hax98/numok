@@ -22,7 +22,8 @@ class PartnerProgramsController extends PartnerBaseController {
                         WHEN pp.id IS NOT NULL THEN 'joined'
                         ELSE 'available'
                     END as status,
-                    pp.tracking_code
+                    pp.tracking_code,
+                    pp.id AS partner_program_id
              FROM programs p
              LEFT JOIN partner_programs pp ON p.id = pp.program_id 
                 AND pp.partner_id = ?
