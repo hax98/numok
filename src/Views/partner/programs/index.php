@@ -190,7 +190,7 @@
                                         </div>
                                         <form action="/programs/update-tracking" method="POST" class="mt-4 border-t border-gray-200 pt-4">
                                             <input type="hidden" name="csrf" value="<?= htmlspecialchars(\Numok\Services\PortalSecurity::csrf(), ENT_QUOTES, 'UTF-8') ?>">
-                                            <input type="hidden" name="partner_program_id" value="<?= (int) $program['id'] ?>">
+                                            <input type="hidden" name="partner_program_id" value="<?= (int) $program['partner_program_id'] ?>">
                                             <label for="tracking-code-<?= (int) $program['id'] ?>" class="block text-sm font-medium text-gray-700">Customize your link</label>
                                             <div class="mt-2 flex flex-col gap-2 sm:flex-row">
                                                 <input id="tracking-code-<?= (int) $program['id'] ?>"
