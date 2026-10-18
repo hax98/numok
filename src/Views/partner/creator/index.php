@@ -7,6 +7,7 @@ $linked=!empty($profile['firebase_uid']);
 $snapshot=$profile['analytics_snapshot']??[];
 $account=$profile['account_snapshot']??[];
 $connections=$snapshot['connections']??[];
+$partnerWelcomeMessage=trim((string)($settings['partner_welcome_message']??''));
 $csrfField='<input type="hidden" name="csrf" value="'.$escape($csrf).'">';
 $money=static fn($v)=>'$'.number_format((float)$v,2);
 ?>
@@ -16,6 +17,7 @@ $money=static fn($v)=>'$'.number_format((float)$v,2);
  <div class="ch-top"><div><div class="ch-kicker">YOUR CREATOR WORKSPACE</div><h1>Hello, <?= $escape(explode(' ',$partner['contact_name'])[0]) ?>.</h1><p class="ch-muted">Your content, your referrals, your recurring income. One place to keep it moving.</p></div><span class="ch-badge">Repostit Partners</span></div>
  <?php foreach(['success','error'] as $notice): if(!empty($_SESSION[$notice])): ?><div class="ch-notice <?= $notice ?>" role="status"><?= $escape($_SESSION[$notice]) ?></div><?php unset($_SESSION[$notice]);endif;endforeach; ?>
  <?php if($syncError): ?><div class="ch-notice error" role="status"><?= $escape($syncError) ?></div><?php endif; ?>
+ <?php if($partnerWelcomeMessage!==''): ?><section class="ch-card ch-stack" aria-label="A message from Repostit"><div class="ch-kicker">A NOTE FROM REPOSTIT</div><p class="ch-muted" style="white-space:pre-line;margin:0"><?= $escape($partnerWelcomeMessage) ?></p></section><?php endif; ?>
  <div class="ch-two">
   <section class="ch-card accent" aria-labelledby="link-heading"><div class="ch-kicker">START HERE</div><h2 id="link-heading">Your recommendation has a home.</h2>
    <?php if($program): $link=CreatorRules::affiliateLink((string)$program['tracking_code']); ?>
