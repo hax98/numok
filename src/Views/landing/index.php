@@ -1,5 +1,6 @@
 <?php
 $partnerShareImage = '/assets/images/partner-og.png';
+$partnerAttributionSuffix = htmlspecialchars($partnerAttributionQuery ?? '', ENT_QUOTES, 'UTF-8');
 ?>
 
 <div class="partner-landing">
@@ -15,7 +16,7 @@ $partnerShareImage = '/assets/images/partner-og.png';
         </nav>
         <div class="partner-nav-actions">
             <a href="/login" class="partner-login">Log in</a>
-            <a href="/register" class="partner-button partner-button-small">Join free</a>
+            <a href="/register<?= $partnerAttributionSuffix ?>" class="partner-button partner-button-small">Join free</a>
         </div>
     </header>
 
@@ -26,7 +27,7 @@ $partnerShareImage = '/assets/images/partner-og.png';
                 <h1 id="partner-hero-title">Help creators grow further. <em>Earn 20% recurring.</em></h1>
                 <p class="partner-hero-lede">Join the Repostit partner program and earn recurring commission by sharing the tool creators, founders, and online businesses use to turn one video into content that performs everywhere.</p>
                 <div class="partner-hero-actions">
-                    <a href="/register" class="partner-button">Join free</a>
+                    <a href="/register<?= $partnerAttributionSuffix ?>" class="partner-button">Join free</a>
                     <a href="/login" class="partner-text-link">Already a partner? Log in</a>
                 </div>
                 <p class="partner-hero-note">Free to join. $200 at 20 paying subscribers, plus an additional $5,000 at 500. Share what you genuinely use.</p>
@@ -83,7 +84,7 @@ $partnerShareImage = '/assets/images/partner-og.png';
                 <p class="partner-eyebrow">BUILT FOR PEOPLE WHO PUBLISH</p>
                 <h2 id="final-cta-title">Make your next recommendation count.</h2>
             </div>
-            <a href="/register" class="partner-button">Join the partner program</a>
+            <a href="/register<?= $partnerAttributionSuffix ?>" class="partner-button">Join the partner program</a>
         </section>
     </main>
 
