@@ -14,7 +14,7 @@
             <p class="partner-auth-eyebrow">JOIN THE CREW</p>
             <h1>Make your next recommendation count.</h1>
             <p class="partner-auth-lede">Create your free partner account to track referrals and earnings.</p>
-            <p class="partner-auth-secondary">Publishing uses a separate Repostit app account. <a href="<?= htmlspecialchars(\Numok\Services\PortalEnvironment::appUrl(), ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Open Repostit</a> and use your existing app account, or create one if you're new. Publishing access is managed in the app.</p>
+            <p class="partner-auth-secondary">You can share your referral link and earn commission without a Repostit app account. Link an existing app account after signup only if you want to see your connected profiles and available metrics in your creator workspace. <a href="<?= htmlspecialchars(\Numok\Services\PortalEnvironment::appUrl(), ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Open Repostit</a> if you want to create or use an app account.</p>
 
             <?php if (isset($_SESSION['register_error'])): ?>
                 <div class="partner-auth-alert" role="alert"><?= htmlspecialchars($_SESSION['register_error']) ?></div>
