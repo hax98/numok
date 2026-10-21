@@ -39,6 +39,7 @@
                     <input id="password" name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters" />
                 </div>
                 <?php if($program): ?><details style="font-size:12px;line-height:1.6"><summary>Read the affiliate program terms</summary><div style="max-height:210px;overflow:auto;white-space:pre-wrap;padding:12px 0"><?= htmlspecialchars(($program['terms']??'')."\n\n".\Numok\Services\CreatorRules::BONUS_TERMS,ENT_QUOTES,'UTF-8') ?></div></details><label class="partner-auth-check" style="align-items:flex-start;line-height:1.5"><input type="checkbox" name="terms_accepted" value="1" required>I accept the affiliate program terms and bonus conditions.</label><?php endif; ?>
+                <p class="partner-auth-secondary">If you arrived through a campaign-tagged link, we save its UTM campaign details with your partner account so we can measure which recruitment channels lead to active referrals.</p>
                 <button class="partner-auth-submit" type="submit">Create my free account and referral link</button>
             </form>
 

@@ -83,6 +83,7 @@ class PartnerAuthController extends PartnerBaseController
 
     public function register(): void
     {
+        \Numok\Services\PartnerAcquisitionAttribution::capture($_GET, $_SESSION);
         $settings = $this->getSettings();
         $this->view('partner/auth/register', [
             'title' => 'Register - ' . ($settings['custom_app_name'] ?? 'Repostit Partners'),
@@ -148,14 +149,16 @@ class PartnerAuthController extends PartnerBaseController
                 $_SESSION['register_error']='Please review and accept the affiliate program terms.';
                 header('Location: /register'); exit;
             }
-            $partnerId = Database::transaction(function () use($email,$companyName,$contactName,$program) {
+            $acquisitionFields = \Numok\Services\PartnerAcquisitionAttribution::databaseFields($_SESSION);
+            $partnerId = Database::transaction(function () use($email,$companyName,$contactName,$program,$acquisitionFields) {
             $id=Database::insert('partners', [
                 'email' => $email,
                 'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
                 'company_name' => $companyName,
                 'contact_name' => $contactName,
                 'payment_email' => $email,
-                'status' => 'active'  // Automatically activate partners
+                'status' => 'active',  // Automatically activate partners
+                ...$acquisitionFields
             ]);
             if($program)Database::insert('partner_programs',['partner_id'=>$id,'program_id'=>$program['id'],'tracking_code'=>bin2hex(random_bytes(8)),
                 'status'=>'active','terms_accepted'=>gmdate('Y-m-d H:i:s'),'terms_accepted_ip'=>$_SERVER['REMOTE_ADDR']??null]);
@@ -170,6 +173,7 @@ class PartnerAuthController extends PartnerBaseController
             $_SESSION['partner_id']=$partnerId;
             $_SESSION['partner_email']=$email;
             $_SESSION['partner_company']=$companyName;
+            unset($_SESSION[\Numok\Services\PartnerAcquisitionAttribution::SESSION_KEY]);
             $_SESSION['success']=$program?'Welcome! Your affiliate link is ready.':'Welcome! Join the program to get your referral link.';
             header('Location: /dashboard');
         } catch (\Exception $e) {

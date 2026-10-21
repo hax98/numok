@@ -24,6 +24,7 @@ class LandingController extends Controller
         $this->view('landing/index', [
             'title' => 'Repostit Partner Program',
             'program' => $program,
+            'partnerAttributionQuery' => \Numok\Services\PartnerAcquisitionAttribution::querySuffix($_GET),
         ]);
     }
 }
