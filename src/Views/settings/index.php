@@ -176,15 +176,17 @@
                             <form action="/admin/settings/update" method="POST">
                                 <div class="mb-4">
                                     <label for="stripe_secret_key" class="block text-sm font-medium text-gray-700">Secret Key</label>
+                                    <p id="stripe_secret_key_status" class="mt-1 text-sm text-gray-500"><?= !empty($settings['stripe_secret_key']) ? 'Configured. Leave blank to keep the current key.' : 'Not configured. Enter a Stripe key to enable payment lookups.' ?></p>
                                     <input type="password" name="stripe_secret_key" id="stripe_secret_key" 
-                                           value="<?= htmlspecialchars($settings['stripe_secret_key'] ?? '') ?>"
+                                           value="" autocomplete="new-password" aria-describedby="stripe_secret_key_status"
                                            class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
                                 </div>
                                 
                                 <div class="mb-4">
                                     <label for="stripe_webhook_secret" class="block text-sm font-medium text-gray-700">Webhook Secret</label>
+                                    <p id="stripe_webhook_secret_status" class="mt-1 text-sm text-gray-500"><?= !empty($settings['stripe_webhook_secret']) ? 'Configured. Leave blank to keep the current signing secret.' : 'Not configured. Enter the Stripe webhook signing secret.' ?></p>
                                     <input type="password" name="stripe_webhook_secret" id="stripe_webhook_secret" 
-                                           value="<?= htmlspecialchars($settings['stripe_webhook_secret'] ?? '') ?>"
+                                           value="" autocomplete="new-password" aria-describedby="stripe_webhook_secret_status"
                                            class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
                                 </div>
 
