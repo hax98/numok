@@ -92,6 +92,13 @@
                                                     <div class="text-gray-500">
                                                         <?= htmlspecialchars($partner['contact_name']) ?> · <?= htmlspecialchars($partner['email']) ?>
                                                     </div>
+                                                    <?php if (!empty($partner['acquisition_utm_source']) || !empty($partner['acquisition_utm_campaign'])): ?>
+                                                        <div class="text-xs text-gray-500">
+                                                            Source: <?= htmlspecialchars($partner['acquisition_utm_source'] ?: 'not set') ?>
+                                                            <?php if (!empty($partner['acquisition_utm_medium'])): ?> · <?= htmlspecialchars($partner['acquisition_utm_medium']) ?><?php endif; ?>
+                                                            <?php if (!empty($partner['acquisition_utm_campaign'])): ?> · <?= htmlspecialchars($partner['acquisition_utm_campaign']) ?><?php endif; ?>
+                                                        </div>
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
                                         </td>
