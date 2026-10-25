@@ -33,12 +33,21 @@ class SettingsController extends Controller {
 
         try {
             Database::transaction(function() {
-                $settings = [
-                    'app_name' => $_POST['app_name'] ?? 'Numok',
-                    'partner_welcome_message' => $_POST['partner_welcome_message'] ?? '',
-                    'stripe_secret_key' => $_POST['stripe_secret_key'] ?? '',
-                    'stripe_webhook_secret' => $_POST['stripe_webhook_secret'] ?? ''
-                ];
+                $settings = [];
+                foreach (['app_name', 'partner_welcome_message', 'stripe_secret_key', 'stripe_webhook_secret'] as $key) {
+                    // The partner and Stripe forms submit different settings.
+                    if (!array_key_exists($key, $_POST)) continue;
+                    if (!is_string($_POST[$key])) {
+                        throw new \InvalidArgumentException('Invalid settings value.');
+                    }
+                    $value = $_POST[$key];
+                    if (in_array($key, ['stripe_secret_key', 'stripe_webhook_secret'], true)) {
+                        $value = trim($value);
+                        // Credentials are never echoed into the form; blank keeps the saved value.
+                        if ($value === '') continue;
+                    }
+                    $settings[$key] = $value;
+                }
 
                 foreach ($settings as $key => $value) {
                     Database::query(
