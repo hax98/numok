@@ -17,7 +17,7 @@ class AuthController extends Controller {
         
         $settings = $this->getSettings();
         $this->view('auth/login', [
-            'title' => 'Login - ' . ($settings['custom_app_name'] ?? 'Numok'),
+            'title' => 'Login - ' . ($settings['custom_app_name'] ?? 'Repostit Partners'),
             'error' => $error
         ]);
     }

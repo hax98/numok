@@ -15,7 +15,7 @@ class SettingsController extends Controller {
         $settings = $this->getAllSettings();
         
         $this->view('settings/index', [
-            'title' => 'Settings - ' . ($settings['custom_app_name'] ?? 'Numok'),
+            'title' => 'Settings - ' . ($settings['custom_app_name'] ?? 'Repostit Partners'),
             'settings' => $settings,
             'success' => $_SESSION['settings_success'] ?? null,
             'error' => $_SESSION['settings_error'] ?? null

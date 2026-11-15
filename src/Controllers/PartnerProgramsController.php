@@ -36,7 +36,7 @@ class PartnerProgramsController extends PartnerBaseController {
 
         $settings = $this->getSettings();
         $this->view('partner/programs/index', [
-            'title' => 'Available Programs - ' . ($settings['custom_app_name'] ?? 'Numok'),
+            'title' => 'Partner program | ' . ($settings['custom_app_name'] ?? 'Repostit Partners'),
             'programs' => $programs
         ]);
     }
