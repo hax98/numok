@@ -7,7 +7,8 @@
         <div class="sm:flex sm:items-center sm:justify-between">
             <div class="sm:flex-auto">
                 <h1 class="rp-heading-m text-ink">Partner program</h1>
-                <p class="mt-2 text-lg text-gray-600">Join the Repostit program to get your referral link and start earning.</p>
+                <?php $joinedCount = count(array_filter($programs ?? [], fn($p) => $p['status'] === 'joined')); ?>
+                <p class="mt-2 text-lg text-gray-600"><?= $joinedCount ? 'Your referral link and program details.' : 'Join the Repostit program to get your referral link and start earning.' ?></p>
             </div>
             <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                 <div class="flex items-center space-x-4">
@@ -15,7 +16,7 @@
                         <svg class="w-5 h-5 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
                         </svg>
-                        <?php $joinedCount = count(array_filter($programs ?? [], fn($p) => $p['status'] === 'joined')); ?><?= $joinedCount ?> <?= $joinedCount === 1 ? 'program' : 'programs' ?> joined
+                        <?= $joinedCount ?> <?= $joinedCount === 1 ? 'program' : 'programs' ?> joined
                     </div>
                 </div>
             </div>
@@ -75,11 +76,11 @@
             </div>
         <?php else: ?>
             <!-- Programs Grid -->
-            <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
+            <div class="mt-8 grid grid-cols-1 gap-8 max-w-3xl">
                 <?php foreach ($programs as $program): ?>
                     <div class="relative group">
                         <!-- Program Card -->
-                        <div class="bg-white rounded-xl border border-gray-200 hover:shadow-lg transition-all duration-200 overflow-hidden">
+                        <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
                             <!-- Status Badge -->
                             <div class="absolute top-4 right-4 z-10">
                                 <?php if ($program['status'] === 'joined'): ?>
@@ -104,7 +105,7 @@
                                 <div class="flex items-start justify-between">
                                     <div class="flex-1 pr-4">
                                         <h3 class="text-xl font-semibold text-gray-900 mb-2"><?= htmlspecialchars($program['name']) ?></h3>
-                                        <p class="text-gray-600 text-sm leading-relaxed"><?= nl2br(htmlspecialchars($program['description'])) ?></p>
+                                        <?php if (!empty($program['description'])): ?><details class="mt-1"><summary class="cursor-pointer text-[15px] font-medium text-brand-text min-h-[44px] flex items-center">About this program</summary><p class="text-text-secondary text-[15px] leading-relaxed mt-1"><?= nl2br(htmlspecialchars($program['description'])) ?></p></details><?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -125,9 +126,9 @@
                                             <p class="text-sm font-medium text-gray-500">Commission rate</p>
                                             <p class="text-lg font-semibold text-gray-900">
                                                 <?php if ($program['commission_type'] === 'percentage'): ?>
-                                                    <?= number_format($program['commission_value'], 1) ?>% <span class="text-sm font-normal text-gray-500">of sale</span>
+                                                    <?= rtrim(rtrim(number_format((float) $program['commission_value'], 2), '0'), '.') ?>% <span class="text-sm font-normal text-gray-500"><?= $program['is_recurring'] ? 'of every payment' : 'of each sale' ?></span>
                                                 <?php else: ?>
-                                                    $<?= number_format($program['commission_value'], 2) ?> <span class="text-sm font-normal text-gray-500">per sale</span>
+                                                    <?= \Numok\Services\PortalFormat::money($program['commission_value']) ?> <span class="text-sm font-normal text-gray-500">per sale</span>
                                                 <?php endif; ?>
                                             </p>
                                         </div>
@@ -147,16 +148,7 @@
 
                             <!-- Program Details -->
                             <div class="p-6">
-                                <div class="grid grid-cols-2 gap-4 mb-6">
-                                    <div class="text-center p-3 bg-gray-50 rounded-lg">
-                                        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Cookie window</p>
-                                        <p class="text-lg font-semibold text-gray-900 mt-1"><?= $program['cookie_days'] ?> days</p>
-                                    </div>
-                                    <div class="text-center p-3 bg-gray-50 rounded-lg">
-                                        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Sub IDs</p>
-                                        <p class="text-lg font-semibold text-gray-900 mt-1">sid, sid2, sid3</p>
-                                    </div>
-                                </div>
+                                <p class="mb-6 text-[15px] text-text-secondary">Referrals are credited to you for <strong class="font-medium text-ink"><?= (int) $program['cookie_days'] ?> days</strong> after someone clicks your link.</p>
 
                                 <!-- Tracking Link Section (for joined programs) -->
                                 <?php if ($program['status'] === 'joined'): ?>
@@ -170,7 +162,7 @@
                                                 <svg class="w-4 h-4 mr-2 text-brand-text" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd" />
                                                 </svg>
-                                                Your affiliate link
+                                                Your referral link
                                             </h4>
                                             <span class="text-xs text-gray-500 font-mono bg-white px-2 py-1 rounded border">
                                                 <?= htmlspecialchars($trackingCode, ENT_QUOTES, 'UTF-8') ?>
@@ -181,8 +173,8 @@
                                                 <?= htmlspecialchars($trackingUrl, ENT_QUOTES, 'UTF-8') ?>
                                             </code>
                                             <button type="button" onclick="copyToClipboard(<?= htmlspecialchars(json_encode($trackingUrl), ENT_QUOTES, 'UTF-8') ?>, this)"
-                                                class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand transition-colors">
-                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                class="rp-btn rp-btn-s rp-btn-secondary">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                                                 </svg>
                                                 Copy
@@ -191,7 +183,7 @@
                                         <form action="/programs/update-tracking" method="POST" class="mt-4 border-t border-gray-200 pt-4">
                                             <input type="hidden" name="csrf" value="<?= htmlspecialchars(\Numok\Services\PortalSecurity::csrf(), ENT_QUOTES, 'UTF-8') ?>">
                                             <input type="hidden" name="partner_program_id" value="<?= (int) $program['id'] ?>">
-                                            <label for="tracking-code-<?= (int) $program['id'] ?>" class="block text-sm font-medium text-gray-700">Customize your link</label>
+                                            <label for="tracking-code-<?= (int) $program['id'] ?>" class="block text-sm font-medium text-gray-700">Change your code</label>
                                             <div class="mt-2 flex flex-col gap-2 sm:flex-row">
                                                 <input id="tracking-code-<?= (int) $program['id'] ?>"
                                                     name="tracking_code"
@@ -201,13 +193,13 @@
                                                     pattern="[A-Za-z0-9][A-Za-z0-9_-]{2,49}"
                                                     autocomplete="off"
                                                     required
-                                                    class="flex-1 rounded-md border-gray-300 font-mono text-sm focus:border-ink focus:ring-brand"
+                                                    class="rp-input flex-1 font-mono"
                                                     aria-describedby="tracking-code-help-<?= (int) $program['id'] ?>">
-                                                <button type="submit" class="inline-flex items-center justify-center rounded-md bg-ink px-4 min-h-[44px] py-2 text-[15px] font-medium text-white hover:bg-ink-hover focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2">
-                                                    Save link
+                                                <button type="submit" class="rp-btn">
+                                                    Save code
                                                 </button>
                                             </div>
-                                            <p id="tracking-code-help-<?= (int) $program['id'] ?>" class="mt-2 text-xs text-gray-500">3 to 50 characters, letters, numbers, hyphens, or underscores. Previously shared short links keep working after you customize it.</p>
+                                            <p id="tracking-code-help-<?= (int) $program['id'] ?>" class="mt-2 text-xs text-gray-500">3 to 50 letters, numbers, hyphens or underscores. Links you already shared keep working.</p>
                                         </form>
                                     </div>
                                 <?php endif; ?>
@@ -265,24 +257,12 @@
                                 <?php else: ?>
                                     <!-- Already Joined State -->
                                     <div class="space-y-4">
-                                        <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
-                                            <div class="flex items-center">
-                                                <div class="flex-shrink-0">
-                                                    <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </div>
-                                                <div class="ml-3">
-                                                    <p class="text-sm font-medium text-green-800">You're part of this program!</p>
-                                                    <p class="text-sm text-green-700">Start promoting and earning commissions with your tracking link above.</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p class="text-[15px] text-text-secondary">You're in. <a class="rp-link" href="/dashboard">Go to your dashboard</a> for share ideas and results.</p>
                                         <?php if (!empty($program['terms'])): ?>
-                                            <div class="text-center">
+                                            <div>
                                                 <button type="button"
                                                     onclick="showTermsModal('<?= $program['id'] ?>')"
-                                                    class="inline-flex items-center px-3 py-1.5 border border-line-strong text-xs font-medium rounded-md text-brand-text bg-brand-tint hover:bg-brand-tint hover:border-line-strong focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand transition-colors">
+                                                    class="rp-btn rp-btn-s rp-btn-secondary">
                                                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                                     </svg>

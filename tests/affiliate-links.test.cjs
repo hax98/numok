@@ -15,7 +15,7 @@ test('Programs displays and copies the same generated affiliate link', () => {
   const view = source('src/Views/partner/programs/index.php');
   assert.match(view, /htmlspecialchars\(\$trackingUrl, ENT_QUOTES, 'UTF-8'\)/);
   assert.match(view, /json_encode\(\$trackingUrl\)/);
-  assert.match(view, /Your affiliate link/);
+  assert.match(view, /Your referral link/);
   assert.doesNotMatch(view, /Existing links stop working/);
 });
 

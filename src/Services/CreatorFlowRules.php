@@ -52,7 +52,7 @@ final class CreatorFlowRules {
     public static function recommendation(array $contents): array {
         // Exploratory guidance, not a causal claim or statistically validated winner.
         $published=array_values(array_filter($contents,fn($c)=>$c['status']==='verified'));
-        if (!$published) return ['title'=>'Publish your first agreed demo','text'=>'Try a real workflow, use its dedicated link and submit the published URL. There is no verified promotional content to compare yet.'];
+        if (!$published) return ['title'=>'Publish your first demo','text'=>'Create a link for the post, publish it, then add the URL. There is no verified content to compare yet.'];
         usort($published,fn($a,$b)=>[$b['customers'],$b['signups'],$b['clicks']]<=>[$a['customers'],$a['signups'],$a['clicks']]);
         $best=$published[0];$clicks=(int)$best['clicks'];$paid=(int)$best['customers'];$signups=(int)$best['signups'];
         if ($paid>0) return ['title'=>'Repeat this problem with a new angle','text'=>$best['title'].' brought '.$paid.' paying customers, '.$signups.' signups and '.$clicks.' visits. Test a follow-up with a new link. This is an early signal, not proof that it will win again.'];

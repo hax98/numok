@@ -34,81 +34,62 @@
         </div>
         <?php unset($_SESSION['settings_error']); endif; ?>
 
-        <div class="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-3">
-            <div class="md:col-span-2">
+        <div class="mt-6 max-w-2xl">
+            <div>
                 <!-- Profile Settings -->
                 <div class="bg-white shadow sm:rounded-lg">
                     <div class="px-4 py-5 sm:p-6">
-                        <h3 class="text-base font-semibold leading-6 text-gray-900">Profile</h3>
+                        <h2 class="text-[21px] font-medium text-ink">Profile and password</h2>
                         <div class="mt-4 max-w-xl">
                             <form action="/settings/update" method="POST">
                                 <!-- Email -->
                                 <div class="mb-4">
-                                    <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                                    <label for="email" class="block text-[15px] font-medium text-ink">Email address</label>
                                     <input type="email" name="email" id="email" 
                                         value="<?= htmlspecialchars($partner['email']) ?>"
-                                        class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
-                                    <p class="mt-1 text-sm text-gray-500">This email will be used for logging in and account notifications.</p>
+                                        class="rp-input mt-1.5">
+                                    <p class="mt-1 text-sm text-gray-500">You log in with this email. We also send account updates here.</p>
                                 </div>
 
                                 <!-- Payment Email -->
                                 <div class="mb-4">
-                                    <label for="payment_email" class="block text-sm font-medium text-gray-700">Payment email</label>
+                                    <label for="payment_email" class="block text-[15px] font-medium text-ink">Payment email</label>
                                     <input type="email" name="payment_email" id="payment_email"
                                         value="<?= htmlspecialchars($partner['payment_email']) ?>"
-                                        class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
-                                    <p class="mt-1 text-sm text-gray-500">Where your commission payments will be sent.</p>
+                                        class="rp-input mt-1.5">
+                                    <p class="mt-1 text-sm text-gray-500">We contact you here to arrange your payouts.</p>
                                 </div>
 
                                 <!-- Current Password -->
                                 <div class="mb-4">
-                                    <label for="current_password" class="block text-sm font-medium text-gray-700">Current password</label>
+                                    <label for="current_password" class="block text-[15px] font-medium text-ink">Current password</label>
+                                    <p class="mt-1 text-sm text-gray-500">Needed to save any change.</p>
                                     <input type="password" name="current_password" id="current_password" required
-                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
+                                           class="rp-input mt-1.5">
                                 </div>
 
                                 <!-- New Password -->
                                 <div class="mb-4">
-                                    <label for="new_password" class="block text-sm font-medium text-gray-700">New password</label>
+                                    <label for="new_password" class="block text-[15px] font-medium text-ink">New password</label>
                                     <input type="password" name="new_password" id="new_password" minlength="8"
-                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
-                                    <p class="mt-1 text-sm text-gray-500">Leave blank to keep current password. Must be at least 8 characters.</p>
+                                           class="rp-input mt-1.5">
+                                    <p class="mt-1 text-sm text-gray-500">At least 8 characters. Leave blank to keep your current password.</p>
                                 </div>
 
                                 <!-- Confirm New Password -->
                                 <div class="mb-4">
-                                    <label for="confirm_password" class="block text-sm font-medium text-gray-700">Confirm new password</label>
+                                    <label for="confirm_password" class="block text-[15px] font-medium text-ink">Confirm new password</label>
                                     <input type="password" name="confirm_password" id="confirm_password"
-                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
+                                           class="rp-input mt-1.5">
                                 </div>
 
                                 <div class="mt-6">
                                     <button type="submit" 
-                                            class="inline-flex justify-center rounded-md bg-ink py-2 px-4 text-sm font-medium text-white hover:bg-ink-hover focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2">
+                                            class="rp-btn">
                                         Save changes
                                     </button>
                                 </div>
                             </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Help Sidebar -->
-            <div class="md:col-span-1">
-                <div class="sticky top-6">
-                    <div class="rounded-lg bg-white shadow">
-                        <div class="px-4 py-5 sm:p-6">
-                            <h4 class="text-sm font-medium text-gray-900">Account security</h4>
-                            <div class="mt-4 text-sm text-gray-500 space-y-3">
-                                <p>Keep your account secure:</p>
-                                <ul class="list-disc pl-5 space-y-2">
-                                    <li>Use a strong, unique password</li>
-                                    <li>Never share your login credentials</li>
-                                    <li>Keep your payment email up to date</li>
-                                    <li>Review your account activity regularly</li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                 </div>
