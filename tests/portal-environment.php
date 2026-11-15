@@ -7,6 +7,7 @@ $check=function(bool $ok,string $name)use(&$checks):void{if(!$ok)throw new Runti
 $reject=function(callable $fn,string $name)use($check):void{$rejected=false;try{$fn();}catch(RuntimeException $e){$rejected=true;}$check($rejected,$name);};
 putenv('APP_ENV');putenv('APP_URL');
 $check(E::baseUrl()==='https://partners.repostit.io','Production URL unchanged');
+$check(E::shareBaseUrl()==='https://repostit.io','Production share links use the main domain');
 $check(E::appUrl()==='https://app.repostit.io','Production app unchanged');
 $check(E::referralHosts()===['repostit.io','www.repostit.io','app.repostit.io'],'Production referral destinations unchanged');
 $check(CreatorHub::firebaseConfig()['projectId']==='repostit-91b0e','Production auth unchanged');

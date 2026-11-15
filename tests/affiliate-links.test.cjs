@@ -21,8 +21,12 @@ test('Programs displays and copies the same generated affiliate link', () => {
 
 test('canonical share link does not replace content links or old short-link aliases', () => {
   const rules = source('src/Services/CreatorRules.php');
-  assert.match(rules, /PortalEnvironment::baseUrl\(\)\s*\.\s*'\/r\/'\s*\.\s*\$token/);
-  assert.match(rules, /PortalEnvironment::baseUrl\(\)\s*\.\s*'\/go\/'\s*\.\s*rawurlencode\(\$code\)/);
+  assert.match(rules, /PortalEnvironment::shareBaseUrl\(\)\s*\.\s*'\/r\/'\s*\.\s*\$token/);
+  assert.match(rules, /PortalEnvironment::shareBaseUrl\(\)\s*\.\s*'\/go\/'\s*\.\s*rawurlencode\(\$code\)/);
+  // Links already shared as partners.repostit.io/go/<code> and /r/<token> must keep resolving here.
+  const routes = source('public/index.php');
+  assert.match(routes, /'go\/\(\[A-Za-z0-9_-\]\{3,50\}\)'/);
+  assert.match(routes, /'r\/\(\[a-f0-9\]\{24\}\)'/);
   assert.match(source('src/Services/PortalEnvironment.php'), /if \(!self::staging\(\)\) return 'https:\/\/partners\.repostit\.io'/);
   assert.match(source('src/Controllers/CreatorLinkController.php'), /creator_tracking_aliases/);
 });
