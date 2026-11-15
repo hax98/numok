@@ -12,7 +12,7 @@ class PasswordResetController extends Controller
     {
         $settings = $this->getSettings();
         $this->view('auth/passwords/email', [
-            'title' => 'Reset Password - ' . ($settings['custom_app_name'] ?? 'Numok')
+            'title' => 'Reset your password | ' . ($settings['custom_app_name'] ?? 'Repostit Partners')
         ]);
     }
 
@@ -83,7 +83,7 @@ class PasswordResetController extends Controller
 
         $settings = $this->getSettings();
         $this->view('auth/passwords/reset', [
-            'title' => 'Reset Password - ' . ($settings['custom_app_name'] ?? 'Numok'),
+            'title' => 'Reset your password | ' . ($settings['custom_app_name'] ?? 'Repostit Partners'),
             'token' => $token,
             'email' => $record['email']
         ]);

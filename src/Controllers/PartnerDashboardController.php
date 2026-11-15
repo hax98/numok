@@ -36,7 +36,7 @@ class PartnerDashboardController extends PartnerBaseController {
 
         $settings = $this->getSettings();
         $this->view('partner/dashboard/index', [
-            'title' => 'Partner Dashboard - ' . ($settings['custom_app_name'] ?? 'Numok'),
+            'title' => 'Dashboard | ' . ($settings['custom_app_name'] ?? 'Repostit Partners'),
             'stats' => $stats,
             'conversions' => $conversions,
             'programs' => $programs,
