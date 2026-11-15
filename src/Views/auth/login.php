@@ -4,7 +4,7 @@
             <?php if (!empty($settings['custom_logo'])): ?>
                 <img src="/assets/uploads/<?= htmlspecialchars($settings['custom_logo']) ?>" alt="<?= htmlspecialchars($settings['custom_app_name'] ?? 'App') ?>" class="h-12 mx-auto max-w-64 object-contain">
             <?php else: ?>
-                <img src="/assets/images/repostit-logo.png" alt="Repostit Partners" class="h-12 mx-auto max-w-64 object-contain">
+                <span class="rp-brand justify-center" style="margin:0"><img src="/assets/brand/repostit-mark.png" alt="" width="34" height="24">Repostit<span class="rp-brand-tag">Admin</span></span>
             <?php endif; ?>
         </h2>
     </div>
@@ -33,7 +33,7 @@
                 <div class="mt-2">
                     <input id="email" name="email" type="email" autocomplete="email" required autofocus
                     <?php if ($_SERVER['HTTP_HOST']=='demo.numok.com') { echo ' value="admin@numok.com"'; } /* This is for demo purposes */ ?>
-                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
+                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
                 </div>
             </div>
 
@@ -44,13 +44,13 @@
                 <div class="mt-2">
                     <input id="password" name="password" type="password" autocomplete="current-password" required
                     <?php if ($_SERVER['HTTP_HOST']=='demo.numok.com') { echo ' value="admin123"'; } /* This is for demo purposes */ ?>
-                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
+                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
                 </div>
             </div>
 
             <div>
                 <button type="submit" 
-                        class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        class="flex w-full justify-center rounded-md bg-ink px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-ink-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
                     Sign in
                 </button>
             </div>

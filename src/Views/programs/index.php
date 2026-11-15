@@ -6,7 +6,7 @@
                 <p class="mt-2 text-sm text-gray-700">A list of all your affiliate programs and their performance.</p>
             </div>
             <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                <a href="/admin/programs/create" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+                <a href="/admin/programs/create" class="block rounded-md bg-ink px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-ink-hover">
                     Create Program
                 </a>
             </div>
@@ -52,7 +52,7 @@
                 <h3 class="mt-2 text-sm font-medium text-gray-900">No programs</h3>
                 <p class="mt-1 text-sm text-gray-500">Get started by creating your first affiliate program.</p>
                 <div class="mt-6">
-                    <a href="/admin/programs/create" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+                    <a href="/admin/programs/create" class="inline-flex items-center rounded-md bg-ink px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-ink-hover">
                         Create Program
                     </a>
                 </div>
@@ -128,7 +128,7 @@
                                         <div class="flex items-center justify-end space-x-2">
                                             <!-- Integration Link -->
                                             <a href="/admin/programs/<?= $program['id'] ?>/integration"
-                                                class="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                                class="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-line-control hover:bg-gray-50">
                                                 <svg class="mr-1.5 h-4 w-4 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
                                                     <path fill-rule="evenodd" d="M14.5 10a4.5 4.5 0 004.284-5.882c-.105-.324-.51-.391-.752-.15L15.34 6.66a.454.454 0 01-.493.11 3.01 3.01 0 01-1.618-1.616.455.455 0 01.11-.494l2.694-2.692c.24-.241.174-.647-.15-.752a4.5 4.5 0 00-5.873 4.575c.055.873-.128 1.808-.8 2.368l-7.23 6.024a2.724 2.724 0 103.837 3.837l6.024-7.23c.56-.672 1.495-.855 2.368-.8.096.007.193.01.291.01z" clip-rule="evenodd" />
                                                 </svg>
@@ -137,7 +137,7 @@
 
                                             <!-- Edit Link -->
                                             <a href="/admin/programs/<?= $program['id'] ?>/edit"
-                                                class="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                                class="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-line-control hover:bg-gray-50">
                                                 <svg class="mr-1.5 h-4 w-4 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
                                                     <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
                                                     <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
@@ -151,7 +151,7 @@
                                                 onsubmit="return confirm('Are you sure you want to delete this program?')"
                                                 class="inline-block">
                                                 <button type="submit"
-                                                    class="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-red-600 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-50">
+                                                    class="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-red-600 shadow-sm ring-1 ring-inset ring-line-control hover:bg-red-50">
                                                     <svg class="mr-1.5 h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
                                                         <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                                     </svg>

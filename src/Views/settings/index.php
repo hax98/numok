@@ -50,21 +50,21 @@
                                     <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
                                     <input type="email" name="email" id="email" 
                                            value="<?= htmlspecialchars($_SESSION['user_email']) ?>"
-                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
+                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
                                 </div>
 
                                 <!-- Current Password -->
                                 <div class="mb-4">
                                     <label for="current_password" class="block text-sm font-medium text-gray-700">Current Password</label>
                                     <input type="password" name="current_password" id="current_password" required
-                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
+                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
                                 </div>
 
                                 <!-- New Password -->
                                 <div class="mb-4">
                                     <label for="new_password" class="block text-sm font-medium text-gray-700">New Password</label>
                                     <input type="password" name="new_password" id="new_password" minlength="8"
-                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
+                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
                                     <p class="mt-1 text-sm text-gray-500">Leave blank to keep current password</p>
                                 </div>
 
@@ -72,12 +72,12 @@
                                 <div class="mb-4">
                                     <label for="confirm_password" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
                                     <input type="password" name="confirm_password" id="confirm_password"
-                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
+                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
                                 </div>
 
                                 <div class="mt-6">
                                     <button type="submit" 
-                                            class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                            class="inline-flex justify-center rounded-md bg-ink py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-ink-hover focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2">
                                         Update Profile
                                     </button>
                                 </div>
@@ -98,7 +98,7 @@
                                     <input type="text" name="custom_app_name" id="custom_app_name" 
                                            value="<?= htmlspecialchars($settings['custom_app_name'] ?? '') ?>"
                                            placeholder="Enter your app name"
-                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
+                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
                                     <p class="mt-2 text-sm text-gray-500">This will replace "Numok" throughout the application.</p>
                                 </div>
 
@@ -112,13 +112,13 @@
                                     </div>
                                     <?php endif; ?>
                                     <input type="file" name="custom_logo" id="custom_logo" accept="image/*"
-                                           class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                                           class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-brand-tint file:text-brand-text hover:file:bg-brand-tint">
                                     <p class="mt-2 text-sm text-gray-500">Upload a PNG, JPG, or SVG file. Recommended size: 200x50px or similar aspect ratio.</p>
                                 </div>
 
                                 <div class="mt-6 flex space-x-3">
                                     <button type="submit" 
-                                            class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                            class="inline-flex justify-center rounded-md bg-ink py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-ink-hover focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2">
                                         Update Branding
                                     </button>
                                     <?php if (!empty($settings['custom_app_name']) || !empty($settings['custom_logo'])): ?>
@@ -165,7 +165,7 @@
                             <button type="button"
                                     @click="testConnection()"
                                     :disabled="testing"
-                                    class="rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:opacity-50">
+                                    class="rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-line-control hover:bg-gray-50 disabled:opacity-50">
                                 <span x-show="!testing">Test Connection</span>
                                 <span x-show="testing">Testing...</span>
                             </button>
@@ -179,7 +179,7 @@
                                     <p id="stripe_secret_key_status" class="mt-1 text-sm text-gray-500"><?= !empty($settings['stripe_secret_key']) ? 'Configured. Leave blank to keep the current key.' : 'Not configured. Enter a Stripe key to enable payment lookups.' ?></p>
                                     <input type="password" name="stripe_secret_key" id="stripe_secret_key" 
                                            value="" autocomplete="new-password" aria-describedby="stripe_secret_key_status"
-                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
+                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
                                 </div>
                                 
                                 <div class="mb-4">
@@ -187,7 +187,7 @@
                                     <p id="stripe_webhook_secret_status" class="mt-1 text-sm text-gray-500"><?= !empty($settings['stripe_webhook_secret']) ? 'Configured. Leave blank to keep the current signing secret.' : 'Not configured. Enter the Stripe webhook signing secret.' ?></p>
                                     <input type="password" name="stripe_webhook_secret" id="stripe_webhook_secret" 
                                            value="" autocomplete="new-password" aria-describedby="stripe_webhook_secret_status"
-                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
+                                           class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
                                 </div>
 
                                 <template x-if="testResults?.messages">
@@ -226,7 +226,7 @@
 
                                 <div class="mt-6">
                                     <button type="submit" 
-                                            class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                            class="inline-flex justify-center rounded-md bg-ink py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-ink-hover focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2">
                                         Save Stripe Settings
                                     </button>
                                 </div>
@@ -244,13 +244,13 @@
                                 <div class="mb-4">
                                     <label for="partner_welcome_message" class="block text-sm font-medium text-gray-700">Welcome Message</label>
                                     <textarea name="partner_welcome_message" id="partner_welcome_message" rows="4"
-                                            class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3"><?= htmlspecialchars($settings['partner_welcome_message'] ?? '') ?></textarea>
+                                            class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3"><?= htmlspecialchars($settings['partner_welcome_message'] ?? '') ?></textarea>
                                     <p class="mt-2 text-sm text-gray-500">This message will be displayed to partners on their dashboard.</p>
                                 </div>
 
                                 <div class="mt-6">
                                     <button type="submit" 
-                                            class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                            class="inline-flex justify-center rounded-md bg-ink py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-ink-hover focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2">
                                         Save Partner Settings
                                     </button>
                                 </div>
@@ -287,7 +287,7 @@
                             <div class="mt-2 text-sm text-gray-500 space-y-4">
                                 <p>To set up Stripe integration:</p>
                                 <ol class="list-decimal pl-4 space-y-2">
-                                    <li>Go to your <a href="https://dashboard.stripe.com/apikeys" class="text-indigo-600 hover:text-indigo-500" target="_blank">Stripe Dashboard</a></li>
+                                    <li>Go to your <a href="https://dashboard.stripe.com/apikeys" class="text-brand-text hover:text-brand" target="_blank">Stripe Dashboard</a></li>
                                     <li>Copy your Secret Key</li>
                                     <li>Create a new webhook endpoint pointing to:
                                         <code class="block mt-1 p-2 bg-gray-50 rounded text-xs"><?= htmlspecialchars(rtrim($settings['app_url'] ?? 'https://'.$_SERVER['HTTP_HOST'], '/') . '/webhook/stripe') ?></code>

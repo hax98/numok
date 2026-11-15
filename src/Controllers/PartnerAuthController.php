@@ -170,7 +170,7 @@ class PartnerAuthController extends PartnerBaseController
             $_SESSION['partner_id']=$partnerId;
             $_SESSION['partner_email']=$email;
             $_SESSION['partner_company']=$companyName;
-            $_SESSION['success']=$program?'Welcome! Your affiliate link is ready.':'Welcome! Join the program to get your referral link.';
+            $_SESSION['success']=$program?'Your partner account is ready, and so is your referral link.':'Your partner account is ready. Join the program to get your referral link.';
             header('Location: /dashboard');
         } catch (\Exception $e) {
             $_SESSION['register_error'] = 'Registration failed. Please try again.';

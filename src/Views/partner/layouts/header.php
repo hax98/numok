@@ -3,131 +3,65 @@
 $path='partner/'.trim(parse_url($_SERVER['REQUEST_URI']??'',PHP_URL_PATH),'/');
 ?>
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-gray-50">
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($title ?? 'Partner Portal - ' . ($settings['custom_app_name'] ?? 'Repostit Partners')) ?></title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/alpinejs" defer></script>
-
-    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon/android-chrome-512x512.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/assets/favicon/site.webmanifest">
-    <style>
-        :root { --repostit-pink: #5b3df5; --repostit-purple: #5b3df5; }
-        .bg-indigo-600 { background-color: var(--repostit-pink) !important; }
-        .bg-indigo-500 { background-color: #db2777 !important; }
-        .hover\:bg-indigo-700:hover, .hover\:bg-indigo-500:hover { background-color: #db2777 !important; }
-        .text-indigo-600, .text-indigo-700 { color: #db2777 !important; }
-        .hover\:text-indigo-500:hover { color: #be185d !important; }
-        .border-indigo-500, .focus\:border-indigo-500:focus { border-color: var(--repostit-pink) !important; }
-        .bg-indigo-50 { background-color: #fce7f3 !important; }
-        .focus\:ring-indigo-500:focus, .focus\:ring-indigo-600:focus { --tw-ring-color: var(--repostit-pink) !important; }
-    </style>
+<?php require ROOT_PATH . '/src/Views/partials/head.php'; ?>
 </head>
 <body class="h-full">
     <?php if (isset($_SESSION['partner_id'])): ?>
     <div class="min-h-full">
-        <nav class="bg-white shadow" x-data="{ mobileMenuOpen: false }">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="flex h-16 justify-between">
-                    <div class="flex">
-                        <div class="flex flex-shrink-0 items-center">
-                            <a href="/dashboard">
-                                <?php if (!empty($settings['custom_logo'])): ?>
-                                    <img src="/assets/uploads/<?= htmlspecialchars($settings['custom_logo']) ?>" alt="<?= htmlspecialchars($settings['custom_app_name'] ?? 'App') ?>" class="h-8 max-w-48 object-contain" />
-                                <?php else: ?>
-                                    <div class="flex items-center gap-2">
-                                        <span class="grid h-8 w-8 place-items-center rounded-lg bg-fuchsia-600">
-                                            <img src="/assets/favicon/android-chrome-512x512.png" alt="" class="h-6 w-6 object-contain brightness-0 invert" />
-                                        </span>
-                                        <span class="font-semibold text-gray-900">Repostit</span>
-                                    </div>
-                                <?php endif; ?>
-                            </a>
+        <header class="rp-header" x-data="{ mobileMenuOpen: false, open: false }" @keydown.escape.window="mobileMenuOpen = false; open = false">
+            <div class="rp-header-bar">
+                <a href="/dashboard" class="rp-brand" aria-label="Repostit Partners dashboard">
+                    <?php if (!empty($settings['custom_logo'])): ?>
+                        <img src="/assets/uploads/<?= htmlspecialchars($settings['custom_logo']) ?>" alt="<?= htmlspecialchars($settings['custom_app_name'] ?? 'App') ?>" style="width:auto;height:32px;max-width:12rem;object-fit:contain" />
+                    <?php else: ?>
+                        <img src="/assets/brand/repostit-mark.png" alt="" width="34" height="24" />Repostit<span class="rp-brand-tag hidden sm:inline">Partners</span>
+                    <?php endif; ?>
+                </a>
+                <?php $navItems = ['partner/dashboard' => ['/dashboard', 'Dashboard'], 'partner/programs' => ['/programs', 'Programs'], 'partner/earnings' => ['/earnings', 'Earnings']]; ?>
+                <nav aria-label="Main" class="hidden sm:flex items-center gap-0.5 mr-2">
+                    <?php foreach ($navItems as $key => [$href, $label]): ?>
+                        <a href="<?= $href ?>" class="rp-ghost" <?= $path === $key ? 'aria-current="page"' : '' ?>><?= $label ?></a>
+                    <?php endforeach; ?>
+                </nav>
+                <div class="relative hidden sm:block">
+                    <button @click="open = !open" type="button" class="rp-ghost gap-2" :aria-expanded="open.toString()" aria-haspopup="true" aria-controls="account-menu">
+                        <span class="grid h-8 w-8 place-items-center rounded-full bg-surface-subtle border border-line text-sm font-medium" aria-hidden="true"><?= htmlspecialchars(strtoupper(substr($_SESSION['partner_company'] ?? 'P', 0, 1))) ?></span>
+                        <span class="sr-only">Account menu</span>
+                        <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div id="account-menu" x-show="open" x-cloak @click.outside="open = false" class="absolute right-0 z-50 mt-2 w-60 rounded-[14px] border border-line bg-surface p-1.5 shadow-menu" role="menu">
+                        <div class="px-3 py-2">
+                            <p class="rp-caption text-text-muted m-0">Logged in as</p>
+                            <p class="font-medium m-0 truncate"><?= htmlspecialchars($_SESSION['partner_company'] ?? '') ?></p>
                         </div>
-                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                            <a href="/dashboard" class="<?= $path === 'partner/dashboard' ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium">Dashboard</a>
-                            <a href="/programs" class="<?= $path === 'partner/programs' ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium">Programs</a>
-                            <a href="/earnings" class="<?= $path === 'partner/earnings' ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium">Earnings</a>
-                        </div>
-                    </div>
-                    
-                    <div class="hidden sm:ml-6 sm:flex sm:items-center">
-                        <!-- User dropdown -->
-                        <div class="relative ml-3" x-data="{ open: false }">
-                            <div>
-                                <button @click="open = !open" type="button" class="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" id="user-menu-button">
-                                    <span class="sr-only">Open user menu</span>
-                                    <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                                        <span class="text-sm font-medium text-gray-600"><?= strtoupper(substr($_SESSION['partner_company'] ?? 'P', 0, 1)) ?></span>
-                                    </div>
-                                </button>
-                            </div>
-
-                            <div x-show="open" 
-                                 @click.away="open = false"
-                                 class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" 
-                                 role="menu" 
-                                 aria-orientation="vertical" 
-                                 aria-labelledby="user-menu-button" 
-                                 tabindex="-1"
-                                 style="display: none;">
-                                <div class="block px-4 py-2 text-xs text-gray-400">
-                                    Signed in as<br>
-                                    <strong class="text-gray-900"><?= htmlspecialchars($_SESSION['partner_company'] ?? '') ?></strong>
-                                </div>
-                                <div class="border-t border-gray-100"></div>
-                                <a href="/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</a>
-                                <div class="border-t border-gray-100"></div>
-                                <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Sign out</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Mobile menu button -->
-                    <div class="flex items-center sm:hidden">
-                        <button type="button" @click="mobileMenuOpen = !mobileMenuOpen" class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                            <span class="sr-only">Open main menu</span>
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                            </svg>
-                        </button>
+                        <div class="my-1 border-t border-line-soft"></div>
+                        <a href="/settings" class="flex min-h-[44px] items-center rounded-[10px] px-3 hover:bg-surface-subtle" role="menuitem">Settings</a>
+                        <a href="/logout" class="flex min-h-[44px] items-center rounded-[10px] px-3 hover:bg-surface-subtle" role="menuitem">Log out</a>
                     </div>
                 </div>
+                <button type="button" @click="mobileMenuOpen = !mobileMenuOpen" class="sm:hidden grid h-11 w-11 place-items-center rounded-[10px] hover:bg-surface-hover" :aria-expanded="mobileMenuOpen.toString()" aria-controls="mobile-menu">
+                    <span class="sr-only" x-text="mobileMenuOpen ? 'Close menu' : 'Open menu'">Open menu</span>
+                    <svg aria-hidden="true" viewBox="0 0 24 24" class="h-[22px] w-[22px]" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path :d="mobileMenuOpen ? 'M18 6 6 18M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
             </div>
-
-            <!-- Mobile menu -->
-            <div class="sm:hidden" x-show="mobileMenuOpen" style="display: none;">
-                <div class="space-y-1 pb-3 pt-2">
-                    <a href="/dashboard" class="<?= $path === 'partner/dashboard' ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium">Dashboard</a>
-                    <a href="/earnings" class="<?= $path === 'partner/earnings' ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium">Earnings</a>
-                    <a href="/programs" class="<?= $path === 'partner/programs' ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium">Programs</a>
-                </div>
-                <div class="border-t border-gray-200 pb-3 pt-4">
-                    <div class="flex items-center px-4">
-                        <div class="flex-shrink-0">
-                            <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                <span class="text-sm font-medium text-gray-600"><?= strtoupper(substr($_SESSION['partner_company'] ?? 'P', 0, 1)) ?></span>
-                            </div>
-                        </div>
-                        <div class="ml-3">
-                            <div class="text-base font-medium text-gray-800"><?= htmlspecialchars($_SESSION['partner_company'] ?? '') ?></div>
-                            <div class="text-sm font-medium text-gray-500"><?= htmlspecialchars($_SESSION['partner_email'] ?? '') ?></div>
-                        </div>
-                    </div>
-                    <div class="mt-3 space-y-1">
-                        <a href="/logout" class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800">Sign out</a>
-                    </div>
-                </div>
+            <div id="mobile-menu" class="sm:hidden border-t border-line-soft px-3 pb-4 pt-2" x-show="mobileMenuOpen" x-cloak>
+                <?php foreach ($navItems as $key => [$href, $label]): ?>
+                    <a href="<?= $href ?>" class="flex min-h-[48px] items-center rounded-[10px] px-3 font-medium <?= $path === $key ? 'bg-brand-tint text-brand-text' : 'hover:bg-surface-subtle' ?>" <?= $path === $key ? 'aria-current="page"' : '' ?>><?= $label ?></a>
+                <?php endforeach; ?>
+                <div class="my-2 border-t border-line-soft"></div>
+                <p class="px-3 py-1 rp-caption text-text-muted m-0"><?= htmlspecialchars($_SESSION['partner_email'] ?? $_SESSION['partner_company'] ?? '') ?></p>
+                <a href="/settings" class="flex min-h-[48px] items-center rounded-[10px] px-3 font-medium hover:bg-surface-subtle">Settings</a>
+                <a href="/logout" class="flex min-h-[48px] items-center rounded-[10px] px-3 font-medium hover:bg-surface-subtle">Log out</a>
             </div>
-        </nav>
+        </header>
 
         <main>
-            <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+            <div class="rp-page py-8">
     <?php else: ?>
         <main>
     <?php endif; ?>

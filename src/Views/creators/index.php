@@ -1,5 +1,5 @@
 <?php $e=static fn($v)=>htmlspecialchars((string)$v,ENT_QUOTES,'UTF-8'); ?>
-<link rel="stylesheet" href="/assets/css/creator-hub.css?v=creator-flow-20261005">
+<link rel="stylesheet" href="/assets/css/creator-hub.css?v=ds-20261115">
 <div class="creator-hub"><div class="ch-top"><div><div class="ch-kicker">PARTNER OPERATIONS</div><h1>From a yes to real customers.</h1><p class="ch-muted">Profiles, account access, promotional content and payouts. Keep each stage visible.</p></div><a class="ch-button secondary" href="/admin/partners">Manage partner accounts</a></div>
 <?php foreach(['success','error'] as $notice): if(!empty($_SESSION[$notice])): ?><div class="ch-notice <?= $notice ?>" role="status"><?= $e($_SESSION[$notice]) ?></div><?php unset($_SESSION[$notice]);endif;endforeach; ?>
 <?php foreach($partners as $p): $s=$p['summary']; ?>

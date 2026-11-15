@@ -8,6 +8,16 @@
 # Stage for getting Composer binary
 FROM composer:2 AS composer
 
+# Stage that builds the design-system stylesheet (Tailwind) from the views
+FROM node:22-alpine AS assets
+WORKDIR /app
+COPY package.json package-lock.json tailwind.config.js ./
+RUN npm ci --no-audit --no-fund
+COPY resources ./resources
+COPY src/Views ./src/Views
+COPY public/assets/js ./public/assets/js
+RUN npm run build:css
+
 # Runtime image with Apache + PHP
 FROM php:8.2-apache
 
@@ -53,6 +63,9 @@ RUN composer install --no-dev --prefer-dist --no-interaction --no-progress
 
 # Copy the rest of the application code
 COPY . .
+
+# Use the stylesheet built from these exact views
+COPY --from=assets /app/public/assets/css/app.css public/assets/css/app.css
 
 # Ensure writable directories exist and have proper ownership
 RUN mkdir -p public/tracking \

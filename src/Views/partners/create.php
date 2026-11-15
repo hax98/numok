@@ -7,7 +7,7 @@
                 </h2>
             </div>
             <div class="mt-5 flex lg:ml-4 lg:mt-0">
-                <a href="/admin/partners" class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                <a href="/admin/partners" class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-line-control hover:bg-gray-50">
                     <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
                     </svg>
@@ -46,7 +46,7 @@
                             <label for="company_name" class="block text-sm font-medium leading-6 text-gray-900">Company Name</label>
                             <div class="mt-2">
                                 <input type="text" name="company_name" id="company_name" required
-                                       class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
+                                       class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
                             </div>
                         </div>
 
@@ -54,7 +54,7 @@
                             <label for="contact_name" class="block text-sm font-medium leading-6 text-gray-900">Contact Name</label>
                             <div class="mt-2">
                                 <input type="text" name="contact_name" id="contact_name" required
-                                       class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
+                                       class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
                             </div>
                         </div>
 
@@ -62,7 +62,7 @@
                             <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
                             <div class="mt-2">
                                 <input type="email" name="email" id="email" required
-                                       class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
+                                       class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
                             </div>
                             <p class="mt-3 text-sm leading-6 text-gray-600">This email will be used for account login.</p>
                         </div>
@@ -71,7 +71,7 @@
                             <label for="payment_email" class="block text-sm font-medium leading-6 text-gray-900">Payment Email</label>
                             <div class="mt-2">
                                 <input type="email" name="payment_email" id="payment_email"
-                                       class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
+                                       class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
                             </div>
                             <p class="mt-3 text-sm leading-6 text-gray-600">Where commission payments will be sent. Leave blank to use login email.</p>
                         </div>
@@ -81,7 +81,7 @@
 
             <div class="mt-6 flex items-center justify-end gap-x-6 border-t border-gray-900/10 pt-6">
                 <a href="/admin/partners" class="text-sm font-semibold leading-6 text-gray-900">Cancel</a>
-                <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                <button type="submit" class="rounded-md bg-ink px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-ink-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
                     Create Partner
                 </button>
             </div>

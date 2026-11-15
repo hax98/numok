@@ -14,3 +14,4 @@ firebase-debug.*.log
 reports/creator-preview.html
 reports/*.png
 reports/*.jpg
+node_modules/

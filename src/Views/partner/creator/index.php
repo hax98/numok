@@ -10,7 +10,7 @@ $connections=$snapshot['connections']??[];
 $csrfField='<input type="hidden" name="csrf" value="'.$escape($csrf).'">';
 $money=static fn($v)=>'$'.number_format((float)$v,2);
 ?>
-<link rel="stylesheet" href="/assets/css/creator-hub.css?v=creator-flow-20261005">
+<link rel="stylesheet" href="/assets/css/creator-hub.css?v=ds-20261115">
 <div class="creator-hub">
  <?php if($readOnly): ?><div class="ch-notice">Read-only creator workspace preview. No account, content or payout actions can be submitted from this view.</div><?php endif; ?>
  <div class="ch-top"><div><div class="ch-kicker">YOUR CREATOR WORKSPACE</div><h1>Hello, <?= $escape(explode(' ',$partner['contact_name'])[0]) ?>.</h1><p class="ch-muted">Your content, your referrals, your recurring income. One place to keep it moving.</p></div><span class="ch-badge">Repostit Partners</span></div>

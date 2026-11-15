@@ -1,56 +1,34 @@
-<?php require ROOT_PATH . '/src/Views/partner/auth/styles.php'; ?>
+<?php require __DIR__ . '/shell-start.php'; ?>
+<p class="rp-eyebrow">Partner portal</p>
+<h1 class="rp-heading-m mt-2">Log in to Repostit Partners</h1>
+<p class="text-text-secondary mt-2">See your referrals, commission and referral link.</p>
 
-<div class="partner-auth-page">
-    <section class="partner-auth-form-side">
-        <nav class="partner-auth-nav" aria-label="Partner portal navigation">
-            <a href="/" class="partner-auth-brand" aria-label="Repostit Partners home">
-                <span class="partner-auth-mark"><img src="/assets/favicon/android-chrome-512x512.png" alt="" /></span>
-                <span>Repostit <small style="font-family: 'DM Sans', sans-serif; font-size: 9px; letter-spacing: .16em; color: #77717e;">PARTNERS</small></span>
-            </a>
-            <a class="partner-auth-back" href="/">Back to partner program</a>
-        </nav>
+<div class="mt-8 grid gap-4">
+    <?php if (!empty($error)): ?>
+        <div class="rp-alert rp-alert-danger" role="alert"><?= htmlspecialchars($error) ?></div>
+    <?php endif; ?>
+    <?php if (isset($_SESSION['register_success'])): ?>
+        <div class="rp-alert rp-alert-success" role="status"><?= htmlspecialchars($_SESSION['register_success']) ?></div>
+    <?php unset($_SESSION['register_success']); endif; ?>
 
-        <div class="partner-auth-content">
-            <p class="partner-auth-eyebrow">WELCOME BACK</p>
-            <h1>Pick up where your content left off.</h1>
-            <p class="partner-auth-lede">Sign in to your Repostit partner account to check referrals, recurring commission, and your personal link.</p>
-
-            <?php if (!empty($error)): ?>
-                <div class="partner-auth-alert" role="alert"><?= htmlspecialchars($error) ?></div>
-            <?php endif; ?>
-            <?php if (isset($_SESSION['register_success'])): ?>
-                <div class="partner-auth-alert success" role="status"><?= htmlspecialchars($_SESSION['register_success']) ?></div>
-            <?php unset($_SESSION['register_success']); endif; ?>
-
-            <form class="partner-auth-form" action="/auth/login" method="POST">
-                <div class="partner-auth-field">
-                    <label for="email">Email address</label>
-                    <input id="email" name="email" type="email" autocomplete="email" required autofocus placeholder="you@example.com"
-                        <?php if ($_SERVER['HTTP_HOST']=='demo.numok.com') { echo ' value="partner@numok.com"'; } ?> />
-                </div>
-                <div class="partner-auth-field">
-                    <label for="password">Password</label>
-                    <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Your password"
-                        <?php if ($_SERVER['HTTP_HOST']=='demo.numok.com') { echo ' value="partner123"'; } ?> />
-                </div>
-                <div class="partner-auth-row">
-                    <label class="partner-auth-check"><input id="remember-me" name="remember-me" type="checkbox" /> Remember me</label>
-                    <a class="partner-auth-forgot" href="/forgot-password">Forgot password?</a>
-                </div>
-                <button class="partner-auth-submit" type="submit">Sign in to Repostit Partners</button>
-            </form>
-
-            <p class="partner-auth-secondary">New to the program? <a href="/register">Create a free partner account</a></p>
+    <form class="grid gap-5" action="/auth/login" method="POST">
+        <div class="rp-field">
+            <label for="email">Email address</label>
+            <input class="rp-input" id="email" name="email" type="email" autocomplete="email" required autofocus placeholder="you@example.com"
+                <?php if (($_SERVER['HTTP_HOST'] ?? '') == 'demo.numok.com') { echo ' value="partner@numok.com"'; } ?> />
         </div>
-        <p class="partner-auth-footnote">Free to join · 20% recurring commission · Clear reporting</p>
-    </section>
-
-    <aside class="partner-auth-visual" aria-label="Repostit partner program overview">
-        <div class="partner-auth-visual-copy">
-            <p class="partner-auth-visual-kicker">REPOSTIT PARTNER PROGRAM</p>
-            <h2>Your content can travel <em>further.</em></h2>
+        <div class="rp-field">
+            <div class="flex items-baseline justify-between gap-4">
+                <label class="rp-field-label" for="password">Password</label>
+                <a class="rp-link text-[15px]" href="/forgot-password">Forgot password?</a>
+            </div>
+            <input class="rp-input" id="password" name="password" type="password" autocomplete="current-password" required
+                <?php if (($_SERVER['HTTP_HOST'] ?? '') == 'demo.numok.com') { echo ' value="partner123"'; } ?> />
         </div>
-        <div class="partner-auth-art"><img src="/assets/images/partner-workflow.png" alt="One creator video flowing into multiple content formats" /></div>
-        <div class="partner-auth-visual-footer"><span>One useful recommendation.</span><strong>20% recurring.</strong></div>
-    </aside>
+        <label class="rp-check"><input id="remember-me" name="remember-me" type="checkbox" /> Keep me logged in</label>
+        <button class="rp-btn rp-btn-l w-full" type="submit">Log in</button>
+    </form>
+
+    <p class="text-text-secondary text-center mt-4 m-0">New to the program? <a class="rp-link" href="/register">Create a free partner account</a></p>
 </div>
+<?php require __DIR__ . '/shell-end.php'; ?>

@@ -136,7 +136,7 @@
                         <div class="mt-4" x-data="{ tab: 'html' }">
                             <div class="sm:hidden">
                                 <label for="lang-tabs" class="sr-only">Select a language</label>
-                                <select id="lang-tabs" name="tabs" class="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                <select id="lang-tabs" name="tabs" class="block w-full rounded-md border-gray-300 focus:border-ink focus:ring-brand"
                                         x-model="tab">
                                     <option value="html">HTML + JavaScript</option>
                                     <option value="php">PHP</option>
@@ -328,7 +328,7 @@ numok_sid3: tracking_data['sid3']
                                 </ul>
 
                                 <div class="mt-4">
-                                    <a href="https://dashboard.stripe.com/webhooks" target="_blank" class="text-sm text-indigo-600 hover:text-indigo-500">
+                                    <a href="https://dashboard.stripe.com/webhooks" target="_blank" class="text-sm text-brand-text hover:text-brand">
                                         Configure webhooks in Stripe Dashboard →
                                     </a>
                                 </div>
@@ -348,7 +348,7 @@ numok_sid3: tracking_data['sid3']
                             <ol class="list-decimal list-inside space-y-3 text-sm text-gray-600">
                                 <li>Visit your landing page with the tracking parameter:
                                     <div class="mt-1">
-                                        <a href="<?= htmlspecialchars($program['landing_page']) ?>?via=TEST123" target="_blank" class="text-indigo-600 hover:text-indigo-500 break-all">
+                                        <a href="<?= htmlspecialchars($program['landing_page']) ?>?via=TEST123" target="_blank" class="text-brand-text hover:text-brand break-all">
                                             <?= htmlspecialchars($program['landing_page']) ?>?via=TEST123
                                         </a>
                                         👈 You need to use a real tracking code from your partners.
@@ -371,7 +371,7 @@ numok_sid3: tracking_data['sid3']
                                             </tr>
                                         </table>
                                         <div class="mt-2">
-                                            <a href="https://stripe.com/docs/testing#cards" target="_blank" class="text-xs text-indigo-600 hover:text-indigo-500">
+                                            <a href="https://stripe.com/docs/testing#cards" target="_blank" class="text-xs text-brand-text hover:text-brand">
                                                 View more test cards →
                                             </a>
                                         </div>
@@ -404,7 +404,7 @@ numok_sid3: tracking_data['sid3']
                                 </li>
                                 <li>Use Stripe's test webhook tool to simulate payments:
                                     <div class="mt-2">
-                                        <a href="https://dashboard.stripe.com/test/webhooks" target="_blank" class="text-indigo-600 hover:text-indigo-500">
+                                        <a href="https://dashboard.stripe.com/test/webhooks" target="_blank" class="text-brand-text hover:text-brand">
                                             Test webhooks in Stripe Dashboard →
                                         </a>
                                     </div>
@@ -425,11 +425,11 @@ numok_sid3: tracking_data['sid3']
                                 <a href="https://github.com/dfg-ar/numok/issues" class="group block">
                                     <div class="flex items-center">
                                         <div>
-                                            <p class="text-sm font-medium text-gray-900 group-hover:text-indigo-600">GitHub Issues</p>
+                                            <p class="text-sm font-medium text-gray-900 group-hover:text-brand-text">GitHub Issues</p>
                                             <p class="text-sm text-gray-500">Report bugs or request features</p>
                                         </div>
                                         <div class="ml-auto">
-                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500" viewBox="0 0 20 20" fill="currentColor">
+                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-brand" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                                             </svg>
                                         </div>
@@ -440,11 +440,11 @@ numok_sid3: tracking_data['sid3']
                                 <a href="https://stripe.com/docs/webhooks/test" class="group block">
                                     <div class="flex items-center">
                                         <div>
-                                            <p class="text-sm font-medium text-gray-900 group-hover:text-indigo-600">Stripe Webhook Guide</p>
+                                            <p class="text-sm font-medium text-gray-900 group-hover:text-brand-text">Stripe Webhook Guide</p>
                                             <p class="text-sm text-gray-500">Learn more about testing webhooks</p>
                                         </div>
                                         <div class="ml-auto">
-                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500" viewBox="0 0 20 20" fill="currentColor">
+                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-brand" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                                             </svg>
                                         </div>
