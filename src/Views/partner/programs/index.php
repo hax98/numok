@@ -193,7 +193,7 @@
                                                     pattern="[A-Za-z0-9][A-Za-z0-9_-]{2,49}"
                                                     autocomplete="off"
                                                     required
-                                                    class="rp-input flex-1 font-mono"
+                                                    class="rp-input font-mono sm:flex-1"
                                                     aria-describedby="tracking-code-help-<?= (int) $program['id'] ?>">
                                                 <button type="submit" class="rp-btn">
                                                     Save code
