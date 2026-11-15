@@ -27,6 +27,11 @@ final class PortalEnvironment {
         }
         return 'https://us-central1-' . self::firebaseProject() . '.cloudfunctions.net/' . $name;
     }
+    /** Address partners share. Production links use the main domain (repostit.io/go/<code>), which forwards
+     *  to this portal to count the click. Old partners.repostit.io/go/<code> links keep working. */
+    public static function shareBaseUrl(): string {
+        return self::staging() ? self::baseUrl() : 'https://repostit.io';
+    }
     public static function baseUrl(): string {
         if (!self::staging()) return 'https://partners.repostit.io';
         $url = rtrim(getenv('APP_URL') ?: '', '/');

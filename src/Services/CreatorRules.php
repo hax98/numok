@@ -40,9 +40,9 @@ final class CreatorRules {
     }
     public static function link(string $token): string {
         if (!preg_match('/^[a-f0-9]{24}$/', $token)) throw new \InvalidArgumentException('Invalid content token.');
-        return PortalEnvironment::baseUrl() . '/r/' . $token;
+        return PortalEnvironment::shareBaseUrl() . '/r/' . $token;
     }
     public static function affiliateLink(string $code): string {
-        return PortalEnvironment::baseUrl() . '/go/' . rawurlencode($code);
+        return PortalEnvironment::shareBaseUrl() . '/go/' . rawurlencode($code);
     }
 }
