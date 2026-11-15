@@ -7,7 +7,7 @@
                 </h2>
             </div>
             <div class="mt-5 flex lg:ml-4 lg:mt-0">
-                <a href="/admin/partners" class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                <a href="/admin/partners" class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-line-control hover:bg-gray-50">
                     <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
                     </svg>
@@ -61,7 +61,7 @@
                                         <div class="mt-1">
                                             <input type="text" name="company_name" id="company_name" required
                                                 value="<?= htmlspecialchars($partner['company_name']) ?>"
-                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
+                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
                                         </div>
                                     </div>
 
@@ -70,7 +70,7 @@
                                         <div class="mt-1">
                                             <input type="text" name="contact_name" id="contact_name" required
                                                 value="<?= htmlspecialchars($partner['contact_name']) ?>"
-                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
+                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
                                         </div>
                                     </div>
 
@@ -79,7 +79,7 @@
                                         <div class="mt-1">
                                             <input type="email" name="payment_email" id="payment_email"
                                                 value="<?= htmlspecialchars($partner['payment_email']) ?>"
-                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3">
+                                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-line-control placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 px-3">
                                         </div>
                                         <p class="mt-2 text-sm text-gray-500">Where commission payments will be sent.</p>
                                     </div>
@@ -87,7 +87,7 @@
                                     <div class="sm:col-span-6">
                                         <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
                                         <select id="status" name="status" 
-                                                class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                                class="mt-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-line-control focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6">
                                             <option value="pending" <?= $partner['status'] === 'pending' ? 'selected' : '' ?>>Pending</option>
                                             <option value="active" <?= $partner['status'] === 'active' ? 'selected' : '' ?>>Active</option>
                                             <option value="suspended" <?= $partner['status'] === 'suspended' ? 'selected' : '' ?>>Suspended</option>
@@ -97,7 +97,7 @@
                                 </div>
 
                                 <div class="mt-6 flex justify-end">
-                                    <button type="submit" class="ml-3 inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                                    <button type="submit" class="ml-3 inline-flex justify-center rounded-md bg-ink py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-ink-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
                                         Update Partner
                                     </button>
                                 </div>
@@ -118,14 +118,14 @@
                             <div class="flex gap-3">
                                 <div class="flex-1">
                                     <select name="program_id" required
-                                            class="mt-1 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                            class="mt-1 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-line-control focus:ring-2 focus:ring-brand sm:text-sm sm:leading-6">
                                         <option value="">Select a program...</option>
                                         <?php foreach ($availablePrograms as $program): ?>
                                         <option value="<?= $program['id'] ?>"><?= htmlspecialchars($program['name']) ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
-                                <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                                <button type="submit" class="rounded-md bg-ink px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-ink-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
                                     Assign Program
                                 </button>
                             </div>
@@ -183,7 +183,7 @@
                                                 <div x-data="{ copySuccess: false }" class="flex justify-end gap-2">
                                                     <button @click="navigator.clipboard.writeText('<?= htmlspecialchars($program['tracking_code']) ?>'); copySuccess = true; setTimeout(() => copySuccess = false, 2000)" 
                                                             type="button"
-                                                            class="text-indigo-600 hover:text-indigo-900">
+                                                            class="text-brand-text hover:text-brand">
                                                         <span x-show="!copySuccess">Copy Code</span>
                                                         <span x-show="copySuccess" x-cloak>Copied!</span>
                                                     </button>

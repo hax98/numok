@@ -1,191 +1,120 @@
 <?php
-$partnerShareImage = '/assets/images/partner-og.png';
+$e = static fn($v) => htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8');
+$cookieDays = (int) ($program['cookie_days'] ?? 0);
 ?>
-
-<div class="partner-landing">
-    <header class="partner-nav">
-        <a href="/" class="partner-brand" aria-label="Repostit Partners home">
-            <span class="partner-brand-mark"><img src="/assets/favicon/android-chrome-512x512.png" alt="" /></span>
-            <span class="partner-brand-wordmark">Repostit</span>
-            <span class="partner-brand-label">PARTNERS</span>
-        </a>
-        <nav class="partner-nav-links" aria-label="Primary navigation">
-            <a href="#how-it-works">How it works</a>
-            <a href="https://repostit.io" target="_blank" rel="noreferrer">Repostit</a>
-        </nav>
-        <div class="partner-nav-actions">
-            <a href="/login" class="partner-login">Log in</a>
-            <a href="/register" class="partner-button partner-button-small">Join free</a>
+<div class="bg-surface text-ink min-h-screen">
+    <header class="rp-header">
+        <div class="rp-header-bar">
+            <a href="/" class="rp-brand" aria-label="Repostit Partners home">
+                <img src="/assets/brand/repostit-mark.png" alt="" width="34" height="24">
+                Repostit
+                <span class="rp-brand-tag hidden sm:inline">Partners</span>
+            </a>
+            <nav aria-label="Main" class="hidden md:flex items-center gap-0.5 mr-2.5">
+                <a class="rp-ghost" href="#how-it-works">How it works</a>
+                <a class="rp-ghost" href="#program">Program details</a>
+                <a class="rp-ghost" href="https://repostit.io/">About Repostit</a>
+            </nav>
+            <a class="rp-ghost" href="/login">Log in</a>
+            <a class="rp-btn rp-btn-s ml-1" href="/register">Join free</a>
         </div>
     </header>
 
-    <main>
-        <section class="partner-hero" aria-labelledby="partner-hero-title">
-            <div class="partner-hero-copy">
-                <p class="partner-eyebrow">REPOSTIT AFFILIATE PARTNER PROGRAM</p>
-                <h1 id="partner-hero-title">Help creators grow further. <em>Earn 20% recurring.</em></h1>
-                <p class="partner-hero-lede">Join the Repostit partner program and earn recurring commission by sharing the tool creators, founders, and online businesses use to turn one video into content that performs everywhere.</p>
-                <div class="partner-hero-actions">
-                    <a href="/register" class="partner-button">Join free</a>
-                    <a href="/login" class="partner-text-link">Already a partner? Log in</a>
-                </div>
-                <p class="partner-hero-note">Free to join. $200 at 20 paying subscribers, plus an additional $5,000 at 500. Share what you genuinely use.</p>
-            </div>
-
-            <div class="partner-hero-art" aria-label="One video flowing into content for multiple platforms">
-                <div class="partner-art-label">ONE VIDEO, MORE REACH</div>
-                <img src="/assets/images/partner-workflow.png" alt="A creator video flowing into multiple platform-ready posts" />
-            </div>
-        </section>
-
-        <section class="partner-benefits" aria-label="Partner program benefits">
-            <article>
-                <span class="partner-benefit-kicker">01 / REVENUE</span>
-                <h2>20% recurring</h2>
-                <p>Earn on every valid paid subscription you refer for as long as the customer stays active.</p>
-            </article>
-            <article>
-                <span class="partner-benefit-kicker">02 / SHARING</span>
-                <h2>One simple link</h2>
-                <p>Create your partner link, mention Repostit when it genuinely fits, and keep your voice.</p>
-            </article>
-            <article>
-                <span class="partner-benefit-kicker">03 / VISIBILITY</span>
-                <h2>Clear reporting</h2>
-                <p>See clicks, referrals, conversions, and earnings from your partner dashboard.</p>
-            </article>
-        </section>
-
-        <section class="partner-how" id="how-it-works" aria-labelledby="how-title">
-            <div class="partner-section-intro">
-                <p class="partner-eyebrow">HOW IT WORKS</p>
-                <h2 id="how-title">A useful product makes a better recommendation.</h2>
-                <p>Try Repostit first. If it earns a place in your workflow, share it with the people who would genuinely benefit.</p>
-            </div>
-            <ol class="partner-steps">
-                <li>
-                    <span class="partner-step-number">01</span>
-                    <div><h3>Create your link</h3><p>Open a free partner account and copy your personal referral link.</p></div>
-                </li>
-                <li>
-                    <span class="partner-step-number">02</span>
-                    <div><h3>Share naturally</h3><p>Include Repostit in the videos, posts, or conversations where it is genuinely useful.</p></div>
-                </li>
-                <li>
-                    <span class="partner-step-number">03</span>
-                    <div><h3>Track earnings</h3><p>Watch your referrals and recurring commission from one simple dashboard.</p></div>
-                </li>
-            </ol>
-        </section>
-
-        <section class="partner-final-cta" aria-labelledby="final-cta-title">
+    <div>
+        <section class="rp-page grid items-center gap-12 lg:gap-16 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] pt-14 sm:pt-20 pb-6" aria-labelledby="hero-title">
             <div>
-                <p class="partner-eyebrow">BUILT FOR PEOPLE WHO PUBLISH</p>
-                <h2 id="final-cta-title">Make your next recommendation count.</h2>
+                <p class="rp-eyebrow">Repostit partner program</p>
+                <h1 id="hero-title" class="rp-display-xl mt-4 max-w-[13ch]">Recommend Repostit. Earn 20% every month.</h1>
+                <p class="rp-lead mt-5 max-w-[34rem]">Share Repostit with creators and businesses who post on TikTok first. You earn 20% of every paid subscription you refer, for as long as they stay subscribed.</p>
+                <div class="mt-8 flex flex-col sm:flex-row gap-2">
+                    <a class="rp-btn rp-btn-l" href="/register">Join free</a>
+                    <a class="rp-btn rp-btn-l rp-btn-secondary" href="/login">Log in</a>
+                </div>
+                <p class="rp-small text-text-muted mt-4">Free to join. A $200 bonus at 20 paying subscribers, and $5,000 more at 500.</p>
             </div>
-            <a href="/register" class="partner-button">Join the partner program</a>
+            <figure class="m-0">
+                <video class="block w-full h-auto rounded-2xl border border-line" src="/assets/media/workflows-loop.mp4" poster="/assets/media/workflows-poster.jpg" width="1600" height="1094" muted loop playsinline autoplay preload="metadata" aria-label="The Repostit Workflows screen: TikTok reposting to Instagram Reels, YouTube Shorts, Facebook Reels and X, each switching from Manual to Auto"></video>
+                <figcaption class="rp-caption text-text-muted mt-3">The Workflows screen your audience will use. Every new TikTok goes out to the other apps.</figcaption>
+            </figure>
         </section>
-    </main>
 
-    <footer class="partner-footer">
-        <div class="partner-footer-brand">
-            <span class="partner-brand-mark"><img src="/assets/favicon/android-chrome-512x512.png" alt="" /></span>
-            <span>Repostit Partners</span>
+        <section class="rp-page rp-section" aria-labelledby="why-title">
+            <h2 id="why-title" class="sr-only">Why partners join</h2>
+            <div class="grid gap-4 md:grid-cols-3">
+                <article class="rp-card">
+                    <span class="rp-tile" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+                    <h3 class="rp-heading-s mt-5">20% recurring</h3>
+                    <p class="text-text-secondary mt-2">You earn on every payment from every subscription you refer, not only the first one.</p>
+                </article>
+                <article class="rp-card">
+                    <span class="rp-tile" style="background:#e8f0fb;color:#1f5bb8" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span>
+                    <h3 class="rp-heading-s mt-5">One link, your code</h3>
+                    <p class="text-text-secondary mt-2">Pick a code that sounds like you. Add separate links for a Reel, a Story or your bio to see which one works.</p>
+                </article>
+                <article class="rp-card">
+                    <span class="rp-tile" style="background:#e5f3ea;color:#2f7a4c" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg></span>
+                    <h3 class="rp-heading-s mt-5">Clear reporting</h3>
+                    <p class="text-text-secondary mt-2">Clicks, sign-ups, paying customers and earnings, all in your partner dashboard.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="rp-page rp-section" id="how-it-works" aria-labelledby="how-title">
+            <div class="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+                <div>
+                    <p class="rp-eyebrow">How it works</p>
+                    <h2 id="how-title" class="rp-display-l mt-3 max-w-[16ch]">Use it first, then share it.</h2>
+                    <p class="text-text-secondary mt-4 max-w-[28rem]">Recommendations work best when your audience sees you use the product. Try Repostit on your own account, then show the workflow you actually run.</p>
+                </div>
+                <ol class="list-none m-0 p-0 border-t border-line">
+                    <li class="grid grid-cols-[48px_1fr] gap-4 py-6 border-b border-line">
+                        <span class="rp-heading-s text-text-muted">1</span>
+                        <div><h3 class="rp-heading-s">Create your partner account</h3><p class="text-text-secondary mt-1">It's free. Join the program and choose your referral code.</p></div>
+                    </li>
+                    <li class="grid grid-cols-[48px_1fr] gap-4 py-6 border-b border-line">
+                        <span class="rp-heading-s text-text-muted">2</span>
+                        <div><h3 class="rp-heading-s">Share your link</h3><p class="text-text-secondary mt-1">Put it in your bio, a Story link sticker, a video description, or a reply to someone who asked.</p></div>
+                    </li>
+                    <li class="grid grid-cols-[48px_1fr] gap-4 py-6 border-b border-line">
+                        <span class="rp-heading-s text-text-muted">3</span>
+                        <div><h3 class="rp-heading-s">Get paid every month</h3><p class="text-text-secondary mt-1">When someone you referred pays for Repostit, 20% of each payment is yours while they stay subscribed.</p></div>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="rp-page rp-section" id="program" aria-labelledby="program-title">
+            <p class="rp-eyebrow">Program details</p>
+            <h2 id="program-title" class="rp-display-l mt-3">What you earn</h2>
+            <dl class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 m-0">
+                <div class="rp-card"><dt class="rp-label">Commission</dt><dd class="m-0 mt-3 rp-display-l">20%</dd><dd class="m-0 mt-2 text-text-secondary">Of every payment, every month the customer stays</dd></div>
+                <div class="rp-card"><dt class="rp-label">First bonus</dt><dd class="m-0 mt-3 rp-display-l">$200</dd><dd class="m-0 mt-2 text-text-secondary">When 20 of your referrals are paying subscribers</dd></div>
+                <div class="rp-card"><dt class="rp-label">Second bonus</dt><dd class="m-0 mt-3 rp-display-l">$5,000</dd><dd class="m-0 mt-2 text-text-secondary">On top, when you reach 500 paying subscribers</dd></div>
+                <div class="rp-card"><dt class="rp-label">Cost to join</dt><dd class="m-0 mt-3 rp-display-l">$0</dd><dd class="m-0 mt-2 text-text-secondary"><?= $cookieDays > 0 ? 'Referrals are credited to you for ' . $e($cookieDays) . ' days after a click' : 'No fees and no minimum audience size' ?></dd></div>
+            </dl>
+            <p class="rp-caption text-text-muted mt-4">Full terms are shown when you create your account.</p>
+        </section>
+
+        <section class="rp-page rp-section pb-24" aria-labelledby="cta-title">
+            <div class="rp-panel-dark flex flex-col md:flex-row md:items-center justify-between gap-8 p-8 sm:p-12">
+                <div>
+                    <h2 id="cta-title" class="rp-display-l text-surface">Start with your link.</h2>
+                    <p class="mt-3 text-on-dark max-w-[32rem]">Create your free partner account and get your referral link right away.</p>
+                </div>
+                <a class="rp-btn rp-btn-l rp-btn-on-dark shrink-0" href="/register">Join free</a>
+            </div>
+        </section>
+    </div>
+
+    <footer class="border-t border-line-soft">
+        <div class="rp-page py-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <a href="/" class="rp-brand" style="font-size:18px" aria-label="Repostit Partners home"><img src="/assets/brand/repostit-mark.png" alt="" width="28" height="20" style="width:28px">Repostit Partners</a>
+            <nav aria-label="Footer" class="flex flex-wrap gap-x-1 -ml-3 sm:ml-0">
+                <a class="rp-ghost text-text-secondary" style="font-size:15px" href="https://repostit.io/">repostit.io</a>
+                <a class="rp-ghost text-text-secondary" style="font-size:15px" href="/login">Log in</a>
+                <a class="rp-ghost text-text-secondary" style="font-size:15px" href="/register">Join free</a>
+            </nav>
+            <p class="rp-caption text-text-muted m-0">© <?= date('Y') ?> Repostit</p>
         </div>
-        <span>© <?= date('Y') ?> Repostit. Built for people who publish.</span>
-        <a href="https://repostit.io" target="_blank" rel="noreferrer">repostit.io</a>
     </footer>
 </div>
-
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
-
-    .partner-landing {
-        --ink: #17141c;
-        --muted: #655f6d;
-        --line: #dfdbe5;
-        --paper: #fbfaf8;
-        --purple: #5b3df5;
-        --purple-dark: #4224cb;
-        --lavender: #ebe7ff;
-        --blush: #f7d6df;
-        min-height: 100vh;
-        background: var(--paper);
-        color: var(--ink);
-        font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
-    }
-
-    .partner-landing *, .partner-landing *::before, .partner-landing *::after { box-sizing: border-box; }
-    .partner-landing a { color: inherit; text-decoration: none; }
-    .partner-nav, .partner-hero, .partner-benefits, .partner-how, .partner-final-cta, .partner-footer { width: min(1180px, calc(100% - 48px)); margin-inline: auto; }
-    .partner-nav { display: flex; align-items: center; justify-content: space-between; gap: 28px; padding: 26px 0; }
-    .partner-brand, .partner-footer-brand { display: inline-flex; align-items: center; gap: 9px; font-weight: 700; }
-    .partner-brand-mark { display: inline-grid; place-items: center; width: 31px; height: 31px; border-radius: 9px; background: var(--purple); overflow: hidden; }
-    .partner-brand-mark img { width: 25px; height: 25px; object-fit: contain; filter: brightness(0) invert(1); }
-    .partner-brand-wordmark { font-family: 'Space Grotesk', sans-serif; font-size: 19px; letter-spacing: -0.04em; }
-    .partner-brand-label { margin-left: 5px; padding-left: 12px; border-left: 1px solid var(--line); color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .16em; }
-    .partner-nav-links { display: flex; gap: 26px; margin-left: auto; color: var(--muted); font-size: 13px; }
-    .partner-nav-links a:hover, .partner-login:hover, .partner-text-link:hover, .partner-footer a:hover { color: var(--purple); }
-    .partner-nav-actions { display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 600; }
-    .partner-login { color: var(--muted); }
-    .partner-button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 23px; border: 1px solid var(--purple); border-radius: 999px; background: var(--purple); color: #fff !important; font-size: 14px; font-weight: 700; box-shadow: 0 8px 20px rgba(91, 61, 245, .16); transition: background .18s ease, transform .18s ease; }
-    .partner-button:hover { background: var(--purple-dark); transform: translateY(-1px); }
-    .partner-button-small { min-height: 39px; padding: 0 17px; font-size: 12px; }
-    .partner-hero { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: center; gap: 64px; padding: 76px 0 88px; }
-    .partner-eyebrow { margin: 0; color: var(--purple); font-size: 11px; font-weight: 700; letter-spacing: .17em; line-height: 1.4; }
-    .partner-hero h1 { max-width: 620px; margin: 20px 0 22px; font-family: 'Space Grotesk', sans-serif; font-size: clamp(42px, 5.6vw, 76px); font-weight: 600; letter-spacing: -.075em; line-height: .98; }
-    .partner-hero h1 em { color: var(--purple); font-style: normal; }
-    .partner-hero-lede { max-width: 560px; margin: 0; color: var(--muted); font-size: 17px; line-height: 1.65; }
-    .partner-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 22px; margin-top: 31px; }
-    .partner-text-link { color: var(--ink); font-size: 13px; font-weight: 600; }
-    .partner-hero-note { margin: 18px 0 0; color: #8a8492; font-size: 12px; }
-    .partner-hero-art { position: relative; padding: 17px; border: 1px solid var(--line); border-radius: 28px; background: var(--lavender); }
-    .partner-hero-art::before { content: ''; position: absolute; top: -13px; right: 30px; width: 76px; height: 26px; border-radius: 2px; background: var(--blush); transform: rotate(4deg); }
-    .partner-art-label { position: absolute; z-index: 1; top: 30px; left: 34px; padding: 7px 10px; border: 1px solid rgba(23, 20, 28, .14); border-radius: 999px; background: rgba(251, 250, 248, .9); color: var(--ink); font-size: 9px; font-weight: 700; letter-spacing: .15em; }
-    .partner-hero-art img { display: block; width: 100%; height: auto; min-height: 370px; border-radius: 17px; object-fit: cover; object-position: center; }
-    .partner-benefits { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-    .partner-benefits article { min-height: 218px; padding: 32px 32px 32px 0; }
-    .partner-benefits article + article { padding-left: 32px; border-left: 1px solid var(--line); }
-    .partner-benefit-kicker { color: var(--purple); font-size: 10px; font-weight: 700; letter-spacing: .15em; }
-    .partner-benefits h2 { margin: 16px 0 8px; font-family: 'Space Grotesk', sans-serif; font-size: 25px; letter-spacing: -.045em; }
-    .partner-benefits p, .partner-section-intro p, .partner-steps p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
-    .partner-how { display: grid; grid-template-columns: .85fr 1.15fr; gap: 100px; padding: 120px 0; }
-    .partner-section-intro h2 { max-width: 440px; margin: 18px 0 18px; font-family: 'Space Grotesk', sans-serif; font-size: clamp(30px, 3.2vw, 46px); letter-spacing: -.065em; line-height: 1.02; }
-    .partner-section-intro > p:last-child { max-width: 400px; }
-    .partner-steps { list-style: none; margin: 0; padding: 0; }
-    .partner-steps li { display: grid; grid-template-columns: 65px 1fr; gap: 21px; padding: 0 0 30px; }
-    .partner-steps li + li { padding-top: 30px; border-top: 1px solid var(--line); }
-    .partner-step-number { color: var(--purple); font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; }
-    .partner-steps h3 { margin: -3px 0 7px; font-family: 'Space Grotesk', sans-serif; font-size: 22px; letter-spacing: -.04em; }
-    .partner-final-cta { display: flex; align-items: center; justify-content: space-between; gap: 30px; margin-bottom: 80px; padding: 42px 47px; border-radius: 22px; background: var(--ink); color: #fff; }
-    .partner-final-cta .partner-eyebrow { color: var(--blush); }
-    .partner-final-cta h2 { margin: 11px 0 0; font-family: 'Space Grotesk', sans-serif; font-size: clamp(25px, 3vw, 40px); letter-spacing: -.06em; }
-    .partner-final-cta .partner-button { flex-shrink: 0; border-color: #fff; background: #fff; color: var(--ink) !important; box-shadow: none; }
-    .partner-final-cta .partner-button:hover { background: var(--blush); border-color: var(--blush); }
-    .partner-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 24px 0 30px; border-top: 1px solid var(--line); color: #8a8492; font-size: 11px; }
-    .partner-footer-brand { color: var(--ink); font-size: 12px; }
-    .partner-footer-brand .partner-brand-mark { width: 23px; height: 23px; border-radius: 7px; }
-    .partner-footer-brand .partner-brand-mark img { width: 19px; height: 19px; }
-
-    @media (max-width: 840px) {
-        .partner-nav, .partner-hero, .partner-benefits, .partner-how, .partner-final-cta, .partner-footer { width: min(100% - 34px, 620px); }
-        .partner-nav-links { display: none; }
-        .partner-hero { grid-template-columns: 1fr; gap: 42px; padding: 56px 0 66px; }
-        .partner-hero-art img { min-height: 0; }
-        .partner-benefits { grid-template-columns: 1fr; }
-        .partner-benefits article, .partner-benefits article + article { min-height: 0; padding: 27px 0; border-left: 0; }
-        .partner-benefits article + article { border-top: 1px solid var(--line); }
-        .partner-how { grid-template-columns: 1fr; gap: 48px; padding: 82px 0; }
-        .partner-final-cta { align-items: flex-start; flex-direction: column; margin-bottom: 55px; padding: 32px 27px; }
-        .partner-footer { align-items: flex-start; flex-direction: column; }
-    }
-    @media (max-width: 520px) {
-        .partner-nav { padding: 18px 0; }
-        .partner-brand-label, .partner-login { display: none; }
-        .partner-hero h1 { font-size: 44px; }
-        .partner-hero-lede { font-size: 15px; }
-        .partner-hero-actions { align-items: flex-start; flex-direction: column; gap: 17px; }
-        .partner-button { width: 100%; }
-        .partner-art-label { top: 28px; left: 28px; font-size: 8px; }
-    }
-</style>

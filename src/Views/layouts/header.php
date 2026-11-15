@@ -5,36 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($title ?? ($settings['custom_app_name'] ?? 'Repostit Partners')) ?></title>
-    <meta name="description" content="Join the Repostit partner program and earn 20% recurring commission by sharing a tool creators use to publish everywhere.">
-    <meta name="theme-color" content="#5b3df5">
+    <meta name="description" content="Recommend Repostit to creators and businesses who post on TikTok first. Earn 20% of every payment while they stay subscribed.">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Repostit Partners — Earn 20% recurring">
-    <meta property="og:description" content="Share Repostit with creators, founders, and online businesses. Earn 20% recurring commission while customers stay active.">
-    <meta property="og:image" content="https://partners.repostit.io/assets/images/partner-og.png">
-    <meta property="og:image:alt" content="Repostit partner program workflow visual">
+    <meta property="og:title" content="Repostit partner program: earn 20% recurring">
+    <meta property="og:description" content="Recommend Repostit and earn 20% of every payment while your referrals stay subscribed. Free to join.">
+    <meta property="og:image" content="https://partners.repostit.io/assets/images/partner-og.png?v=2">
+    <meta property="og:image:alt" content="Repostit partner program: earn 20% recurring">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Repostit Partners — Earn 20% recurring">
-    <meta name="twitter:description" content="Share Repostit with people who publish. Earn 20% recurring commission.">
-    <meta name="twitter:image" content="https://partners.repostit.io/assets/images/partner-og.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/alpinejs" defer></script>
-
-    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon/android-chrome-512x512.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/assets/favicon/site.webmanifest">
-    <style>
-        :root { --repostit-pink: #5b3df5; --repostit-purple: #5b3df5; }
-        .bg-indigo-600 { background-color: var(--repostit-pink) !important; }
-        .bg-indigo-500 { background-color: #db2777 !important; }
-        .hover\:bg-indigo-700:hover, .hover\:bg-indigo-500:hover { background-color: #db2777 !important; }
-        .text-indigo-600, .text-indigo-700 { color: #db2777 !important; }
-        .hover\:text-indigo-500:hover { color: #be185d !important; }
-        .border-indigo-500, .focus\:border-indigo-500:focus { border-color: var(--repostit-pink) !important; }
-        .bg-indigo-50 { background-color: #fce7f3 !important; }
-        .focus\:ring-indigo-500:focus, .focus\:ring-indigo-600:focus { --tw-ring-color: var(--repostit-pink) !important; }
-    </style>
+    <meta name="twitter:title" content="Repostit partner program: earn 20% recurring">
+    <meta name="twitter:description" content="Recommend Repostit and earn 20% of every payment while your referrals stay subscribed.">
+    <meta name="twitter:image" content="https://partners.repostit.io/assets/images/partner-og.png?v=2">
+<?php require ROOT_PATH . '/src/Views/partials/head.php'; ?>
 </head>
 <body class="h-full">
     <?php if (isset($_SESSION['user_id'])): ?>
@@ -48,21 +29,16 @@
                                 <?php if (!empty($settings['custom_logo'])): ?>
                                     <img src="/assets/uploads/<?= htmlspecialchars($settings['custom_logo']) ?>" alt="<?= htmlspecialchars($settings['custom_app_name'] ?? 'App') ?>" class="h-8 max-w-48 object-contain" />
                                 <?php else: ?>
-                                    <div class="flex items-center gap-2">
-                                        <span class="grid h-8 w-8 place-items-center rounded-lg bg-fuchsia-600">
-                                            <img src="/assets/favicon/android-chrome-512x512.png" alt="" class="h-6 w-6 object-contain brightness-0 invert" />
-                                        </span>
-                                        <span class="font-semibold text-gray-900">Repostit</span>
-                                    </div>
+                                    <span class="rp-brand" style="margin-right:0"><img src="/assets/brand/repostit-mark.png" alt="" />Repostit</span>
                                 <?php endif; ?>
                             </a>
                         </div>
                         <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                            <a href="/admin/dashboard" class="<?= $path === 'dashboard' ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium">Dashboard</a>
-                            <a href="/admin/programs" class="<?= $path === 'programs' ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium">Programs</a>
+                            <a href="/admin/dashboard" class="<?= $path === 'dashboard' ? 'border-brand text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium">Dashboard</a>
+                            <a href="/admin/programs" class="<?= $path === 'programs' ? 'border-brand text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium">Programs</a>
                             <a href="/admin/partners" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium">Partners</a>
                             <a href="/admin/creators" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium">Creator Hub</a>
-                            <a href="/admin/conversions" class="<?= $path === 'conversions' ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium">Conversions</a>
+                            <a href="/admin/conversions" class="<?= $path === 'conversions' ? 'border-brand text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium">Conversions</a>
                         </div>
                     </div>
                     
@@ -70,7 +46,7 @@
                         <!-- User dropdown -->
                         <div class="relative ml-3" x-data="{ open: false }">
                             <div>
-                                <button @click="open = !open" type="button" class="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" id="user-menu-button">
+                                <button @click="open = !open" type="button" class="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2" id="user-menu-button">
                                     <span class="sr-only">Open user menu</span>
                                     <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
                                         <span class="text-sm font-medium text-gray-600"><?= strtoupper(substr($_SESSION['user_name'] ?? 'U', 0, 1)) ?></span>
@@ -100,7 +76,7 @@
 
                     <!-- Mobile menu button -->
                     <div class="flex items-center sm:hidden">
-                        <button type="button" @click="mobileMenuOpen = !mobileMenuOpen" class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                        <button type="button" @click="mobileMenuOpen = !mobileMenuOpen" class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand">
                             <span class="sr-only">Open main menu</span>
                             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -113,11 +89,11 @@
             <!-- Mobile menu -->
             <div class="sm:hidden" x-show="mobileMenuOpen" style="display: none;">
                 <div class="space-y-1 pb-3 pt-2">
-                    <a href="/admin/dashboard" class="<?= $path === 'dashboard' ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium">Dashboard</a>
-                    <a href="/admin/programs" class="<?= $path === 'programs' ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium">Programs</a>
+                    <a href="/admin/dashboard" class="<?= $path === 'dashboard' ? 'bg-brand-tint border-brand text-brand-text' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium">Dashboard</a>
+                    <a href="/admin/programs" class="<?= $path === 'programs' ? 'bg-brand-tint border-brand text-brand-text' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium">Programs</a>
                     <a href="/admin/partners" class="block py-2 pl-3 pr-4 text-base font-medium">Partners</a>
                     <a href="/admin/creators" class="block py-2 pl-3 pr-4 text-base font-medium">Creator Hub</a>
-                    <a href="/admin/conversions" class="<?= $path === 'conversions' ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium">Conversions</a>
+                    <a href="/admin/conversions" class="<?= $path === 'conversions' ? 'bg-brand-tint border-brand text-brand-text' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium">Conversions</a>
                 </div>
                 <div class="border-t border-gray-200 pb-3 pt-4">
                     <div class="flex items-center px-4">

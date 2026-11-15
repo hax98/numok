@@ -135,7 +135,7 @@ class PasswordResetController extends Controller
         // Delete token
         Database::query("DELETE FROM password_resets WHERE email = ?", [$email]);
 
-        $_SESSION['success'] = 'Your password has been reset!';
+        $_SESSION['success'] = 'Your password has been reset. You can log in now.';
         header('Location: /login');
         exit;
     }

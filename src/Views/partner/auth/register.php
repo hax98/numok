@@ -1,58 +1,44 @@
-<?php require ROOT_PATH . '/src/Views/partner/auth/styles.php'; ?>
+<?php require __DIR__ . '/shell-start.php'; ?>
+<p class="rp-eyebrow">Join the partner program</p>
+<h1 class="rp-heading-m mt-2">Create your partner account</h1>
+<p class="text-text-secondary mt-2">It's free. You get your referral link and a dashboard for clicks, referrals and earnings.</p>
 
-<div class="partner-auth-page">
-    <section class="partner-auth-form-side">
-        <nav class="partner-auth-nav" aria-label="Partner portal navigation">
-            <a href="/" class="partner-auth-brand" aria-label="Repostit Partners home">
-                <span class="partner-auth-mark"><img src="/assets/favicon/android-chrome-512x512.png" alt="" /></span>
-                <span>Repostit <small style="font-family: 'DM Sans', sans-serif; font-size: 9px; letter-spacing: .16em; color: #77717e;">PARTNERS</small></span>
-            </a>
-            <a class="partner-auth-back" href="/">Back to partner program</a>
-        </nav>
+<div class="mt-6 grid gap-4">
+    <p class="rp-small text-text-secondary bg-surface-subtle rounded-md p-4 m-0">This account is only for the partner program. Posting uses your Repostit app account: <a class="rp-link" href="<?= htmlspecialchars(\Numok\Services\PortalEnvironment::appUrl(), ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">open Repostit</a> to log in or start a free trial.</p>
 
-        <div class="partner-auth-content">
-            <p class="partner-auth-eyebrow">JOIN THE CREW</p>
-            <h1>Make your next recommendation count.</h1>
-            <p class="partner-auth-lede">Create your free partner account to track referrals and earnings.</p>
-            <p class="partner-auth-secondary">Publishing uses a separate Repostit app account. <a href="<?= htmlspecialchars(\Numok\Services\PortalEnvironment::appUrl(), ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Open Repostit</a> and use your existing app account, or create one if you're new. Publishing access is managed in the app.</p>
+    <?php if (isset($_SESSION['register_error'])): ?>
+        <div class="rp-alert rp-alert-danger" role="alert"><?= htmlspecialchars($_SESSION['register_error']) ?></div>
+    <?php unset($_SESSION['register_error']); endif; ?>
 
-            <?php if (isset($_SESSION['register_error'])): ?>
-                <div class="partner-auth-alert" role="alert"><?= htmlspecialchars($_SESSION['register_error']) ?></div>
-            <?php unset($_SESSION['register_error']); endif; ?>
-
-            <form class="partner-auth-form" action="/auth/register" method="POST">
-                <input type="hidden" name="csrf" value="<?= htmlspecialchars(\Numok\Services\PortalSecurity::csrf(), ENT_QUOTES, 'UTF-8') ?>">
-                <div class="partner-auth-field">
-                    <label for="company_name">Company or creator name</label>
-                    <input id="company_name" name="company_name" type="text" autocomplete="organization" required autofocus placeholder="Your name or business" />
-                </div>
-                <div class="partner-auth-field">
-                    <label for="contact_name">Your name</label>
-                    <input id="contact_name" name="contact_name" type="text" autocomplete="name" required placeholder="First and last name" />
-                </div>
-                <div class="partner-auth-field">
-                    <label for="email">Email address</label>
-                    <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
-                </div>
-                <div class="partner-auth-field">
-                    <label for="password">Create a password</label>
-                    <input id="password" name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="At least 8 characters" />
-                </div>
-                <?php if($program): ?><details style="font-size:12px;line-height:1.6"><summary>Read the affiliate program terms</summary><div style="max-height:210px;overflow:auto;white-space:pre-wrap;padding:12px 0"><?= htmlspecialchars(($program['terms']??'')."\n\n".\Numok\Services\CreatorRules::BONUS_TERMS,ENT_QUOTES,'UTF-8') ?></div></details><label class="partner-auth-check" style="align-items:flex-start;line-height:1.5"><input type="checkbox" name="terms_accepted" value="1" required>I accept the affiliate program terms and bonus conditions.</label><?php endif; ?>
-                <button class="partner-auth-submit" type="submit">Create my free account and referral link</button>
-            </form>
-
-            <p class="partner-auth-secondary">Already a partner? <a href="/login">Sign in to your account</a></p>
+    <form class="grid gap-5 mt-2" action="/auth/register" method="POST">
+        <input type="hidden" name="csrf" value="<?= htmlspecialchars(\Numok\Services\PortalSecurity::csrf(), ENT_QUOTES, 'UTF-8') ?>">
+        <div class="rp-field">
+            <label for="company_name">Creator or business name</label>
+            <input class="rp-input" id="company_name" name="company_name" type="text" autocomplete="organization" required autofocus placeholder="How your audience knows you" />
         </div>
-        <p class="partner-auth-footnote">20% recurring · $200 at 20 paying subscribers · An additional $5,000 at 500</p>
-    </section>
-
-    <aside class="partner-auth-visual" aria-label="Repostit partner program overview">
-        <div class="partner-auth-visual-copy">
-            <p class="partner-auth-visual-kicker">REPOSTIT PARTNER PROGRAM</p>
-            <h2>Share what you genuinely <em>use.</em></h2>
+        <div class="rp-field">
+            <label for="contact_name">Your name</label>
+            <input class="rp-input" id="contact_name" name="contact_name" type="text" autocomplete="name" required />
         </div>
-        <div class="partner-auth-art"><img src="/assets/images/partner-workflow.png" alt="One creator video flowing into multiple content formats" /></div>
-        <div class="partner-auth-visual-footer"><span>One simple link.</span><strong>Recurring revenue.</strong></div>
-    </aside>
+        <div class="rp-field">
+            <label for="email">Email address</label>
+            <input class="rp-input" id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
+        </div>
+        <div class="rp-field">
+            <label for="password">Password</label>
+            <input class="rp-input" id="password" name="password" type="password" autocomplete="new-password" required minlength="8" aria-describedby="password-hint" />
+            <p id="password-hint" class="rp-caption text-text-muted m-0">At least 8 characters</p>
+        </div>
+        <?php if ($program): ?>
+            <details class="rounded-md border border-line">
+                <summary class="cursor-pointer px-4 py-3 font-medium">Read the program terms</summary>
+                <div class="max-h-56 overflow-auto whitespace-pre-wrap px-4 pb-4 rp-small text-text-secondary"><?= htmlspecialchars(($program['terms'] ?? '') . "\n\n" . \Numok\Services\CreatorRules::BONUS_TERMS, ENT_QUOTES, 'UTF-8') ?></div>
+            </details>
+            <label class="rp-check"><input type="checkbox" name="terms_accepted" value="1" required> I accept the program terms and bonus conditions.</label>
+        <?php endif; ?>
+        <button class="rp-btn rp-btn-l w-full" type="submit">Create account</button>
+    </form>
+
+    <p class="text-text-secondary text-center mt-4 m-0">Already a partner? <a class="rp-link" href="/login">Log in</a></p>
 </div>
+<?php require __DIR__ . '/shell-end.php'; ?>

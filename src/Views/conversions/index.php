@@ -6,7 +6,7 @@
                 <p class="mt-2 text-sm text-gray-700">A list of all conversions from your affiliate programs.</p>
             </div>
             <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                <a href="/admin/conversions/export" class="block rounded-md bg-white px-3 py-2 text-center text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                <a href="/admin/conversions/export" class="block rounded-md bg-white px-3 py-2 text-center text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-line-control hover:bg-gray-50">
                     Export CSV
                 </a>
             </div>
@@ -15,7 +15,7 @@
         <!-- Filter Form -->
         <form method="GET" action="/admin/conversions" class="mt-8 flex items-center gap-4">
             <div class="flex-1">
-                <select id="status" name="status" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                <select id="status" name="status" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-line-control focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6">
                     <option value="all" <?= ($filters['status'] ?? 'all') === 'all' ? 'selected' : '' ?>>All Status</option>
                     <option value="pending" <?= ($filters['status'] ?? '') === 'pending' ? 'selected' : '' ?>>Pending</option>
                     <option value="payable" <?= ($filters['status'] ?? '') === 'payable' ? 'selected' : '' ?>>Payable</option>
@@ -25,7 +25,7 @@
             </div>
 
             <div class="flex-1">
-                <select id="partner_id" name="partner_id" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                <select id="partner_id" name="partner_id" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-line-control focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6">
                     <option value="">All Partners</option>
                     <?php foreach ($partners as $partner): ?>
                         <option value="<?= $partner['id'] ?>" <?= ($filters['partner_id'] ?? '') == $partner['id'] ? 'selected' : '' ?>>
@@ -36,7 +36,7 @@
             </div>
 
             <div class="flex-1">
-                <select id="program_id" name="program_id" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                <select id="program_id" name="program_id" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-line-control focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6">
                     <option value="">All Programs</option>
                     <?php foreach ($programs as $program): ?>
                         <option value="<?= $program['id'] ?>" <?= ($filters['program_id'] ?? '') == $program['id'] ? 'selected' : '' ?>>
@@ -50,15 +50,15 @@
                 <input type="date" name="start_date" id="start_date"
                     value="<?= htmlspecialchars($filters['start_date'] ?? '') ?>"
                     placeholder="Start Date"
-                    class="block w-40 rounded-md border-0 py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    class="block w-40 rounded-md border-0 py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-inset ring-line-control focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6">
                 <span class="text-gray-500">-</span>
                 <input type="date" name="end_date" id="end_date"
                     value="<?= htmlspecialchars($filters['end_date'] ?? '') ?>"
                     placeholder="End Date"
-                    class="block w-40 rounded-md border-0 py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    class="block w-40 rounded-md border-0 py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-inset ring-line-control focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6">
             </div>
 
-            <button type="submit" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-500">
+            <button type="submit" class="rounded-md bg-ink px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-ink-hover">
                 Apply Filters
             </button>
         </form>
@@ -159,7 +159,7 @@
                                                         <input type="hidden" name="id" value="<?= $conversion['id'] ?>">
                                                         <input type="hidden" name="status" value="payable">
                                                         <button type="submit"
-                                                            class="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-green-600 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green-50">
+                                                            class="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-green-600 shadow-sm ring-1 ring-inset ring-line-control hover:bg-green-50">
                                                             <svg class="mr-1.5 h-4 w-4 text-green-500" viewBox="0 0 20 20" fill="currentColor">
                                                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                                             </svg>
@@ -172,7 +172,7 @@
                                                         <input type="hidden" name="id" value="<?= $conversion['id'] ?>">
                                                         <input type="hidden" name="status" value="rejected">
                                                         <button type="submit"
-                                                            class="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-red-600 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-50">
+                                                            class="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-red-600 shadow-sm ring-1 ring-inset ring-line-control hover:bg-red-50">
                                                             <svg class="mr-1.5 h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
                                                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
                                                             </svg>
@@ -187,7 +187,7 @@
                                                         <input type="hidden" name="id" value="<?= $conversion['id'] ?>">
                                                         <input type="hidden" name="status" value="paid">
                                                         <button type="submit"
-                                                            class="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-blue-600 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-blue-50">
+                                                            class="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-blue-600 shadow-sm ring-1 ring-inset ring-line-control hover:bg-blue-50">
                                                             <svg class="mr-1.5 h-4 w-4 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
                                                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clip-rule="evenodd" />
                                                             </svg>
@@ -197,7 +197,7 @@
                                                 <?php endif; ?>
 
                                                 <!-- View Details button (if needed in the future) -->
-                                                <!-- <a href="#" class="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                                <!-- <a href="#" class="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-line-control hover:bg-gray-50">
                                                     <svg class="mr-1.5 h-4 w-4 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
                                                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                                                         <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />

@@ -3,11 +3,10 @@
         
         <?php if (isset($_SESSION['partner_id'])): ?>
         <footer class="mt-auto">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="border-t border-gray-200 py-8">
-                    <p class="text-center text-xs leading-5 text-gray-500">
-                        Repostit Partners
-                    </p>
+            <div class="border-t border-line-soft">
+                <div class="rp-page py-6 flex flex-wrap items-center justify-between gap-3 rp-caption text-text-muted">
+                    <span>© <?= date('Y') ?> Repostit Partners</span>
+                    <a class="hover:text-ink" href="https://repostit.io/">repostit.io</a>
                 </div>
             </div>
         </footer>
