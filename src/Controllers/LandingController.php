@@ -8,6 +8,12 @@ class LandingController extends Controller
 {
     public function index(): void
     {
+        // Partners who are already logged in go straight to their dashboard.
+        if (!empty($_SESSION['partner_id'])) {
+            header('Location: /dashboard', true, 302);
+            exit;
+        }
+
         $program = null;
 
         try {

@@ -1,7 +1,7 @@
 <?php
 // Shared <head> assets for every layout: Repostit design system stylesheet, self-hosted Geist,
 // pinned Alpine and the Repostit icons. Bump $assetVersion when the built CSS changes.
-$assetVersion = '20261115';
+$assetVersion = '20261115b';
 ?>
     <link rel="preload" href="/assets/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="/assets/css/app.css?v=<?= $assetVersion ?>">

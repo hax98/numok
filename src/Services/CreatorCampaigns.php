@@ -39,7 +39,7 @@ final class CreatorCampaigns {
         elseif(empty($profile['account_snapshot']['influencerExpiresAt']))$add('grant','Review this creator and the promised annual account before granting access.','/admin/creators','admin');
         foreach(self::all($partnerId) as $c){
             if($c['status']==='proposed')$add('accept_'.$c['id'],'Review the proposed campaign: '.$c['title'].'.','/dashboard#campaigns','creator');
-            if($c['overdue']&&$c['status']==='accepted')$add('overdue_'.$c['id'],'The deadline for '.$c['title'].' has passed. Submit the published URLs or agree a new plan with Hax.','/dashboard#campaigns','creator');
+            if($c['overdue']&&$c['status']==='accepted')$add('overdue_'.$c['id'],'The deadline for '.$c['title'].' has passed. Submit the published URLs or agree a new plan with us at support@repostit.io.','/dashboard#campaigns','creator');
         }
         if(count(array_filter($contents,fn($c)=>$c['status']==='submitted')))$add('review','Published content is waiting for your review.','/admin/creators','admin');
         Database::transaction(function()use($partnerId,$active){
